@@ -1,100 +1,100 @@
 # Relevancy Classification and Percentage Analysis
 
 **Generated on:** Live Run
-**Total Listings Crawled:** 3595
+**Total Listings Crawled:** 3511
 
 ## Global Breakdown
 | Category | Count | Percentage | Description |
 | --- | --- | --- | --- |
-| **Relevant** | 716 | 19.9% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
-| **Uncertain** | 2162 | 60.1% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
-| **Excluded** | 717 | 19.9% | Confirmed noise (Civil, Mechanical, Drivers, Doctors, Trade Apprentices, etc.) |
+| **Relevant** | 264 | 7.5% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
+| **Uncertain** | 1043 | 29.7% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
+| **Excluded** | 2204 | 62.8% | Confirmed noise (Civil, Mechanical, Drivers, Doctors, Trade Apprentices, etc.) |
 
 ## Per-Organization Relevancy Breakdown
 | Organization | Status | Total Scraped | Relevant % | Uncertain % | Excluded (Noise) % |
 | --- | --- | --- | --- | --- | --- |
 | NIC (National Informatics Centre) | Success | 9 | 100.0% (9) | 0.0% (0) | 0.0% (0) |
-| C-DOT (Centre for Development of Telematics) | Success | 7 | 100.0% (7) | 0.0% (0) | 0.0% (0) |
-| STPI (Software Technology Parks of India) | Success | 9 | 100.0% (9) | 0.0% (0) | 0.0% (0) |
+| C-DOT (Centre for Development of Telematics) | Success | 6 | 100.0% (6) | 0.0% (0) | 0.0% (0) |
+| STPI (Software Technology Parks of India) | Success | 8 | 100.0% (8) | 0.0% (0) | 0.0% (0) |
 | BISAG-N (Bhaskaracharya National Institute for Space Applications) | Success | 2 | 100.0% (2) | 0.0% (0) | 0.0% (0) |
-| C-DAC (Centre for Development of Advanced Computing) | Success | 45 | 97.8% (44) | 0.0% (0) | 2.2% (1) |
-| CRIS (Centre for Railway Information Systems) | Success | 292 | 75.3% (220) | 0.0% (0) | 24.7% (72) |
 | CERT-In (Indian Computer Emergency Response Team) | Success | 4 | 75.0% (3) | 0.0% (0) | 25.0% (1) |
-| NIELIT (National Institute of Electronics & IT) | Success | 607 | 50.1% (304) | 36.4% (221) | 13.5% (82) |
 | UPSC (Union Public Service Commission) | Success | 2 | 50.0% (1) | 50.0% (1) | 0.0% (0) |
+| C-DAC (Centre for Development of Advanced Computing) | Success | 44 | 45.5% (20) | 0.0% (0) | 54.5% (24) |
 | Indira Gandhi Centre for Atomic Research (IGCAR) | Success | 34 | 41.2% (14) | 35.3% (12) | 23.5% (8) |
 | BSNL (Bharat Sanchar Nigam Ltd) | Success | 3 | 33.3% (1) | 66.7% (2) | 0.0% (0) |
-| SAMEER (R&D under MeitY) | Success | 3 | 33.3% (1) | 66.7% (2) | 0.0% (0) |
 | Employment News (Ministry of I&B) | Success | 19 | 31.6% (6) | 15.8% (3) | 52.6% (10) |
 | UIDAI (Aadhaar) | Success | 7 | 28.6% (2) | 71.4% (5) | 0.0% (0) |
-| CSIR Fourth Paradigm Institute | Success | 14 | 28.6% (4) | 50.0% (7) | 21.4% (3) |
-| JPSC (Jharkhand Public Service Commission) | Success | 50 | 20.0% (10) | 42.0% (21) | 38.0% (19) |
+| CRIS (Centre for Railway Information Systems) | Success | 292 | 28.4% (83) | 0.0% (0) | 71.6% (209) |
+| CSIR Fourth Paradigm Institute | Success | 14 | 21.4% (3) | 35.7% (5) | 42.9% (6) |
 | National e-Governance Division (NeGD) | Success | 6 | 16.7% (1) | 50.0% (3) | 33.3% (2) |
-| National Internet Exchange of India (NIXI) | Success | 6 | 16.7% (1) | 66.7% (4) | 16.7% (1) |
-| Bharat Petroleum Corporation Limited (BPCL) | Success | 9 | 11.1% (1) | 77.8% (7) | 11.1% (1) |
-| MPPSC (Madhya Pradesh Public Service Commission) | Success | 28 | 10.7% (3) | 17.9% (5) | 71.4% (20) |
-| PPSC (Punjab Public Service Commission) | Success | 371 | 10.0% (37) | 50.1% (186) | 39.9% (148) |
+| NIELIT (National Institute of Electronics & IT) | Success | 607 | 11.9% (72) | 19.8% (120) | 68.4% (415) |
+| MPPSC (Madhya Pradesh Public Service Commission) | Success | 28 | 10.7% (3) | 14.3% (4) | 75.0% (21) |
 | RPSC (Rajasthan Public Service Commission) | Success | 53 | 9.4% (5) | 35.8% (19) | 54.7% (29) |
-| IBPS (Institute of Banking Personnel Selection) | Success | 11 | 9.1% (1) | 72.7% (8) | 18.2% (2) |
+| IBPS (Institute of Banking Personnel Selection) | Success | 11 | 9.1% (1) | 63.6% (7) | 27.3% (3) |
 | HPSC (Haryana Public Service Commission) | Success | 24 | 8.3% (2) | 12.5% (3) | 79.2% (19) |
 | BARC (Bhabha Atomic Research Centre) | Success | 14 | 7.1% (1) | 14.3% (2) | 78.6% (11) |
-| SBI Careers (State Bank of India) | Success | 37 | 5.4% (2) | 73.0% (27) | 21.6% (8) |
-| WBPSC (West Bengal Public Service Commission) | Success | 206 | 5.3% (11) | 55.8% (115) | 38.8% (80) |
-| Raja Ramanna Centre for Advanced Technology (RRCAT) | Success | 106 | 4.7% (5) | 84.9% (90) | 10.4% (11) |
-| ITI Limited (Indian Telephone Industries) | Success | 106 | 3.8% (4) | 83.0% (88) | 13.2% (14) |
-| Coal India Limited | Success | 158 | 1.3% (2) | 89.2% (141) | 9.5% (15) |
-| ONGC (Oil and Natural Gas Corporation) | Success | 439 | 0.7% (3) | 75.9% (333) | 23.5% (103) |
-| BEL (Bharat Electronics Limited) | Failed | 0 | - | - | - |
-| DRDO (Defence Research and Development Organisation) | Success | 15 | 0.0% (0) | 93.3% (14) | 6.7% (1) |
+| SBI Careers (State Bank of India) | Success | 37 | 5.4% (2) | 27.0% (10) | 67.6% (25) |
+| PPSC (Punjab Public Service Commission) | Success | 371 | 3.2% (12) | 10.8% (40) | 86.0% (319) |
+| Coal India Limited | Success | 158 | 1.3% (2) | 42.4% (67) | 56.3% (89) |
+| Raja Ramanna Centre for Advanced Technology (RRCAT) | Success | 106 | 0.9% (1) | 4.7% (5) | 94.3% (100) |
+| ITI Limited (Indian Telephone Industries) | Success | 106 | 0.9% (1) | 38.7% (41) | 60.4% (64) |
+| ONGC (Oil and Natural Gas Corporation) | Success | 439 | 0.7% (3) | 46.0% (202) | 53.3% (234) |
 | ISRO (Indian Space Research Organisation) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| DRDO (Defence Research and Development Organisation) | Success | 15 | 0.0% (0) | 93.3% (14) | 6.7% (1) |
 | ECIL (Electronics Corporation of India Ltd) | Success | 23 | 0.0% (0) | 100.0% (23) | 0.0% (0) |
 | NCS (National Career Service - Ministry of Labour & Employment) | Success | 10 | 0.0% (0) | 70.0% (7) | 30.0% (3) |
-| SAIL (Steel Authority of India) | Success | 29 | 0.0% (0) | 96.6% (28) | 3.4% (1) |
-| NTPC (National Thermal Power Corporation) | Success | 9 | 0.0% (0) | 100.0% (9) | 0.0% (0) |
-| PGCIL (Power Grid Corporation of India) | Success | 480 | 0.0% (0) | 97.3% (467) | 2.7% (13) |
+| HAL (Hindustan Aeronautics Limited) | Success | 9 | 0.0% (0) | 44.4% (4) | 55.6% (5) |
+| BEL (Bharat Electronics Limited) | Failed | 0 | - | - | - |
+| SAIL (Steel Authority of India) | Success | 29 | 0.0% (0) | 93.1% (27) | 6.9% (2) |
+| SAMEER (R&D under MeitY) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
+| NTPC (National Thermal Power Corporation) | Success | 8 | 0.0% (0) | 100.0% (8) | 0.0% (0) |
+| PGCIL (Power Grid Corporation of India) | Success | 479 | 0.0% (0) | 46.1% (221) | 53.9% (258) |
 | IOCL (Indian Oil Corporation) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | BHEL (Bharat Heavy Electricals) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
-| AAI (Airports Authority of India) | Success | 97 | 0.0% (0) | 100.0% (97) | 0.0% (0) |
 | RailTel Corporation of India | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | BECIL (Broadcast Engineering Consultants) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
 | SIDBI (Small Industries Development Bank) | Failed | 0 | - | - | - |
-| SEBI (Securities & Exchange Board) | Success | 5 | 0.0% (0) | 100.0% (5) | 0.0% (0) |
+| SEBI (Securities & Exchange Board) | Success | 5 | 0.0% (0) | 80.0% (4) | 20.0% (1) |
 | SJVN Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| AAI (Airports Authority of India) | Success | 97 | 0.0% (0) | 56.7% (55) | 43.3% (42) |
 | TCIL (Telecommunications Consultants) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| Digital India Corporation (DIC) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| Nuclear Power Corporation of India (NPCIL) | Success | 8 | 0.0% (0) | 100.0% (8) | 0.0% (0) |
-| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
+| Digital India Corporation (DIC) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
 | RITES Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| Dedicated Freight Corridor Corporation (DFCCIL) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
+| Nuclear Power Corporation of India (NPCIL) | Success | 5 | 0.0% (0) | 100.0% (5) | 0.0% (0) |
 | Semi-Conductor Laboratory (SCL) Mohali | Success | 23 | 0.0% (0) | 95.7% (22) | 4.3% (1) |
-| HAL (Hindustan Aeronautics Limited) | Success | 9 | 0.0% (0) | 44.4% (4) | 55.6% (5) |
+| Dedicated Freight Corridor Corporation (DFCCIL) | Success | 2 | 0.0% (0) | 50.0% (1) | 50.0% (1) |
 | REC Limited | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| Central Electronics Limited (CEL) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
-| Hindustan Petroleum Corporation Limited (HPCL) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| Grid Controller of India Limited (GRID-INDIA) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| Reserve Bank of India (RBI) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| NHPC Limited | Success | 12 | 0.0% (0) | 100.0% (12) | 0.0% (0) |
 | Power Finance Corporation (PFC) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| IRCTC (Indian Railway Catering and Tourism Corporation) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
-| CONCOR (Container Corporation of India) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| Central Electronics Limited (CEL) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| Bharat Petroleum Corporation Limited (BPCL) | Success | 8 | 0.0% (0) | 75.0% (6) | 25.0% (2) |
+| Grid Controller of India Limited (GRID-INDIA) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| Hindustan Petroleum Corporation Limited (HPCL) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| NHPC Limited | Success | 12 | 0.0% (0) | 100.0% (12) | 0.0% (0) |
+| National Internet Exchange of India (NIXI) | Success | 5 | 0.0% (0) | 20.0% (1) | 80.0% (4) |
+| Reserve Bank of India (RBI) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | SSC (Staff Selection Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| IRCTC (Indian Railway Catering and Tourism Corporation) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
 | MPSC (Maharashtra Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| CONCOR (Container Corporation of India) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
 | Kerala Public Service Commission | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| TNPSC (Tamil Nadu Public Service Commission) | Success | 4 | 0.0% (0) | 100.0% (4) | 0.0% (0) |
+| TNPSC (Tamil Nadu Public Service Commission) | Success | 4 | 0.0% (0) | 75.0% (3) | 25.0% (1) |
 | EIL (Engineers India Limited) | Success | 6 | 0.0% (0) | 100.0% (6) | 0.0% (0) |
-| GPSC (Gujarat Public Service Commission) | Success | 55 | 0.0% (0) | 52.7% (29) | 47.3% (26) |
 | APPSC (Andhra Pradesh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| GPSC (Gujarat Public Service Commission) | Success | 55 | 0.0% (0) | 14.5% (8) | 85.5% (47) |
 | OPSC (Odisha Public Service Commission) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
+| WBPSC (West Bengal Public Service Commission) | Success | 206 | 0.0% (0) | 5.8% (12) | 94.2% (194) |
+| JPSC (Jharkhand Public Service Commission) | Success | 50 | 0.0% (0) | 18.0% (9) | 82.0% (41) |
 | CGPSC (Chhattisgarh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| NABARD (National Bank for Agriculture and Rural Development) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| UKPSC (Uttarakhand Public Service Commission) | Success | 7 | 0.0% (0) | 42.9% (3) | 57.1% (4) |
 | GAIL (India) Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| NHB (National Housing Bank) | Success | 17 | 0.0% (0) | 70.6% (12) | 29.4% (5) |
-| OIL (Oil India Limited) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
-| UKPSC (Uttarakhand Public Service Commission) | Success | 7 | 0.0% (0) | 71.4% (5) | 28.6% (2) |
+| NABARD (National Bank for Agriculture and Rural Development) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| NHB (National Housing Bank) | Success | 17 | 0.0% (0) | 64.7% (11) | 35.3% (6) |
 | MDL (Mazagon Dock Shipbuilders) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
-| NALCO (National Aluminium Company) | Success | 71 | 0.0% (0) | 100.0% (71) | 0.0% (0) |
-| HSSC (Haryana Staff Selection Commission) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| DSSSB (Delhi Subordinate Services Selection Board) | Success | 5 | 0.0% (0) | 100.0% (5) | 0.0% (0) |
+| OIL (Oil India Limited) | Success | 3 | 0.0% (0) | 66.7% (2) | 33.3% (1) |
+| NALCO (National Aluminium Company) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| HSSC (Haryana Staff Selection Commission) | Success | 2 | 0.0% (0) | 50.0% (1) | 50.0% (1) |
+| DSSSB (Delhi Subordinate Services Selection Board) | Success | 4 | 0.0% (0) | 100.0% (4) | 0.0% (0) |
 | RSMSSB (Rajasthan Staff Selection Board) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
 
 ## Relevancy Verification Samples
@@ -120,52 +120,52 @@ These titles matched include keywords like *software, programmer, information te
    Link: [https://recruitment.nic.in/STA_2026.pdf](https://recruitment.nic.in/STA_2026.pdf)
 9. **[NIC (National Informatics Centre)]** Recruitment of Scientist-B, Group-A (Scientific & Technical) posts in NIC to view details  
    Link: [https://recruitment.nic.in/scib_2026.pdf](https://recruitment.nic.in/scib_2026.pdf)
-10. **[C-DOT (Centre for Development of Telematics)]** Skip To Main Content  
-   Link: [https://www.cdot.in/cdotweb/web/current_openings.php?lang=en#maincontent](https://www.cdot.in/cdotweb/web/current_openings.php?lang=en#maincontent)
-11. **[C-DOT (Centre for Development of Telematics)]** Skip To Main Content हिं 🌓 A+ A- U̲ 👁️‍🗨️ 🔄  
-   Link: [https://www.cdot.in/cdotweb/web/current_openings.php?lang=hi](https://www.cdot.in/cdotweb/web/current_openings.php?lang=hi)
-12. **[C-DOT (Centre for Development of Telematics)]** (1.23 MB  
-   Link: [https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-Manager-Admin-2026.pdf](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-Manager-Admin-2026.pdf)
-13. **[C-DOT (Centre for Development of Telematics)]** (1.26 MB  
-   Link: [https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-EA-Finance-2026.pdf](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-EA-Finance-2026.pdf)
-14. **[C-DOT (Centre for Development of Telematics)]** (0.72 MB  
-   Link: [https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-Hindi-Cell-2026.pdf](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-Hindi-Cell-2026.pdf)
-15. **[C-DOT (Centre for Development of Telematics)]** (0.77 MB  
-   Link: [https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-AI-Expert-Sc-BCD-2026.pdf](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-AI-Expert-Sc-BCD-2026.pdf)
+10. **[C-DAC (Centre for Development of Advanced Computing)]** Walk-In Interview for the positions of Project Manager, Senior Project Engineer, Project Engineer, Project Associate and Project Support Staff to be posted in Guwahati, Assam  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=walkin-CINE-REC-2026-01.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=walkin-CINE-REC-2026-01.pdf)
+11. **[C-DAC (Centre for Development of Advanced Computing)]** C-DAC invites online applications for various contractual positions for different locations across India. Last date of application is 20th June 2026  
+   Link: [https://careers.cdac.in/](https://careers.cdac.in/)
+12. **[C-DAC (Centre for Development of Advanced Computing)]** Recruitment for Project Staff on Various Contract positions @ Various locations for CDAC, Thiruvananthapuram through WALK IN/ONLINE interview  
+   Link: [https://www.cdac.in/index.aspx?id=ca_TvmContractStaff130526](https://www.cdac.in/index.aspx?id=ca_TvmContractStaff130526)
+13. **[C-DAC (Centre for Development of Advanced Computing)]** Recruitment for Project Engineer on various contract positions for C-DAC, Bengaluru through walk in interview  
+   Link: [https://www.cdac.in/index.aspx?id=ca_AdvtNoCDACBRCT2026_15012026](https://www.cdac.in/index.aspx?id=ca_AdvtNoCDACBRCT2026_15012026)
+14. **[C-DAC (Centre for Development of Advanced Computing)]** Notification for inviting application for the engagement of Consultant at C-DAC Thiruvananthapuram  
+   Link: [https://www.cdac.in/index.aspx?id=ca_NotificationConsultant04122025](https://www.cdac.in/index.aspx?id=ca_NotificationConsultant04122025)
+15. **[C-DAC (Centre for Development of Advanced Computing)]** Recruitment Drive for Project "Advanced Computing Research (ACR)"  
+   Link: [https://www.cdac.in/index.aspx?id=job_Advt_BLR_CDAC_05072025](https://www.cdac.in/index.aspx?id=job_Advt_BLR_CDAC_05072025)
 
 ### Sample Excluded Listings (Filtered Noise)
 These listings were successfully identified as non-CS (e.g. Civil, Mechanical, Nurse, HR, Apprentice, Hindi translator) and excluded from the notifications feed.
 
-1. **[C-DAC (Centre for Development of Advanced Computing)]** Mumbai Centre:- Cancellation of Recruitment Process for the post of Driver (Level-2  
+1. **[C-DAC (Centre for Development of Advanced Computing)]** Notice Regarding Advertisement no. C-DACK/COCP/2025/01 dated 12.12.2025  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Notification_kol_19_1_26](https://www.cdac.in/index.aspx?id=ca_Notification_kol_19_1_26)
+2. **[C-DAC (Centre for Development of Advanced Computing)]** Walk-in interview for recruitment on contract on consolidated salary basis for project location at Duliajan, Assam & Guwahati, Assam. (ADVT No: CINE/REC/2025/01  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Silchar-SPE-PE-dec2025](https://www.cdac.in/index.aspx?id=ca_Silchar-SPE-PE-dec2025)
+3. **[C-DAC (Centre for Development of Advanced Computing)]** Noida Centre:- to 'Admit Card' for recruitment test for 'Technical Assistant' (Level-6) positions against advt. no. CORP/Grp.A&BGA/04/2025/NOIDA  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Notification_for_AdmitCard](https://www.cdac.in/index.aspx?id=ca_Notification_for_AdmitCard)
+4. **[C-DAC (Centre for Development of Advanced Computing)]** Cancellation of Recruitment of Below Group 'A' Posts - Chennai against Adv. No. CORP/GR.A&BGA/04/2025/CH  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Cancellation_of_Posts_Chennai](https://www.cdac.in/index.aspx?id=ca_Cancellation_of_Posts_Chennai)
+5. **[C-DAC (Centre for Development of Advanced Computing)]** C-DAC TVM - Cancellation of Recruitment- Project Technician-02 - CORP/JIT/07/2025-TVM  
+   Link: [https://www.cdac.in/index.aspx?id=ca_CancellationofRecruitmentPT02JIT11CDAC TVM](https://www.cdac.in/index.aspx?id=ca_CancellationofRecruitmentPT02JIT11CDAC TVM)
+6. **[C-DAC (Centre for Development of Advanced Computing)]** Mumbai Centre:- Cancellation of Recruitment Process for the post of Driver (Level-2  
    Link: [https://www.cdac.in/index.aspx?id=ca_Corrigendum3](https://www.cdac.in/index.aspx?id=ca_Corrigendum3)
-2. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt_No_ NHQ-12_1_2026_3174950: NIELIT Invites Applications from retired Government employees for the position of Consultant-Finance (01-one) purely on short-term contract basis. The initial period of engagement shall be for a period of one year, which may be further extended depending upon requirement and the performance review of the Consultant, but shall not be extended beyond 65 years. Interested candidates may bring completely filled Application Form alongwith photograph and self attested Certificate in support of qualification & experience as per the date mentioned above. Candidate has to be deposit the non refundable registration fee of Rs. 500/- per position through online mode on or before wal-in-interview date. For detailed advt. with eligibility criteria, remuneration, age, terms and conditions and application pro-forma log on to https://nielit.gov.in/recruitments  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-3. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No. NHQ-12/22/2025-NC (3160304): Result of Interviews held on 8th and 9th Sep, 2025 for the recruitment of Faculty (Assistant Professor/Associate Professor) for NIELIT deemed to be University Campuses  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=Kir8yGsTtOvvii3S8Kd+Tw==](https://www.nielit.gov.in/Fileviewer?fileId=Kir8yGsTtOvvii3S8Kd+Tw==)
-4. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No. NHQ-12/22/2025-NC (3160304): Schedule for Document Verification and Interview in respect of faculties in NIELIT Advt. No. NHQ-12/22/2025-NC (3160304): Result of Interviews held on 8th and 9th Sep, 2025 for the recruitment of Faculty (Assistant Professor/Associate Professor) for NIELIT deemed to be University Campuses  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=emNuikObEzLhQwkIYu9oeA==](https://www.nielit.gov.in/Fileviewer?fileId=emNuikObEzLhQwkIYu9oeA==)
-5. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Recruitment for the post of Chief Finance Officer (CFO) and Senior Finance Officer (SFO) on deputation basis in NIELIT.  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-6. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement vide No. 07/319/2025/NDL/FM: Empanelment of Resource Person (Private Secretary) to be deployed on contract basis.  
-   Link: [https://www.nielit.gov.in/Nielitmain/DEL](https://www.nielit.gov.in/Nielitmain/DEL)
-7. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] ADVERTISEMENT NO. A-12/7/2022-ADMINISTRATOR: LIST OF PROVISIONALLY SELECTED CANDIDATES FOR THE POST OF JUNIOR ASSISTANT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=5nZIJC4QS/2OED93TiWS6A==](https://www.nielit.gov.in/Fileviewer?fileId=5nZIJC4QS/2OED93TiWS6A==)
-8. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] ADVERTISEMENT NO. A-12/7/2022-ADMINISTRATOR: PROVISIONAL LIST OF SELECTED CANDIDATES FOR THE POST OF STENOGRAPHER  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=SftGpjpZaC6sY/MI5A+AIQ==](https://www.nielit.gov.in/Fileviewer?fileId=SftGpjpZaC6sY/MI5A+AIQ==)
-9. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement No. A-12/7/2022-ADMINISTRATOR: Result for the post of Assistant in NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=P/K5kf2UnwuiD8bd+ef+DQ==](https://www.nielit.gov.in/Fileviewer?fileId=P/K5kf2UnwuiD8bd+ef+DQ==)
-10. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement No. A-12/7/2022-ADMINISTRATOR: Result for the post of Assistant in NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=SoEoOdVaA8vAxwRiFiaWvg==](https://www.nielit.gov.in/Fileviewer?fileId=SoEoOdVaA8vAxwRiFiaWvg==)
-11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] ADVERTISEMENT NO. A-12/7/2022-ADMINISTRATOR: Result for the post of Assistant Director (Admin) and Senior Finance Officer in NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=slxEi+si8wn9m+2E5yETvQ==](https://www.nielit.gov.in/Fileviewer?fileId=slxEi+si8wn9m+2E5yETvQ==)
-12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt No. A-12/7/2022-Administrator: Schedule for skill test of shortlisted candidates for the post of Junior Assistant And Stenogrpaher at NIELIT:  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in-Interview for recruitment for the post of Junior Resource Person (Assistant-Academics) at NIELIT HQ purely on contract basis on 05-02-2024  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement No. A-12/7/2022-Administrator: Schedule for Skill test for the post of Junior Assistant and Stenographer at NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=XeWMam/4dpexe/b2tZv9yw==](https://www.nielit.gov.in/Fileviewer?fileId=XeWMam/4dpexe/b2tZv9yw==)
-15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] ADVERTISEMENT NO. A-12/7/2022-ADMINISTRATOR: Provisional list of Shortlisted candidates for SKILL TEST to the post of Junior Assistant  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=G28kPtiNi7sI26TcYtZzBg==](https://www.nielit.gov.in/Fileviewer?fileId=G28kPtiNi7sI26TcYtZzBg==)
+7. **[C-DAC (Centre for Development of Advanced Computing)]** Cancellation of recruitment process for the post of HRD-Executive, Level – 7 of C-DAC Mohali. Vide notification no.CORP/Grp.A&BGA/04/2025/ML  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=CANCELLATION-MOHALI.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=CANCELLATION-MOHALI.pdf)
+8. **[C-DAC (Centre for Development of Advanced Computing)]** List of Candidates selected/joined against the Regular positions at C-DAC, Mumbai. (Advt. No. Corp/Grp-A&BGA/04/2025/MB dated 14.06.2025  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Selection-list-C-DAC-Mumbai](https://www.cdac.in/index.aspx?id=ca_Selection-list-C-DAC-Mumbai)
+9. **[C-DAC (Centre for Development of Advanced Computing)]** Result - Advt. Ref. No. C-DACK/COCP/2025/01 - Project Manager, Senior Project Engineer, Project Engineer, Project Assistant  
+   Link: [https://www.cdac.in/index.aspx?id=ca_Result_C-DACK-COCP-2025-01](https://www.cdac.in/index.aspx?id=ca_Result_C-DACK-COCP-2025-01)
+10. **[C-DAC (Centre for Development of Advanced Computing)]** Update 9 - Advt. No. CORP/GRP.A/06/2024 - Recruitment to the post of Scientist C - Declaration of Result  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Notice-Sci-C-Selection.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Notice-Sci-C-Selection.pdf)
+11. **[C-DAC (Centre for Development of Advanced Computing)]** Update 8 – Advt. No. CORP/GRP.A/06/2024 – Recruitment to the post of Scientist C – Further Selection process  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Notice_for_interview_shortlist_ further process.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Notice_for_interview_shortlist_ further process.pdf)
+12. **[C-DAC (Centre for Development of Advanced Computing)]** Update 7 - Advt. No. CORP/GRP.A/06/2024 - Result of the examination held from 10th to 13th December 2025  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Update-Sci-c-exam-result1.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Update-Sci-c-exam-result1.pdf)
+13. **[C-DAC (Centre for Development of Advanced Computing)]** Update 6 - Advt. No. CORP/GRP.A/06/2024 - Issuance of revised answer key after redressal of grievances  
+   Link: [https://recruit-ndl.nielit.gov.in/cdac/frmHome.aspx](https://recruit-ndl.nielit.gov.in/cdac/frmHome.aspx)
+14. **[C-DAC (Centre for Development of Advanced Computing)]** Update 4 - Advt. No. CORP/GRP.A/06/2024 - admit card for the examination of Scientist C posts in C-DAC  
+   Link: [https://recruit-ndl.nielit.gov.in/cdac/Forms/DetailsForms/AdmitCard.aspx](https://recruit-ndl.nielit.gov.in/cdac/Forms/DetailsForms/AdmitCard.aspx)
+15. **[C-DAC (Centre for Development of Advanced Computing)]** Update 2 - Advt. No. CORP/GRP.A/06/2024 - Notice regarding the Recruitment examination of notified positions of Scientist C in C-DAC  
+   Link: [https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Sci-C-Update-examination.pdf](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Sci-C-Update-examination.pdf)
 
 ### Sample Uncertain Listings (General titles)
 These titles did not have a clear discipline keyword in the header. For these, Layer 3 (PDF scanning) or manual review is required to verify CS/IT relevance.
@@ -176,27 +176,27 @@ These titles did not have a clear discipline keyword in the header. For these, L
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==](https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==)
 3. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in-Interview for the post of VLSI Design Expert/Junior VLSI Engineer (Post-02) on Contract basis for a period of 01 year at NIELIT CoE Noida Date of walk in interview: 25/02/2026  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-4. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Schedule Document Verification and Interview-Advt. No. NHQ-12023/36/2025-NIELIT (3164855)  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=s2UvoDPNzm7s2EwzWuvZBQ==](https://www.nielit.gov.in/Fileviewer?fileId=s2UvoDPNzm7s2EwzWuvZBQ==)
-5. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in Interview for position of Technical Programme Consultant (Advanced Skills Programme) purely on contract basis (advt. no. NC-SW040/14/2025-NC). Last date to apply - 9th Nov 2025  
-   Link: [https://www.nielit.gov.in/Recruitments/DEL](https://www.nielit.gov.in/Recruitments/DEL)
-6. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No.: NHQ-39/10/2025-NIELIT (3158711) : NIELIT invites applications for interview from suitable and interested Indian Citizen candidates for the Post :- Chief Executive Officer (CEO) purely on temporary and short-term contract basis on consolidated remuneration initially for a period of one year which may be considered for extension based on requirement and performance. List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026  
+4. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No.: NHQ-39/10/2025-NIELIT (3158711) : NIELIT invites applications for interview from suitable and interested Indian Citizen candidates for the Post :- Chief Executive Officer (CEO) purely on temporary and short-term contract basis on consolidated remuneration initially for a period of one year which may be considered for extension based on requirement and performance. List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=dOeepOk+1Q00wu0hQU3KVg==](https://www.nielit.gov.in/Fileviewer?fileId=dOeepOk+1Q00wu0hQU3KVg==)
-7. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No. NHQ-12/22/2025-NC (3160304): Result of Interviews held on 11th and 12th Sep, 2025 for the recruitment of Manpower for EdTech Project in NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=5hFvZ/vnGJEDIYYHXUf9yA==](https://www.nielit.gov.in/Fileviewer?fileId=5hFvZ/vnGJEDIYYHXUf9yA==)
-8. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt No. NHQ-12/22/2025-NC (3160304):Schedule with Eligible Candidate for Document Verification and Interview Edtech Project Advt No. NHQ-12/22/2025-NC (3160304): Schedule for Document Verification and Interview under EdTech Project Advt. No. NHQ-12/22/2025-NC (3160304): Result of Interviews held on 11th and 12th Sep, 2025 for the recruitment of Manpower for EdTech Project in NIELIT  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=Kg9ZH6R7vzWi1VcGxs/9FA==](https://www.nielit.gov.in/Fileviewer?fileId=Kg9ZH6R7vzWi1VcGxs/9FA==)
-9. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Result of WBL-Interns under WBL project applied against the advertisement published on various platforms AICTE/WBL portal  
+5. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Result of WBL-Interns under WBL project applied against the advertisement published on various platforms AICTE/WBL portal  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=6u+/8nBI+NRxxBfaLtmiAQ==](https://www.nielit.gov.in/Fileviewer?fileId=6u+/8nBI+NRxxBfaLtmiAQ==)
-10. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] List of shortlisted candidates for document verification and interview for internship (July 2025 batch) under WBL project applied against the advertisement published on various platforms AICTE/WBL portal  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=7Lb3NJGoSlOBr3LOt9T+vQ==](https://www.nielit.gov.in/Fileviewer?fileId=7Lb3NJGoSlOBr3LOt9T+vQ==)
-11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement vide no. 07/330/2025/NDL/FM: Empanelment of Resource Persons to be deployed purely on contract basis Last date of application is 04/09/2025.For complete details , kindly visit https://nielit.gov.in/delhi/recruitments  
-   Link: [https://www.nielit.gov.in/Nielitmain/DEL](https://www.nielit.gov.in/Nielitmain/DEL)
-12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in Interview on 11th June, 2025 at NIELIT Ajmer (Kekri) : Applications are invited from interested and eligible candidates for selection/empanelment of various posts for NIELIT Ajmer (Kekri), purely on contract basis  
-   Link: [https://www.nielit.gov.in/Recruitments/DEL](https://www.nielit.gov.in/Recruitments/DEL)
-13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] WALK-IN INTERVIEW AT NIELIT AJMER ON 30.05.2025 : Applications are invited from interested and eligible candidates for selection/empanelment of posts for NIELIT Ajmer (Kekri),purely on contract basis, initially for a period of One year on consolidated emolument.  
-   Link: [https://www.nielit.gov.in/Recruitments/DEL](https://www.nielit.gov.in/Recruitments/DEL)
-14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] List of shortlisted candidates for document verification and interview for internship (January 2025 batch) under WBL project applied against the advertisement published on various platforms (AICTE/WBL portal) dated 03.03.2025  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=uGyKDmaEK1fUqLJAP0tvPg==](https://www.nielit.gov.in/Fileviewer?fileId=uGyKDmaEK1fUqLJAP0tvPg==)
-15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No.: NHQ/462/2024-NC(E-3150372) : Advertisement for the position(s) of Consultant (HR), Junior Developer and Developer  
+6. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement for the recruitment of contractual staff at the position of Multi-Tasking Staff (MTS) under Electronics & ICT Academy Scheme, Phase-II:  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+7. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Filling up the various posts in ERNET India on Deputation Basis  
+   Link: [https://www.nielit.gov.in/Fileviewer?fileId=lbwZ1Lo0y51Lze47BX+8Dg==](https://www.nielit.gov.in/Fileviewer?fileId=lbwZ1Lo0y51Lze47BX+8Dg==)
+8. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited from interested and eligible candidates for selection / empanelment of Project Coordinator through walk-in-interviews to be held at NIELIT Ropar, Punjab for the contractual deployment with a client department at Chandigarh  
+   Link: [https://www.nielit.gov.in/chandigarh/recruitments](https://www.nielit.gov.in/chandigarh/recruitments)
+9. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for the position of Consultant (Placements) on short term contract purely on temporary basis on consolidated remuneration -  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+10. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Recruitment to the Post of Executive Director in NIELIT  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower i.e. Resource Person (Alumni/Placement Portal) on short term contract purely on a temporary basis on consolidated remuneration in NIELIT:  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for contractual engagement of 01 position of Chief Resource Person(Project Coordination) and 01 position of Resource Person(Admin/Account) at NIELIT HQ. For details regarding Advertisement, Eligibility Criteria, Terms & Conditions, Application Form, please click the links below:  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Scientific and Technical Posts to be filled up on direct recruitment basis in NIC. Click here for Detailed Advertisement and Apply online  
+   Link: [https://www.calicut.nielit.in/nic23/](https://www.calicut.nielit.in/nic23/)
+14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower on short term contract purely on a temporary basis on consolidated remuneration in NIELIT  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for the Internship in NIELIT. For details of Eligibility Criteria, Terms & Conditions and Application Form, please click the below mentioned links -  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)

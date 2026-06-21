@@ -360,6 +360,15 @@ def classify(title, link="", org_key="", session=None):
     """
     t = f" {title.lower()} "  # pad so word-boundary-ish substrings match cleanly
 
+    # ── Filter out past years (e.g. 2025 and older) to remove expired historical archives ──
+    # Current year is 2026.
+    years = [int(y) for y in re.findall(r"\b(20\d{2})\b", t)]
+    if link:
+        years += [int(y) for y in re.findall(r"\b(20\d{2})\b", link.lower())]
+    if years and max(years) < 2026:
+        if max(years) <= 2025:
+            return "excluded"
+
     # ── Layer 1: Title keyword matching ────────────────────────────────────
     has_include = any(kw in t for kw in INCLUDE_KEYWORDS)
     has_exclude = any(kw in t for kw in EXCLUDE_KEYWORDS)
@@ -413,10 +422,21 @@ def annotate(listings, org_key="", session=None):
         session: requests.Session (optional, for PDF content extraction)
     """
     for item in listings:
-        item["relevance"] = classify(
-            item.get("title", ""),
-            link=item.get("link", ""),
-            org_key=org_key,
-            session=session,
-        )
+        # Filter out postings that explicitly have old dates (e.g. year <= 2025)
+        date_str = item.get("date", "")
+        is_old = False
+        if date_str:
+            years = [int(y) for y in re.findall(r"\b(20\d{2})\b", date_str)]
+            if years and max(years) <= 2025:
+                is_old = True
+
+        if is_old:
+            item["relevance"] = "excluded"
+        else:
+            item["relevance"] = classify(
+                item.get("title", ""),
+                link=item.get("link", ""),
+                org_key=org_key,
+                session=session,
+            )
     return listings

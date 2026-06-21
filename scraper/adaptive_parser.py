@@ -65,7 +65,7 @@ class AdaptiveParser:
         # Iterate through all anchor tags on the page
         for a in soup.find_all("a", href=True):
             href = a["href"].strip()
-            if not href or href.startswith("javascript:") or href.startswith("mailto:") or href == "#":
+            if not href or href.startswith("javascript:") or href.startswith("mailto:") or href.startswith("#"):
                 continue
 
             link = urljoin(self.base_url, href)
@@ -95,11 +95,33 @@ class AdaptiveParser:
             title = re.sub(r"\s*(click here|download|apply online|apply now|here|pdf|link)\s*", " ", title, flags=re.I)
             title = re.sub(r"[\s,\.\-\|\[\]\(\)]+$", "", title).strip()
 
+            title_lower = title.lower()
+            if any(w in title_lower for w in ["skip to", "screen reader", "accessibility", "font size", "zoom in", "zoom out", "skip navigation"]):
+                continue
+
             if len(title) < 5:
                 continue
 
+            # Check parents for archive containers
+            parent_el = a
+            is_archived = False
+            for _ in range(4):
+                if not parent_el:
+                    break
+                p_attrs = getattr(parent_el, "attrs", {})
+                p_class = " ".join(p_attrs.get("class", [])) if isinstance(p_attrs.get("class"), list) else str(p_attrs.get("class", ""))
+                p_class = p_class.lower()
+                p_id = str(p_attrs.get("id", "")).lower()
+                if any(w in p_class or w in p_id for w in ["archive", "expired", "old", "closed", "past"]):
+                    is_archived = True
+                    break
+                parent_el = parent_el.parent
+
             # 2. Score the link for job relevance
             score = self._score_element(clean_link, title)
+            if is_archived:
+                score -= 50
+
             if score < 35:
                 continue
 
