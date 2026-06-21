@@ -1161,7 +1161,8 @@ def parse_ntpc(html_content):
             continue
         seen.add(link)
         date_str = ""
-        date_span = card.find('span', class_=re.compile(r'date|time', re.I))
+        date_pattern = re.compile(r'date|time', re.I)
+        date_span = card.find('span', class_=date_pattern)
         if date_span:
             date_str = date_span.get_text(strip=True)
         postings.append({"title": title, "link": link, "date": date_str})
@@ -1238,12 +1239,10 @@ def parse_aai(html_content):
 
 def parse_rrb(html_content):
     """
-    Parses Indian Railways (RRB) notifications.
-    URL: https://www.rrbapply.gov.in/
-    Structure: SPA portal — static HTML may have no content.
-    Fallback: extracts CEN (Centralised Employment Notice) links from any
-    available text on the page. Also checks the static Indian Railways
-    board page for recruitment links.
+    Parses Indian Railways (RRB) notifications from the static board page.
+    URL: https://indianrailways.gov.in/railwayboard/view_section.jsp
+    Structure: Static HTML page with recruitment links and CEN notifications.
+    Note: rrbapply.gov.in is a React SPA that returns no useful static HTML.
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
