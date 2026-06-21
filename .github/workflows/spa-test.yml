@@ -1,0 +1,86 @@
+name: SPA Scraper Test
+
+on:
+  schedule:
+    - cron: '30 6 * * 1'  # 06:30 UTC every Monday (12:00 PM IST)
+  workflow_dispatch:        # Manual trigger for testing
+
+permissions:
+  contents: read
+
+jobs:
+  test-spa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright Chromium
+        run: playwright install chromium --with-deps
+
+      - name: Test SPA scraper on DRDO (Playwright)
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          python -c "
+          import sys
+          sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+          from scraper.crawler import GovJobCrawler
+
+          crawler = GovJobCrawler()
+          result = crawler.run_scrape(orgs=['drdo_spa'])
+          postings = result.get('drdo_spa')
+
+          if postings is None:
+              print('FAIL: drdo_spa returned None')
+              sys.exit(1)
+          if len(postings) == 0:
+              print('FAIL: drdo_spa returned 0 listings')
+              sys.exit(1)
+
+          print(f'PASS: drdo_spa found {len(postings)} listings')
+          for p in postings[:3]:
+              print(f'  - {p[\"title\"][:80]}')
+          "
+
+      - name: Test SPA scraper on RRB (Playwright + static fallback)
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          python -c "
+          import sys
+          sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+          from scraper.crawler import GovJobCrawler
+
+          crawler = GovJobCrawler()
+          result = crawler.run_scrape(orgs=['rrb'])
+          postings = result.get('rrb')
+
+          if postings is None:
+              print('FAIL: rrb returned None')
+              sys.exit(1)
+
+          print(f'PASS: rrb returned {len(postings)} listings (SPA or static fallback)')
+          for p in postings[:3]:
+              print(f'  - {p[\"title\"][:80]}')
+          "
+
+      - name: Test stealth mode import
+        run: |
+          python -c "
+          from playwright_stealth import stealth_sync
+          print('PASS: playwright-stealth imported successfully')
+          "
