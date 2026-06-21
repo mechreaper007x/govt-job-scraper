@@ -6,8 +6,8 @@
 ## Global Breakdown
 | Category | Count | Percentage | Description |
 | --- | --- | --- | --- |
-| **Relevant** | 264 | 7.5% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
-| **Uncertain** | 1043 | 29.7% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
+| **Relevant** | 257 | 7.3% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
+| **Uncertain** | 1050 | 29.9% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
 | **Excluded** | 2204 | 62.8% | Confirmed noise (Civil, Mechanical, Drivers, Doctors, Trade Apprentices, etc.) |
 
 ## Per-Organization Relevancy Breakdown
@@ -27,7 +27,7 @@
 | CRIS (Centre for Railway Information Systems) | Success | 292 | 28.4% (83) | 0.0% (0) | 71.6% (209) |
 | CSIR Fourth Paradigm Institute | Success | 14 | 21.4% (3) | 35.7% (5) | 42.9% (6) |
 | National e-Governance Division (NeGD) | Success | 6 | 16.7% (1) | 50.0% (3) | 33.3% (2) |
-| NIELIT (National Institute of Electronics & IT) | Success | 607 | 11.9% (72) | 19.8% (120) | 68.4% (415) |
+| NIELIT (National Institute of Electronics & IT) | Success | 607 | 10.7% (65) | 20.8% (126) | 68.5% (416) |
 | MPPSC (Madhya Pradesh Public Service Commission) | Success | 28 | 10.7% (3) | 14.3% (4) | 75.0% (21) |
 | RPSC (Rajasthan Public Service Commission) | Success | 53 | 9.4% (5) | 35.8% (19) | 54.7% (29) |
 | IBPS (Institute of Banking Personnel Selection) | Success | 11 | 9.1% (1) | 63.6% (7) | 27.3% (3) |
@@ -39,12 +39,12 @@
 | Raja Ramanna Centre for Advanced Technology (RRCAT) | Success | 106 | 0.9% (1) | 4.7% (5) | 94.3% (100) |
 | ITI Limited (Indian Telephone Industries) | Success | 106 | 0.9% (1) | 38.7% (41) | 60.4% (64) |
 | ONGC (Oil and Natural Gas Corporation) | Success | 439 | 0.7% (3) | 46.0% (202) | 53.3% (234) |
+| BEL (Bharat Electronics Limited) | Failed | 0 | - | - | - |
 | ISRO (Indian Space Research Organisation) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
 | DRDO (Defence Research and Development Organisation) | Success | 15 | 0.0% (0) | 93.3% (14) | 6.7% (1) |
 | ECIL (Electronics Corporation of India Ltd) | Success | 23 | 0.0% (0) | 100.0% (23) | 0.0% (0) |
-| NCS (National Career Service - Ministry of Labour & Employment) | Success | 10 | 0.0% (0) | 70.0% (7) | 30.0% (3) |
+| NCS (National Career Service - Ministry of Labour & Employment) | Success | 10 | 0.0% (0) | 80.0% (8) | 20.0% (2) |
 | HAL (Hindustan Aeronautics Limited) | Success | 9 | 0.0% (0) | 44.4% (4) | 55.6% (5) |
-| BEL (Bharat Electronics Limited) | Failed | 0 | - | - | - |
 | SAIL (Steel Authority of India) | Success | 29 | 0.0% (0) | 93.1% (27) | 6.9% (2) |
 | SAMEER (R&D under MeitY) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
 | NTPC (National Thermal Power Corporation) | Success | 8 | 0.0% (0) | 100.0% (8) | 0.0% (0) |
@@ -55,47 +55,47 @@
 | BECIL (Broadcast Engineering Consultants) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
 | SIDBI (Small Industries Development Bank) | Failed | 0 | - | - | - |
 | SEBI (Securities & Exchange Board) | Success | 5 | 0.0% (0) | 80.0% (4) | 20.0% (1) |
-| SJVN Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| AAI (Airports Authority of India) | Success | 97 | 0.0% (0) | 56.7% (55) | 43.3% (42) |
 | TCIL (Telecommunications Consultants) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| AAI (Airports Authority of India) | Success | 97 | 0.0% (0) | 56.7% (55) | 43.3% (42) |
 | Digital India Corporation (DIC) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
-| RITES Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | Nuclear Power Corporation of India (NPCIL) | Success | 5 | 0.0% (0) | 100.0% (5) | 0.0% (0) |
-| Semi-Conductor Laboratory (SCL) Mohali | Success | 23 | 0.0% (0) | 95.7% (22) | 4.3% (1) |
 | Dedicated Freight Corridor Corporation (DFCCIL) | Success | 2 | 0.0% (0) | 50.0% (1) | 50.0% (1) |
+| RITES Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
+| Semi-Conductor Laboratory (SCL) Mohali | Success | 23 | 0.0% (0) | 95.7% (22) | 4.3% (1) |
 | REC Limited | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| Power Finance Corporation (PFC) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| SJVN Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | Central Electronics Limited (CEL) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| Bharat Petroleum Corporation Limited (BPCL) | Success | 8 | 0.0% (0) | 75.0% (6) | 25.0% (2) |
+| Power Finance Corporation (PFC) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| NHPC Limited | Success | 12 | 0.0% (0) | 100.0% (12) | 0.0% (0) |
 | Grid Controller of India Limited (GRID-INDIA) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | Hindustan Petroleum Corporation Limited (HPCL) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| NHPC Limited | Success | 12 | 0.0% (0) | 100.0% (12) | 0.0% (0) |
 | National Internet Exchange of India (NIXI) | Success | 5 | 0.0% (0) | 20.0% (1) | 80.0% (4) |
 | Reserve Bank of India (RBI) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| Bharat Petroleum Corporation Limited (BPCL) | Success | 8 | 0.0% (0) | 75.0% (6) | 25.0% (2) |
 | SSC (Staff Selection Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | IRCTC (Indian Railway Catering and Tourism Corporation) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
 | MPSC (Maharashtra Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| CONCOR (Container Corporation of India) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
 | Kerala Public Service Commission | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
-| TNPSC (Tamil Nadu Public Service Commission) | Success | 4 | 0.0% (0) | 75.0% (3) | 25.0% (1) |
 | EIL (Engineers India Limited) | Success | 6 | 0.0% (0) | 100.0% (6) | 0.0% (0) |
-| APPSC (Andhra Pradesh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | GPSC (Gujarat Public Service Commission) | Success | 55 | 0.0% (0) | 14.5% (8) | 85.5% (47) |
+| TNPSC (Tamil Nadu Public Service Commission) | Success | 4 | 0.0% (0) | 75.0% (3) | 25.0% (1) |
+| APPSC (Andhra Pradesh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | OPSC (Odisha Public Service Commission) | Success | 2 | 0.0% (0) | 100.0% (2) | 0.0% (0) |
 | WBPSC (West Bengal Public Service Commission) | Success | 206 | 0.0% (0) | 5.8% (12) | 94.2% (194) |
-| JPSC (Jharkhand Public Service Commission) | Success | 50 | 0.0% (0) | 18.0% (9) | 82.0% (41) |
-| CGPSC (Chhattisgarh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | UKPSC (Uttarakhand Public Service Commission) | Success | 7 | 0.0% (0) | 42.9% (3) | 57.1% (4) |
-| GAIL (India) Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| CGPSC (Chhattisgarh Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| JPSC (Jharkhand Public Service Commission) | Success | 50 | 0.0% (0) | 18.0% (9) | 82.0% (41) |
 | NABARD (National Bank for Agriculture and Rural Development) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
-| NHB (National Housing Bank) | Success | 17 | 0.0% (0) | 64.7% (11) | 35.3% (6) |
-| MDL (Mazagon Dock Shipbuilders) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| GAIL (India) Limited | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | OIL (Oil India Limited) | Success | 3 | 0.0% (0) | 66.7% (2) | 33.3% (1) |
+| NHB (National Housing Bank) | Success | 17 | 0.0% (0) | 64.7% (11) | 35.3% (6) |
 | NALCO (National Aluminium Company) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| MDL (Mazagon Dock Shipbuilders) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
 | HSSC (Haryana Staff Selection Commission) | Success | 2 | 0.0% (0) | 50.0% (1) | 50.0% (1) |
 | DSSSB (Delhi Subordinate Services Selection Board) | Success | 4 | 0.0% (0) | 100.0% (4) | 0.0% (0) |
 | RSMSSB (Rajasthan Staff Selection Board) | Success | 1 | 0.0% (0) | 100.0% (1) | 0.0% (0) |
+| CONCOR (Container Corporation of India) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 
 ## Relevancy Verification Samples
 
@@ -174,29 +174,29 @@ These titles did not have a clear discipline keyword in the header. For these, L
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=3MlpYIVOC0C8ODk2D+Wh+w==](https://www.nielit.gov.in/Fileviewer?fileId=3MlpYIVOC0C8ODk2D+Wh+w==)
 2. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026 against Advt. No. NHQ-39/10/2025-NIELIT (3158711)  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==](https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==)
-3. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in-Interview for the post of VLSI Design Expert/Junior VLSI Engineer (Post-02) on Contract basis for a period of 01 year at NIELIT CoE Noida Date of walk in interview: 25/02/2026  
+3. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] WALK-IN-INTERVIEW [DATE- 11.03.2026] Advt. No. NHQ-12/03/2026-NIELIT/3171549: NIELIT invites applications from suitable, interested, and eligible candidates for the following position(s): Consultant (01-one) and 01 (one) Resource Person (Project Co-ordination), purely on a temporary and short-term contract basis on consolidated remuneration initially for a period of one year, which may be considered for extension based on performance and requirement. Interested candidates may bring a completely filled Application Form along with a photograph and self-attested certificate(s) in support of qualification experience as per the date mentioned above. Candidates have to deposit the non-refundable registration fee of Rs. 500/- per position through online mode on or before the walk-in-interview date. For detailed advertisement including eligibility criteria, remuneration, age, terms and conditions, and application pro-forma, log on to https://nielit.gov.in/recruitments.  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-4. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No.: NHQ-39/10/2025-NIELIT (3158711) : NIELIT invites applications for interview from suitable and interested Indian Citizen candidates for the Post :- Chief Executive Officer (CEO) purely on temporary and short-term contract basis on consolidated remuneration initially for a period of one year which may be considered for extension based on requirement and performance. List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026  
+4. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in-Interview for the post of VLSI Design Expert/Junior VLSI Engineer (Post-02) on Contract basis for a period of 01 year at NIELIT CoE Noida Date of walk in interview: 25/02/2026  
+   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
+5. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advt. No.: NHQ-39/10/2025-NIELIT (3158711) : NIELIT invites applications for interview from suitable and interested Indian Citizen candidates for the Post :- Chief Executive Officer (CEO) purely on temporary and short-term contract basis on consolidated remuneration initially for a period of one year which may be considered for extension based on requirement and performance. List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=dOeepOk+1Q00wu0hQU3KVg==](https://www.nielit.gov.in/Fileviewer?fileId=dOeepOk+1Q00wu0hQU3KVg==)
-5. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Result of WBL-Interns under WBL project applied against the advertisement published on various platforms AICTE/WBL portal  
+6. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Result of WBL-Interns under WBL project applied against the advertisement published on various platforms AICTE/WBL portal  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=6u+/8nBI+NRxxBfaLtmiAQ==](https://www.nielit.gov.in/Fileviewer?fileId=6u+/8nBI+NRxxBfaLtmiAQ==)
-6. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement for the recruitment of contractual staff at the position of Multi-Tasking Staff (MTS) under Electronics & ICT Academy Scheme, Phase-II:  
+7. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Advertisement for the recruitment of contractual staff at the position of Multi-Tasking Staff (MTS) under Electronics & ICT Academy Scheme, Phase-II:  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-7. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Filling up the various posts in ERNET India on Deputation Basis  
+8. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Filling up the various posts in ERNET India on Deputation Basis  
    Link: [https://www.nielit.gov.in/Fileviewer?fileId=lbwZ1Lo0y51Lze47BX+8Dg==](https://www.nielit.gov.in/Fileviewer?fileId=lbwZ1Lo0y51Lze47BX+8Dg==)
-8. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited from interested and eligible candidates for selection / empanelment of Project Coordinator through walk-in-interviews to be held at NIELIT Ropar, Punjab for the contractual deployment with a client department at Chandigarh  
+9. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited from interested and eligible candidates for selection / empanelment of Project Coordinator through walk-in-interviews to be held at NIELIT Ropar, Punjab for the contractual deployment with a client department at Chandigarh  
    Link: [https://www.nielit.gov.in/chandigarh/recruitments](https://www.nielit.gov.in/chandigarh/recruitments)
-9. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for the position of Consultant (Placements) on short term contract purely on temporary basis on consolidated remuneration -  
+10. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for the position of Consultant (Placements) on short term contract purely on temporary basis on consolidated remuneration -  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-10. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Recruitment to the Post of Executive Director in NIELIT  
+11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Recruitment to the Post of Executive Director in NIELIT  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower i.e. Resource Person (Alumni/Placement Portal) on short term contract purely on a temporary basis on consolidated remuneration in NIELIT:  
+12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower i.e. Resource Person (Alumni/Placement Portal) on short term contract purely on a temporary basis on consolidated remuneration in NIELIT:  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for contractual engagement of 01 position of Chief Resource Person(Project Coordination) and 01 position of Resource Person(Admin/Account) at NIELIT HQ. For details regarding Advertisement, Eligibility Criteria, Terms & Conditions, Application Form, please click the links below:  
+13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for contractual engagement of 01 position of Chief Resource Person(Project Coordination) and 01 position of Resource Person(Admin/Account) at NIELIT HQ. For details regarding Advertisement, Eligibility Criteria, Terms & Conditions, Application Form, please click the links below:  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Scientific and Technical Posts to be filled up on direct recruitment basis in NIC. Click here for Detailed Advertisement and Apply online  
+14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Scientific and Technical Posts to be filled up on direct recruitment basis in NIC. Click here for Detailed Advertisement and Apply online  
    Link: [https://www.calicut.nielit.in/nic23/](https://www.calicut.nielit.in/nic23/)
-14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower on short term contract purely on a temporary basis on consolidated remuneration in NIELIT  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Applications are invited for the Internship in NIELIT. For details of Eligibility Criteria, Terms & Conditions and Application Form, please click the below mentioned links -  
+15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Engagement of Manpower on short term contract purely on a temporary basis on consolidated remuneration in NIELIT  
    Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)

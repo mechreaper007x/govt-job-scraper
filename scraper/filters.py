@@ -370,7 +370,16 @@ def classify(title, link="", org_key="", session=None):
             return "excluded"
 
     # ── Layer 1: Title keyword matching ────────────────────────────────────
-    has_include = any(kw in t for kw in INCLUDE_KEYWORDS)
+    has_include = False
+    for kw in INCLUDE_KEYWORDS:
+        if kw == "it/":
+            if "it/" in t and "nielit/" not in t:
+                has_include = True
+                break
+        else:
+            if kw in t:
+                has_include = True
+                break
     has_exclude = any(kw in t for kw in EXCLUDE_KEYWORDS)
 
     if has_include:
