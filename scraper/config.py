@@ -100,13 +100,13 @@ ORGS_CONFIG = {
     # ── Steel / Heavy Manufacturing PSUs ───────────────────────────────────
     "sail": {
         "name": "SAIL (Steel Authority of India)",
-        "url": "https://www.sail.co.in/careers",
+        "url": "https://www.sailcareers.com",
         "note": "May fail with SSL certificate chain error — server-side issue."
     },
     # ── Power PSUs ─────────────────────────────────────────────────────────
     "ntpc": {
         "name": "NTPC (National Thermal Power Corporation)",
-        "url": "https://www.ntpc.co.in/page/career-opportunities"
+        "url": "https://www.ntpc.co.in/jobs-ntpc"
     },
     # ── Aviation / Infrastructure ──────────────────────────────────────────
     "aai": {

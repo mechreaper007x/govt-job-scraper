@@ -71,7 +71,10 @@ INCLUDE_KEYWORDS = [
     "adjunct scientist", "adjunct engineer",
     # General technical roles
     "technical assistant", "technical consultant",
-    "it officer", "information officer",
+    "it officer", "information officer", "it resource", "it professional",
+    "it support", "it manager", "it associate", "it consultant", "it specialist",
+    "it executive", "system engineer", "systems engineer", "technical officer",
+    "scientific officer",
     # Telecom / PSU technical roles
     "junior telecom officer", " jto",
     # Scientific assistant roles (BARC, ISRO style)
@@ -83,25 +86,28 @@ EXCLUDE_KEYWORDS = [
     "civil engineering", "civil works", "mechanical engineering",
     "electrical engineering", "chemical engineering", "metallurgy",
     "instrumentation engineering", "architecture",
-    # non-engineering / support roles
+    # non-engineering / support roles & trades
     "driver", "havildar", "fireman", "cook", "catering",
     "nurse", "nursing", "pharmacist", "medical officer", "radiographer",
     "lab technician", "stenographer", "draughtsman", "library assistant",
     "security officer", "office attendant", "peon",
     "multi tasking staff", " mts ",
+    "trade apprentice", "iti apprentice", "technician b", "technician-b",
+    "technician a", "technician-a", "clerk", "typist", "receptionist",
     # pure science branches common in ISRO/BARC/DRDO postings
     "geology", "geophysics", "agriculture", "physical sciences",
     "life sciences", "ordnance", "ammunition",
     # administrative, legal, hr, and financial roles
     "legal", "law ", "law officer", "finance", "accounts", "audit", "marketing",
     "administrative officer", " admin ", "admin officer", "human resource", " hr ",
-    "personal assistant", "private secretary",
+    "personal assistant", "private secretary", "administration", "administrative",
+    "assistant",  # safe because specific include matches (scientific assistant etc.) are checked first
     # management / executive roles (not CSE-specific)
     "chairman", "controller", "managing director",
     # teaching / academic non-research
     "guest faculty", "teacher", "professor", "principal", "lecturer",
     # language / translation
-    "translator", "translation officer",
+    "translator", "translation officer", "translation", "hindi", "rajbhasha",
 ]
 
 

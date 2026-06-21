@@ -80,6 +80,10 @@ class RobustGovAdapter(HTTPAdapter):
             assert_hostname=False,
         )
 
+    def cert_verify(self, conn, url, verify, cert):
+        # Force verify=False for all requests using this adapter
+        super().cert_verify(conn, url, False, cert)
+
 
 # ─── Parser Map ──────────────────────────────────────────────────────────────
 

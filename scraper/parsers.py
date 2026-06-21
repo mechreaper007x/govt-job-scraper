@@ -1074,9 +1074,9 @@ def parse_ongc(html_content):
                           'about us', 'contact', 'home', 'site map', 'feedback', 'photo gallery']
         if any(g in title_lower for g in generic_titles):
             continue
-        if any(kw in link_lower for kw in ['recruit', 'vacanc', 'notification', 'engagement']):
-            # Also require the link to point to a PDF or a specific notification page
-            if any(ext in link_lower for ext in ['.pdf', 'notification', 'recruit', 'vacanc', 'engagement']):
+        if any(kw in link_lower or kw in title_lower for kw in ['recruit', 'vacanc', 'notification', 'engagement']):
+            # Also require the link to point to a PDF or a specific recruitment portal
+            if '.pdf' in link_lower or 'recruitment.ongc.' in link_lower:
                 postings.append({"title": title, "link": link, "date": ""})
 
     return postings
@@ -1085,12 +1085,12 @@ def parse_ongc(html_content):
 def parse_sail(html_content):
     """
     Parses SAIL careers page.
-    URL: https://www.sail.co.in/careers
+    URL: https://www.sailcareers.com
     Structure: HTML page with links to recruitment notifications.
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
-    BASE = "https://www.sail.co.in"
+    BASE = "https://www.sailcareers.com"
     seen = set()
 
     # Try table rows first
@@ -1115,7 +1115,7 @@ def parse_sail(html_content):
     if not postings:
         for a in soup.find_all('a'):
             href = a.get('href', '').strip()
-            if not href or href.startswith('javascript:') or href == '#':
+            if not href or href.startswith('javascript:') or href.startswith('#') or href == '#':
                 continue
             title = a.get_text(strip=True)
             if len(title) < 8:
@@ -1126,48 +1126,69 @@ def parse_sail(html_content):
             link_lower = link.lower()
             title_lower = title.lower()
             if any(kw in link_lower or kw in title_lower
-                   for kw in ['recruit', 'vacanc', 'notification', 'career', 'engagement']):
+                   for kw in ['recruit', 'vacanc', 'notification', 'career', 'engagement', 'apply', 'job', 'mtt', 'ypb', 'call.letter']):
                 seen.add(link)
                 postings.append({"title": title, "link": link, "date": ""})
 
     return postings
 
 
+
 def parse_ntpc(html_content):
     """
     Parses NTPC careers page.
-    URL: https://www.ntpc.co.in/page/career-opportunities
-    Structure: Static page with links to recruitment notifications.
-    Fallback: extracts any recruitment links from the page.
+    URL: https://www.ntpc.co.in/jobs-ntpc
+    Structure: HTML table with class "table" listing job notices.
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
     BASE = "https://www.ntpc.co.in"
     seen = set()
 
-    # If page has job listing cards or table rows
-    for card in soup.find_all(['tr', 'div', 'li']):
-        a_tag = card.find('a')
-        if not a_tag or not a_tag.get('href'):
-            continue
-        title = a_tag.get_text(strip=True)
-        href = a_tag['href']
-        if len(title) < 8:
-            continue
-        if href.startswith('javascript:') or href == '#':
-            continue
-        link = urljoin(BASE + "/", href)
-        if link in seen:
-            continue
-        seen.add(link)
-        date_str = ""
-        date_pattern = re.compile(r'date|time', re.I)
-        date_span = card.find('span', class_=date_pattern)
-        if date_span:
-            date_str = date_span.get_text(strip=True)
-        postings.append({"title": title, "link": link, "date": date_str})
+    # Find the main table listing job notices
+    table = soup.find('table', class_='table') or soup.find('table')
+    if table:
+        for row in table.find_all('tr'):
+            tds = row.find_all('td')
+            if len(tds) >= 2:
+                # First cell contains the title (often inside h4, p, etc.)
+                title_cell = tds[0]
+                title = title_cell.get_text(separator=' ', strip=True)
+                title = re.sub(r'\s+', ' ', title).strip()
+                
+                # Second cell contains the links
+                link_cell = tds[1]
+                a_tag = link_cell.find('a')
+                if a_tag and a_tag.get('href'):
+                    href = a_tag['href'].strip()
+                    if href.startswith('javascript:') or href == '#':
+                        continue
+                    link = urljoin(BASE + "/", href)
+                    if link not in seen and len(title) > 5:
+                        seen.add(link)
+                        postings.append({"title": title, "link": link, "date": ""})
+                        
+    # Fallback to general link scraping if table not found (to remain resilient)
+    if not postings:
+        main = soup.find(id='main') or soup.find('article') or soup
+        for a in main.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href.startswith('#') or href == '#':
+                continue
+            title = a.get_text(strip=True)
+            if len(title) < 10:
+                continue
+            link = urljoin(BASE + "/", href)
+            # Only include if it looks like a document or job-specific link
+            link_lower = link.lower()
+            title_lower = title.lower()
+            if any(kw in link_lower or kw in title_lower for kw in ['pdf', 'advertisement', 'recruitment', 'opening', 'job']):
+                if link not in seen:
+                    seen.add(link)
+                    postings.append({"title": title, "link": link, "date": ""})
 
     return postings
+
 
 
 def parse_aai(html_content):
@@ -1289,17 +1310,13 @@ def parse_rrb(html_content):
 
 
 def test_parsers():
-
     """
     Utility testing routine to pull live websites and check parsing yields.
     """
     import sys
-    import ssl
     import io
-    from requests.adapters import HTTPAdapter
-    from urllib3.poolmanager import PoolManager
-    from scraper.config import ORGS_CONFIG, DEFAULT_HEADERS
-    from scraper.filters import classify
+    from scraper.crawler import GovJobCrawler
+    from scraper.config import ORGS_CONFIG
 
     # Ensure console can handle Unicode output (Windows cp1252 workaround)
     if hasattr(sys.stdout, 'reconfigure'):
@@ -1307,81 +1324,37 @@ def test_parsers():
     elif hasattr(sys.stdout, 'buffer'):
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='backslashreplace')
     
-    class LegacyAdapter(HTTPAdapter):
-        def init_poolmanager(self, connections, maxsize, block=False):
-            ctx = ssl.create_default_context()
-            ctx.options |= 0x4  # ssl.OP_LEGACY_SERVER_CONNECT
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            self.poolmanager = PoolManager(
-                num_pools=connections, maxsize=maxsize, block=block, ssl_context=ctx
-            )
-            
-    session = requests.Session()
-    session.mount('https://', LegacyAdapter())
-    
     print("Starting Live Parsers Verification Test...")
+    crawler = GovJobCrawler()
     errors = 0
+    success = 0
+    
     for key, val in ORGS_CONFIG.items():
-        print(f"\nTargeting: {val['name']} ({val['url']})...")
+        print(f"\nTargeting: {val['name']} ({key})...")
         try:
-            # Special handling for orgs that don't use simple GET + HTML parse
-            if key == "nielit":
-                # NIELIT uses a JSON API session, not static HTML
-                results = parse_nielit(session=session)
-                print(f"  Postings Found: {len(results)}")
-            elif key == "hal":
-                # HAL endpoint requires POST with browser-like headers
-                hal_headers = {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                                  "Chrome/120.0.0.0 Safari/537.36",
-                    "Accept": "application/json, text/plain, */*",
-                    "Content-Type": "application/json",
-                    "Referer": "https://hal-india.co.in/",
-                    "Origin": "https://hal-india.co.in",
-                }
-                r = session.post(val['url'], headers=hal_headers, json={}, timeout=30)
-                r.raise_for_status()
-                print(f"  Status Code: {r.status_code}")
-                results = parse_hal(r.text)
-                print(f"  Postings Found: {len(results)}")
-            else:
-                r = session.get(val['url'], headers=DEFAULT_HEADERS, timeout=15)
-                r.raise_for_status()
-                
-                # Map parser functions dynamically
-                parser_fn = getattr(sys.modules[__name__], f"parse_{key}")
-                # NIC uses windows-1251 charset; pass bytes to avoid decode errors
-                results = parser_fn(r.content if key in ('barc', 'nic') else r.text)
-                
-                print(f"  Status Code: {r.status_code}")
-                print(f"  Postings Found: {len(results)}")
+            # Delegate to crawler's scrape logic, which handles standard, API, and Playwright SPAs
+            postings = crawler._scrape_org(key)
             
-            if results:
-                # Count by relevance
-                relevant_cnt = 0
-                uncertain_cnt = 0
-                excluded_cnt = 0
-                for item in results:
-                    rel = classify(item["title"])
-                    if rel == "relevant":
-                        relevant_cnt += 1
-                    elif rel == "uncertain":
-                        uncertain_cnt += 1
-                    else:
-                        excluded_cnt += 1
-                print(f"  Relevance Breakdown: relevant={relevant_cnt}, uncertain={uncertain_cnt}, excluded={excluded_cnt}")
-                # Windows console encoding handled globally via sys.stdout.reconfigure above
-                print(f"  First Posting Sample: {results[0]}")
+            if postings is None:
+                print(f"  ERROR: Scrape returned None (failed to fetch or parse).")
+                errors += 1
             else:
-                print("  WARNING: Scraped 0 postings. Check selector status.")
+                success += 1
+                print(f"  Postings Found (non-excluded): {len(postings)}")
+                if postings:
+                    # Count by relevance
+                    relevant_cnt = sum(1 for p in postings if p.get("relevance") == "relevant")
+                    uncertain_cnt = sum(1 for p in postings if p.get("relevance") == "uncertain")
+                    print(f"  Relevance Breakdown (filtered): relevant={relevant_cnt}, uncertain={uncertain_cnt}")
+                    print(f"  First Posting Sample: {postings[0]}")
+                else:
+                    print("  WARNING: Scraped 0 active postings.")
         except Exception as e:
             print(f"  ERROR parsing {val['name']}: {e}")
             errors += 1
             
     print("\n-------------------------------------------")
-    print(f"Verification Test Complete. Failures encountered: {errors}")
+    print(f"Verification Test Complete. Success: {success}, Failures: {errors}")
     if errors > 0:
         sys.exit(1)
 
