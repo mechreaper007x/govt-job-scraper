@@ -1456,7 +1456,59 @@ def parse_nixi(html_content):
 def parse_bisag_n(html_content):
     return _parse_generic_page(html_content, "https://www.bisag-n.gov.in")
 
+def parse_upsc(html_content):
+    return _parse_generic_page(html_content, "https://www.upsc.gov.in/recruitment/recruitment-advertisements")
 
+def parse_ssc(html_content):
+    return _parse_generic_page(html_content, "https://ssc.gov.in/")
+
+def parse_irctc(html_content):
+    return _parse_generic_page(html_content, "https://www.irctc.com/recruitment.php")
+
+def parse_eil(html_content):
+    return _parse_generic_page(html_content, "https://www.engineersindia.com/careers/")
+
+def parse_mpsc(html_content):
+    return _parse_generic_page(html_content, "https://mpsc.gov.in/")
+
+def parse_gpsc(html_content):
+    return _parse_generic_page(html_content, "https://gpsc.gujarat.gov.in/")
+
+def parse_keralapsc(html_content):
+    return _parse_generic_page(html_content, "https://www.keralapsc.gov.in/")
+
+def parse_rpsc(html_content):
+    return _parse_generic_page(html_content, "https://rpsc.rajasthan.gov.in/")
+
+def parse_tnpsc(html_content):
+    return _parse_generic_page(html_content, "https://www.tnpsc.gov.in/")
+
+def parse_opsc(html_content):
+    return _parse_generic_page(html_content, "https://www.opsc.gov.in/Public/OPSC/Default.aspx")
+
+def parse_wbpsc(html_content):
+    return _parse_generic_page(html_content, "https://psc.wb.gov.in/")
+
+def parse_appsc(html_content):
+    return _parse_generic_page(html_content, "https://psc.ap.gov.in/")
+
+def parse_mppsc(html_content):
+    return _parse_generic_page(html_content, "https://mppsc.mp.gov.in/")
+
+def parse_hpsc(html_content):
+    return _parse_generic_page(html_content, "https://hpsc.gov.in/en-us/")
+
+def parse_ppsc(html_content):
+    return _parse_generic_page(html_content, "https://ppsc.gov.in/")
+
+def parse_ukpsc(html_content):
+    return _parse_generic_page(html_content, "https://psc.uk.gov.in/")
+
+def parse_cgpsc(html_content):
+    return _parse_generic_page(html_content, "https://psc.cg.gov.in/")
+
+def parse_jpsc(html_content):
+    return _parse_generic_page(html_content, "https://www.jpsc.gov.in/")
 
 def test_parsers():
     """

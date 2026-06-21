@@ -258,6 +258,83 @@ ORGS_CONFIG = {
     "bisag_n": {
         "name": "BISAG-N (Bhaskaracharya National Institute for Space Applications)",
         "url": "https://www.bisag-n.gov.in"
+    },
+    "upsc": {
+        "name": "UPSC (Union Public Service Commission)",
+        "url": "https://www.upsc.gov.in/recruitment/recruitment-advertisements"
+    },
+    "ssc": {
+        "name": "SSC (Staff Selection Commission)",
+        "url": "https://ssc.gov.in/"
+    },
+    "irctc": {
+        "name": "IRCTC (Indian Railway Catering and Tourism Corporation)",
+        "url": "https://www.irctc.com/recruitment.php"
+    },
+    "concor": {
+        "name": "CONCOR (Container Corporation of India)",
+        "url": "https://www.concorindia.co.in/careers_rect.asp",
+        "special": "playwright"
+    },
+    "eil": {
+        "name": "EIL (Engineers India Limited)",
+        "url": "https://www.engineersindia.com/careers/"
+    },
+    "mpsc": {
+        "name": "MPSC (Maharashtra Public Service Commission)",
+        "url": "https://mpsc.gov.in/"
+    },
+    "gpsc": {
+        "name": "GPSC (Gujarat Public Service Commission)",
+        "url": "https://gpsc.gujarat.gov.in/"
+    },
+    "keralapsc": {
+        "name": "Kerala Public Service Commission",
+        "url": "https://www.keralapsc.gov.in/"
+    },
+    "rpsc": {
+        "name": "RPSC (Rajasthan Public Service Commission)",
+        "url": "https://rpsc.rajasthan.gov.in/"
+    },
+    "tnpsc": {
+        "name": "TNPSC (Tamil Nadu Public Service Commission)",
+        "url": "https://www.tnpsc.gov.in/"
+    },
+    "opsc": {
+        "name": "OPSC (Odisha Public Service Commission)",
+        "url": "https://www.opsc.gov.in/Public/OPSC/Default.aspx"
+    },
+    "wbpsc": {
+        "name": "WBPSC (West Bengal Public Service Commission)",
+        "url": "https://psc.wb.gov.in/"
+    },
+    "appsc": {
+        "name": "APPSC (Andhra Pradesh Public Service Commission)",
+        "url": "https://psc.ap.gov.in/"
+    },
+    "mppsc": {
+        "name": "MPPSC (Madhya Pradesh Public Service Commission)",
+        "url": "https://mppsc.mp.gov.in/"
+    },
+    "hpsc": {
+        "name": "HPSC (Haryana Public Service Commission)",
+        "url": "https://hpsc.gov.in/en-us/"
+    },
+    "ppsc": {
+        "name": "PPSC (Punjab Public Service Commission)",
+        "url": "https://ppsc.gov.in/"
+    },
+    "ukpsc": {
+        "name": "UKPSC (Uttarakhand Public Service Commission)",
+        "url": "https://psc.uk.gov.in/"
+    },
+    "cgpsc": {
+        "name": "CGPSC (Chhattisgarh Public Service Commission)",
+        "url": "https://psc.cg.gov.in/"
+    },
+    "jpsc": {
+        "name": "JPSC (Jharkhand Public Service Commission)",
+        "url": "https://www.jpsc.gov.in/"
     }
 }
 
@@ -271,7 +348,9 @@ MAIN_ORGS = [
     "coal_india", "railtel", "becil", "sebi", "sidbi", "sjvn",
     "tcil", "dic", "npcil", "rites", "dfccil",
     "scl", "csir_4pi", "igcar", "rrcat", "bpcl", "pfc", "rec", "iti",
-    "cel", "nhpc", "grid_india", "hpcl", "rbi", "negd", "nixi", "bisag_n"
+    "cel", "nhpc", "grid_india", "hpcl", "rbi", "negd", "nixi", "bisag_n",
+    "upsc", "ssc", "irctc", "concor", "eil", "mpsc", "gpsc", "keralapsc", "rpsc",
+    "tnpsc", "opsc", "wbpsc", "appsc", "mppsc", "hpsc", "ppsc", "ukpsc", "cgpsc", "jpsc"
 ]
 UPPSC_ORGS = ["uppsc"]
 
@@ -469,5 +548,100 @@ DISCOVERY_CONFIG = {
         "name": "BISAG-N (Bhaskaracharya National Institute for Space Applications)",
         "homepages": ["https://www.bisag-n.gov.in/"],
         "patterns": [r"notice", r"recruit", r"vacanc", r"career", r"job"],
+    },
+    "upsc": {
+        "name": "UPSC (Union Public Service Commission)",
+        "homepages": ["https://www.upsc.gov.in/"],
+        "patterns": [r"recruit", r"vacanc", r"exam", r"advertisement"],
+    },
+    "ssc": {
+        "name": "SSC (Staff Selection Commission)",
+        "homepages": ["https://ssc.gov.in/"],
+        "patterns": [r"notice", r"exam", r"recruit", r"vacanc"],
+    },
+    "irctc": {
+        "name": "IRCTC (Indian Railway Catering and Tourism Corporation)",
+        "homepages": ["https://www.irctc.com/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"opening", r"job"],
+    },
+    "concor": {
+        "name": "CONCOR (Container Corporation of India)",
+        "homepages": ["https://www.concorindia.co.in/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"opening", r"hr"],
+    },
+    "eil": {
+        "name": "EIL (Engineers India Limited)",
+        "homepages": ["https://www.engineersindia.com/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"opening", r"job"],
+    },
+    "mpsc": {
+        "name": "MPSC (Maharashtra Public Service Commission)",
+        "homepages": ["https://mpsc.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "gpsc": {
+        "name": "GPSC (Gujarat Public Service Commission)",
+        "homepages": ["https://gpsc.gujarat.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "keralapsc": {
+        "name": "Kerala Public Service Commission",
+        "homepages": ["https://www.keralapsc.gov.in/"],
+        "patterns": [r"notification", r"recruit", r"vacanc", r"job"],
+    },
+    "rpsc": {
+        "name": "RPSC (Rajasthan Public Service Commission)",
+        "homepages": ["https://rpsc.rajasthan.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "tnpsc": {
+        "name": "TNPSC (Tamil Nadu Public Service Commission)",
+        "homepages": ["https://www.tnpsc.gov.in/"],
+        "patterns": [r"notification", r"recruit", r"vacanc", r"job", r"announcement"],
+    },
+    "opsc": {
+        "name": "OPSC (Odisha Public Service Commission)",
+        "homepages": ["https://www.opsc.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "wbpsc": {
+        "name": "WBPSC (West Bengal Public Service Commission)",
+        "homepages": ["https://psc.wb.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "appsc": {
+        "name": "APPSC (Andhra Pradesh Public Service Commission)",
+        "homepages": ["https://psc.ap.gov.in/"],
+        "patterns": [r"notification", r"recruit", r"vacanc", r"job"],
+    },
+    "mppsc": {
+        "name": "MPPSC (Madhya Pradesh Public Service Commission)",
+        "homepages": ["https://mppsc.mp.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "hpsc": {
+        "name": "HPSC (Haryana Public Service Commission)",
+        "homepages": ["https://hpsc.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "ppsc": {
+        "name": "PPSC (Punjab Public Service Commission)",
+        "homepages": ["https://ppsc.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "ukpsc": {
+        "name": "UKPSC (Uttarakhand Public Service Commission)",
+        "homepages": ["https://psc.uk.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "cgpsc": {
+        "name": "CGPSC (Chhattisgarh Public Service Commission)",
+        "homepages": ["https://psc.cg.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "jpsc": {
+        "name": "JPSC (Jharkhand Public Service Commission)",
+        "homepages": ["https://www.jpsc.gov.in/"],
+        "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
     },
 }
