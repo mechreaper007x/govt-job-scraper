@@ -34,6 +34,9 @@ _BLOCKED_RESOURCES = re.compile(r"\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$")
 # Compiled regex for RRB card/container detection
 _RRB_CARD_RE = re.compile(r'card|cen|notification|recruit|job|listing', re.I)
 
+# Stealth instance (reused across pages to avoid re-instantiation)
+_stealth = None
+
 
 def _ensure_playwright():
     """Lazy-import and initialize Playwright if not already done.
@@ -120,8 +123,13 @@ def fetch_spa_page(url, wait_selector=None, timeout_ms=30000, scroll=True):
 
         # Apply stealth patches to hide automation fingerprints
         try:
-            from playwright_stealth import stealth_sync
-            stealth_sync(page)
+            from playwright_stealth import Stealth
+            global _stealth
+            if _stealth is None:
+                with _init_lock:
+                    if _stealth is None:
+                        _stealth = Stealth()
+            _stealth.apply_stealth_sync(page)
         except Exception:
             pass  # stealth is optional — degrade gracefully if not installed
 
