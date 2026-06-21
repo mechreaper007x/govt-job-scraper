@@ -1135,14 +1135,14 @@ def parse_sail(html_content):
 
 def parse_ntpc(html_content):
     """
-    Parses NTPC careers portal.
-    URL: https://careers.ntpc.co.in/
-    Structure: Dynamic portal — may return HTML with job listings or a login page.
+    Parses NTPC careers page.
+    URL: https://www.ntpc.co.in/page/career-opportunities
+    Structure: Static page with links to recruitment notifications.
     Fallback: extracts any recruitment links from the page.
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
-    BASE = "https://careers.ntpc.co.in"
+    BASE = "https://www.ntpc.co.in"
     seen = set()
 
     # If page has job listing cards or table rows
@@ -1246,7 +1246,7 @@ def parse_rrb(html_content):
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
-    BASE_RRB = "https://www.rrbapply.gov.in"
+    BASE_RRB = "https://indianrailways.gov.in"
     seen = set()
 
     for a in soup.find_all('a'):
