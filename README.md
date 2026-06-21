@@ -1,108 +1,129 @@
-# Indian Government Job Notification Tracker
+# Indian Government & PSU Job Notification Tracker
 
-A Python-based monitoring system that automatically scans a fixed list of Indian government and PSU recruitment portals once a day. It identifies *new* job notifications via content hashing and alerts you instantly via a Discord Webhook and Email.
+A highly resilient, concurrent, and adaptive monitoring system designed to crawl and track recruitment notifications across **83 core Indian public sector, banking, and government portals**, with built-in scalability to support **2,370+ municipal, state, and academic domains** in batches.
 
-The system runs entirely on **GitHub Actions free tier**, requiring no server of your own, and persists its state by committing an updated `state.json` file back to the repository.
+The system filters out noise and prioritizes **Computer Science & Engineering (CSE) and IT positions**, sending instant, aggregated alerts via Discord Webhooks and Email notifications when new listings are detected.
 
 ---
 
-## Architecture & Features
+## Key Features & Architecture
 
-- **CSE / IT Relevance Filtering:** Design optimized specifically for Computer Science & Engineering (CSE) and IT postings. Employs a three-tier relevance check (`relevant`, `excluded`, `uncertain`) to ensure no potential CSE/IT jobs are silently dropped. Vague/general recruitment titles (e.g., general "Scientist B" posts) are classified as `uncertain` and surfaced with a warning flag (⚠️) instead of being excluded.
-- **Automated Scanning:** Daily runs on GitHub Actions (at `11:30 AM IST` / `06:00 UTC`). Manual run triggers are also configured (`workflow_dispatch`).
-- **Resilient Checking & SSL Renegotiation:** Individual site scrapes are isolated inside `try/except` blocks. Features a custom HTTP `LegacyAdapter` mapping that bypasses OpenSSL TLS errors encountered on older government webservers (such as C-DOT). If one site goes offline, it does not block the check for the rest of the portals.
-- **State Persistence:** A root-level `state.json` tracks hashes of previously scanned posts. If state changes, GitHub Actions automatically commits the changes back to your repository.
-- **Batched Notifications:** Rather than flooding your inbox or chat, all new postings from a single run are batched and delivered as a single clean alert.
-- **Polite Crawling:** Implements delays between scraping different targets to avoid overloading servers, and strictly respects `robots.txt` instructions.
+### 1. Unified Layout-Invariant Adaptive Parser
+* **Core Engine:** [adaptive_parser.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/scraper/adaptive_parser.py)
+* **Design:** Adapts to arbitrary HTML layouts without brittle hardcoded CSS selectors.
+* **Contextual Link Scoring:** Employs heuristics evaluating link text, URL paths, and anchors with positive boosts (e.g. `recruit`, `vacanc`, `career`, `scientist`, `developer`) and negative penalties (e.g. `tender`, `faq`, `contact`, `login`).
+* **Active Proximity Date Finder:** Scrapes nearby DOM sibling and parent text nodes to extract publication dates and deadlines.
+* **Self-Healing Exclusions:** Bypasses boilerplate page fragments (like `#nav`) and filters out historical listings (2025 and older) using year/date thresholds and parent archive container detection.
+
+### 2. High-Performance Concurrency & SPAs
+* **Fast Concurrent Scrapes:** Leverages a `ThreadPoolExecutor` to query multiple sites in parallel, slashing wall-clock crawl time.
+* **Playwright browser integration:** Uses headless Chromium (`spa_scraper.py`) to render modern Single Page Applications (like **RRB Apply**, **DRDO SPA**, **SJVN**, and **CONCOR**) with seamless fallback mechanisms.
+* **SSL Renegotiation Bypass:** Utilizes a custom `RobustGovAdapter` (urllib3) to bypass legacy TLS renegotiation blocks and certificate errors on older government servers.
+
+### 3. Scaling & Career Path Seeder
+* **Seeder Engine:** [domain_seeder.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/scraper/domain_seeder.py)
+* **Expanded Targets:** Generates a registry of **2,372 unique target domains** (including 589 district NIC portals, 30+ state departments for all 36 states/UTs, state PSUs, municipal corporations, and regional rural banks).
+* **Self-Healing Career Resolver:** Probes homepages dynamically to discover updated career links.
+* **Batch Execution:** Supports batching parameters (`--limit`, `--offset`) to run large-scale crawls safely without triggering server blocks.
 
 ---
 
 ## Directory Structure
 
 ```
-govt-job-tracker/
+job-scraper/
 ├── .github/workflows/
-│   ├── daily-check.yml       # Scrapes CDAC, BEL, DRDO, ISRO, BARC, BSNL, CERT-In, Employment News, C-DOT
-│   └── uppsc-check.yml       # Isolated scraper workflow for UPPSC
+│   └── daily-check.yml       # Automated daily check runner
 ├── scraper/
-│   ├── config.py             # Target URLs and basic user-agent headers
-│   ├── parsers.py            # Site-specific BeautifulSoup parsing functions
-│   ├── filters.py            # Three-tier CSE/IT relevance classification logic
+│   ├── adaptive_parser.py    # Layout-invariant link-scoring parser
+│   ├── domain_seeder.py      # Expanded seed registry of 2,370+ domains
+│   ├── config.py             # Core config and 83 main portal metadata
+│   ├── crawler.py            # Concurrent crawl controller and strategy router
+│   ├── parsers.py            # API-specific and legacy parser fallbacks
+│   ├── spa_scraper.py        # Playwright headless chromium SPA handlers
+│   ├── filters.py            # Three-tier CSE/IT relevancy engine & date filtering
 │   ├── diff.py               # Hashing and state diffing (state.json comparison)
 │   ├── notify_discord.py     # Discord Webhook sender logic
 │   ├── notify_email.py       # Gmail SMTP sender logic
-│   └── main.py               # Orchestrator entry point (with CLI support)
+│   └── main.py               # Orchestrator CLI entry point
 ├── state.json                # Persisted content hashes (updated by action)
-├── MANUAL_CHECK.md           # Reminder urls for portals blocking scrapers (SSC, NIC)
+├── seeded_organizations.md   # Searchable markdown database of all 2,370+ seeds
+├── relevancy_analysis.md     # Updated signal-to-noise relevancy report
+├── all_relevant_jobs.md      # Auto-generated markdown list of active CS/IT jobs
 ├── requirements.txt          # Python dependencies
 └── README.md                 # Setup & configuration guide
 ```
 
 ---
 
-## Target Job Portals
-
-1. **C-DAC:** `Current Openings`, `Rolling Advertisements`, and `Notifications`.
-2. **BEL (Bharat Electronics Limited):** WordPress job notification cards.
-3. **DRDO:** Drupal vacancy grids.
-4. **ISRO:** Opportunities table layout.
-5. **BARC:** Scrapes the official RSS feed for `New Vacancies` and `Results`, with HTML table fallback.
-6. **BSNL:** Active exams and registration forms on the BSNL external exam portal.
-7. **UPPSC:** Home page "What's New" announcements (avoiding Candidate postbacks).
-8. **CERT-In (Indian Computer Emergency Response Team):** Recruitment page containing cybersecurity and IT vacancies.
-9. **Employment News (MIB):** Supplementary aggregator of central government recruitment ads.
-10. **C-DOT (Centre for Development of Telematics):** Current openings table layout. Uses custom SSL legacy renegotiation support for compatibility with older government servers.
+## Target Job Portals (83 Core Channels)
+The crawler monitors 83 core agencies including:
+* **MeitY & Strategic:** C-DAC, NIELIT, STPI, NIC, C-DOT, CERT-In, SAMEER, ERNET.
+* **Defense & Space:** DRDO, ISRO, BARC, BEL, IGCAR, RRCAT, SCL Mohali.
+* **Maharatna & Navratna PSUs:** HAL, ECIL, ONGC, SAIL, NTPC, AAI, IOCL, BHEL, Coal India, PGCIL, BPCL, HPCL, GAIL.
+* **Banking & Finance:** RBI, SEBI, SBI, IBPS, NABARD, NHB, SIDBI.
+* **Commissions & Staff Boards:** UPSC, SSC, DSSSB, RSMSSB, HSSC, and all State Public Service Commissions (UPPSC, MPSC, GPSC, PPSC, etc.).
 
 ---
 
 ## Configuration & Setup
 
-To make the tracker work, you need to set up a few repository secrets in your GitHub repository. Go to **Settings > Secrets and variables > Actions > New repository secret** and add the following four secrets:
+Add the following four repository secrets in your GitHub repository (**Settings > Secrets and variables > Actions > New repository secret**):
 
-### 1. Discord Webhook Setup (`DISCORD_WEBHOOK_URL`)
-To get job alerts sent to a Discord channel:
-1. Open your Discord server, right-click on the target channel, and select **Edit Channel**.
-2. Go to **Integrations** > **Webhooks** > **New Webhook**.
-3. Copy the **Webhook URL**.
-4. Paste it as a secret named `DISCORD_WEBHOOK_URL` in your GitHub repository.
-
-### 2. Gmail App Password Setup (`SMTP_EMAIL` and `SMTP_APP_PASSWORD`)
-The system sends email alerts via Google's secure SMTP servers.
-1. Log in to the Google account you wish to send emails from.
-2. Go to **Google Account Settings** > **Security**.
-3. Under **How you sign in to Google**, ensure **2-Step Verification** is enabled.
-4. Click on **2-Step Verification**, scroll to the bottom, and select **App passwords**.
-5. Generate an app password for `Mail` / `Other` and name it `Job Scraper`.
-6. Copy the generated 16-character password (without spaces).
-7. In your GitHub repository, create two secrets:
-   - `SMTP_EMAIL`: Your full Gmail address (e.g. `sender@gmail.com`).
-   - `SMTP_APP_PASSWORD`: The 16-character app password.
-
-### 3. Destination Address (`NOTIFY_EMAIL_TO`)
-Add the destination email where alerts should be sent:
-- Create a secret named `NOTIFY_EMAIL_TO` with the target email address (this can be the same as your `SMTP_EMAIL`).
+1. `DISCORD_WEBHOOK_URL`: Copy the Webhook URL from your Discord channel integration settings to enable chat alerts.
+2. `SMTP_EMAIL`: The Gmail address used to send alerts (e.g. `sender@gmail.com`).
+3. `SMTP_APP_PASSWORD`: A 16-character Google App Password (requires 2-Step Verification enabled in Gmail Account settings).
+4. `NOTIFY_EMAIL_TO`: The destination email address where job alert emails will be delivered.
 
 ---
 
-## Local Development & Testing
+## Local Development & CLI Usage
 
-To test the scrapers or notifications locally on your machine:
+To run the pipeline or test the scrapers locally:
 
-1. Clone the repository and navigate into it.
-2. Install the requirements:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Set your local environment variables:
-   ```bash
-   # On Windows (PowerShell)
-   $env:DISCORD_WEBHOOK_URL="your_webhook_url"
-   $env:SMTP_EMAIL="your_email@gmail.com"
-   $env:SMTP_APP_PASSWORD="your_app_password"
-   $env:NOTIFY_EMAIL_TO="recipient_email@gmail.com"
-   ```
-4. Run the scraper:
-   - **Check all portals:** `python scraper/main.py`
-   - **Check main scrapers only:** `python scraper/main.py --main`
-   - **Check UPPSC scraper only:** `python scraper/main.py --uppsc`
-   - **Check a single specific portal:** `python scraper/main.py --org cdac`
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+playwright install  # Required for SPA scrapers (rrb, concor, sjvn)
+```
+
+### 2. Set Up Environment Variables
+On Windows (PowerShell):
+```powershell
+$env:DISCORD_WEBHOOK_URL="your_webhook_url"
+$env:SMTP_EMAIL="your_email@gmail.com"
+$env:SMTP_APP_PASSWORD="your_app_password"
+$env:NOTIFY_EMAIL_TO="recipient_email@gmail.com"
+```
+
+### 3. Run Commands
+
+* **Run core scraper (83 main orgs):**
+  ```powershell
+  python -m scraper.main
+  ```
+
+* **Run seeder in batch mode (e.g. first 20 domains):**
+  ```powershell
+  python -m scraper.main --scale-all --limit 20 --offset 0
+  ```
+
+* **Generate signal-to-noise coverage reports:**
+  ```powershell
+  python -m scraper.main --report-json
+  ```
+
+* **Show historical trend metrics:**
+  ```powershell
+  python -m scraper.main --trend
+  ```
+
+* **Watch Mode (continuous monitor, alert on diff):**
+  ```powershell
+  python -m scraper.main --watch --interval 30
+  ```
+
+* **Target a single organization:**
+  ```powershell
+  python -m scraper.main --org cdac
+  ```
