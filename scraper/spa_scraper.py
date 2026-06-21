@@ -118,6 +118,13 @@ def fetch_spa_page(url, wait_selector=None, timeout_ms=30000, scroll=True):
 
         page = context.new_page()
 
+        # Apply stealth patches to hide automation fingerprints
+        try:
+            from playwright_stealth import stealth_sync
+            stealth_sync(page)
+        except Exception:
+            pass  # stealth is optional — degrade gracefully if not installed
+
         # Block unnecessary resources to speed up loading
         page.route(_BLOCKED_RESOURCES, lambda route: route.abort())
 
