@@ -632,7 +632,7 @@ class GovJobCrawler:
                     stats["relevant"],
                     stats["uncertain"],
                     f"{stats['relevant_pct']}%",
-                    stats["signal_quality"],
+                    _quality_label(stats["relevant_pct"]),
                 ))
 
         print("-" * 60)
@@ -643,7 +643,7 @@ class GovJobCrawler:
             s["total_relevant"],
             s["total_uncertain"],
             f"{s['overall_relevant_pct']}%",
-            "",
+            _quality_label(s["overall_relevant_pct"]),
         ))
         print()
         print(f"  Orgs scraped: {s['orgs_ok']}/{s['orgs_ok'] + s['orgs_failed']}")
