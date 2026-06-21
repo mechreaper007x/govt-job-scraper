@@ -29,31 +29,34 @@ import os
 import io
 import hashlib
 
-# ─── Keyword lists (unchanged) ──────────────────────────────────────────────
+# ─── Keyword lists & Regexes ────────────────────────────────────────────────
 
-INCLUDE_KEYWORDS = [
+STRONG_CS_KEYWORDS = [
     # core CS/IT terms
-    "computer science", "computer engineering", " cse", "cse ",
-    "information technology",    "it/", "i.t.",
-    "software", "programmer", "programming",
+    "computer science", "computer engineering", "cse",
+    "information technology", "i.t.", "software", "programmer", "programming",
     "full stack", "fullstack", "web develop", "app develop",
     "web designer", "application developer",
     # data / AI
     "data science", "data analytics", "data analyst",
-    "artificial intelligence", "machine learning", "ai/ml", " ai ", " ml ",
+    "artificial intelligence", "machine learning", "ai/ml",
     "deep learning", "nlp", "computer vision",
     # security / infra
     "cyber security", "cybersecurity", "network security", "information security",
-    "devops", "cloud computing", "cloud engineer", "cloud ",
+    "devops", "cloud computing", "cloud engineer", "cloud",
     "database", "dbms", "system administrator", "sysadmin",
     "system analyst", "network engineer",
-    "blockchain", "quantum computing", "high performance computing", " hpc",
+    "blockchain", "quantum computing", "high performance computing", "hpc",
     # IT infrastructure & architecture
     "data centre", "data center", "enterprise architecture",
     "architect",
-    # explicit combined-discipline phrasing seen in ISRO/NIC-style postings
-    "and computer science", "computer science engineering",
-    # PSU IT project roles (CDAC, DRDO, ISRO style)
+    # IT professional roles
+    "it officer", "information officer", "it resource", "it professional",
+    "it support", "it manager", "it associate", "it consultant", "it specialist",
+    "it executive", "laravel", "php", "oracle", "developer", "it", "ai", "data"
+]
+
+GENERIC_TECH_KEYWORDS = [
     "project engineer", "project manager", "project associate",
     "project scientist", "project staff", "project technician",
     "senior project", "project support",
@@ -62,53 +65,77 @@ INCLUDE_KEYWORDS = [
     # Scientist grades at NIC, DRDO, ISRO
     "scientist/engineer", "scientist b", "scientist-b",
     "scientist c", "scientist-c", "scientist d", "scientist-d",
-    "scientist 'sc'", "scientist 'sd'",
+    "scientist 'sc'", "scientist 'sd'", "scientist",
     # Research roles relevant for CSE
-    "junior research fellow", "junior research fellowship", " jrf",
+    "junior research fellow", "junior research fellowship", "jrf",
     "research associate", "research scientist", "research fellow",
-    "scientist ",
     # CDAC-specific roles
     "adjunct scientist", "adjunct engineer",
     # General technical roles
     "technical assistant", "technical consultant",
-    "it officer", "information officer", "it resource", "it professional",
-    "it support", "it manager", "it associate", "it consultant", "it specialist",
-    "it executive", "system engineer", "systems engineer", "technical officer",
+    "system engineer", "systems engineer", "technical officer",
     "scientific officer",
     # Telecom / PSU technical roles
-    "junior telecom officer", " jto",
+    "junior telecom officer", "jto",
     # Scientific assistant roles (BARC, ISRO style)
     "scientific assistant",
 ]
 
 EXCLUDE_KEYWORDS = [
-    # other engineering branches, when standing alone
-    "civil engineering", "civil works", "mechanical engineering",
-    "electrical engineering", "chemical engineering", "metallurgy",
-    "instrumentation engineering", "architecture",
-    # non-engineering / support roles & trades
-    "driver", "havildar", "fireman", "cook", "catering",
-    "nurse", "nursing", "pharmacist", "medical officer", "radiographer",
-    "lab technician", "stenographer", "draughtsman", "library assistant",
-    "security officer", "office attendant", "peon",
-    "multi tasking staff", " mts ",
-    "trade apprentice", "iti apprentice", "technician b", "technician-b",
-    "technician a", "technician-a", "clerk", "typist", "receptionist",
-    # pure science branches common in ISRO/BARC/DRDO postings
+    # other engineering branches
+    "civil", "mechanical", "electrical", "electronics",
+    "telecommunication", "telecom", "instrumentation", "chemical", "metallurgy",
     "geology", "geophysics", "agriculture", "physical sciences",
-    "life sciences", "ordnance", "ammunition",
+    "life sciences", "ordnance", "ammunition", "architecture",
+    # non-engineering / support roles & trades
+    "driver", "havildar", "fireman", "cook", "catering", "canteen",
+    "nurse", "nursing", "pharmacist", "medical", "radiographer", "radiography",
+    "pathology", "doctor", "doctors", "physiotherapy", "physiotherapist",
+    "lab technician", "stenographer", "draughtsman", "library",
+    "security officer", "office attendant", "peon",
+    "multi tasking", "mts", "trade apprentice", "iti apprentice",
+    "technician b", "technician-b", "technician a", "technician-a",
+    "clerk", "typist", "receptionist",
     # administrative, legal, hr, and financial roles
-    "legal", "law ", "law officer", "finance", "accounts", "audit", "marketing",
-    "administrative officer", " admin ", "admin officer", "human resource", " hr ",
+    "legal", "law", "finance", "accounts", "audit", "marketing",
+    "administrative officer", "admin officer", "human resource", "hr",
     "personal assistant", "private secretary", "administration", "administrative",
-    "assistant",  # safe because specific include matches (scientific assistant etc.) are checked first
+    "assistant", "pa/ps", "pa / ps", "cfo", "registrar", "purchase", "store",
+    "stores", "materials management",
     # management / executive roles (not CSE-specific)
-    "chairman", "controller", "managing director",
+    "chairman", "controller", "managing director", "director", "cvo", "vigilance",
+    "grievance", "gst", "nodal",
     # teaching / academic non-research
     "guest faculty", "teacher", "professor", "principal", "lecturer",
     # language / translation
-    "translator", "translation officer", "translation", "hindi", "rajbhasha",
+    "translator", "translation", "hindi", "rajbhasha",
+    # Exam / Results junk (non-active postings)
+    "syllabus", "corrigendum", "result", "selection list", "select list",
+    "marks", "answer key", "admit card", "screening status", "exam date",
+    "shortlisted", "careers", "vacancies", "internship", "annexure", "data entry",
+    "circulars", "notifications", "committee", "complaints", "grievance", 
+    "grievances", "nodal", "officer list", "officers list", "contact us", 
+    "about us", "feedback", "menu"
 ]
+
+def _build_boundary_regex(keywords):
+    patterns = []
+    for kw in keywords:
+        # Normalize and escape
+        escaped = re.escape(kw.strip())
+        escaped = escaped.replace('\\ ', '\\s+')
+        # Wrap in word boundary if it starts/ends with alphanumeric
+        pattern = escaped
+        if kw.strip()[0].isalnum():
+            pattern = r'\b' + pattern
+        if kw.strip()[-1].isalnum():
+            pattern = pattern + r'\b'
+        patterns.append(pattern)
+    return re.compile('|'.join(patterns), re.IGNORECASE)
+
+STRONG_CS_RE = _build_boundary_regex(STRONG_CS_KEYWORDS)
+GENERIC_TECH_RE = _build_boundary_regex(GENERIC_TECH_KEYWORDS)
+EXCLUDE_RE = _build_boundary_regex(EXCLUDE_KEYWORDS)
 
 
 # ─── Layer 2: Per-org context rules ─────────────────────────────────────────
@@ -360,6 +387,19 @@ def classify(title, link="", org_key="", session=None):
     """
     t = f" {title.lower()} "  # pad so word-boundary-ish substrings match cleanly
 
+    # Exclude extremely short titles that are likely noise (like page numbers, file sizes, or menu links)
+    clean_title = re.sub(r'[^a-zA-Z0-9\s]', '', title).strip()
+    if len(clean_title) < 4:
+        return "excluded"
+    
+    # Exclude patterns like (1.23 MB) or 1.23 MB or KB notices
+    if re.search(r'\b\d+(\.\d+)?\s*(mb|kb)\b', t):
+        return "excluded"
+        
+    # Exclude common single-word menu items
+    if clean_title.lower() in ("careers", "vacancies", "internship", "downloads", "home", "archive", "about us", "contact us"):
+        return "excluded"
+
     # ── Filter out past years (e.g. 2025 and older) to remove expired historical archives ──
     # Current year is 2026.
     years = [int(y) for y in re.findall(r"\b(20\d{2})\b", t)]
@@ -369,23 +409,20 @@ def classify(title, link="", org_key="", session=None):
         if max(years) <= 2025:
             return "excluded"
 
-    # ── Layer 1: Title keyword matching ────────────────────────────────────
-    has_include = False
-    for kw in INCLUDE_KEYWORDS:
-        if kw == "it/":
-            if "it/" in t and "nielit/" not in t:
-                has_include = True
-                break
-        else:
-            if kw in t:
-                has_include = True
-                break
-    has_exclude = any(kw in t for kw in EXCLUDE_KEYWORDS)
-
-    if has_include:
+    # ── Layer 1: Title keyword matching with regex ──
+    # 1. Strong CS keywords always win
+    if STRONG_CS_RE.search(title):
         return "relevant"
-    if has_exclude:
+
+    # 2. Exclude keywords next (generic designations in non-CS depts are filtered out)
+    if EXCLUDE_RE.search(title):
         return "excluded"
+
+    # 3. Generic tech keywords next
+    has_generic = bool(GENERIC_TECH_RE.search(title))
+    if has_generic:
+        if org_key in CS_FIRST_ORGS:
+            return "relevant"
 
     # ── Layer 2a: Per-org context rules ────────────────────────────────────
     if org_key:
@@ -415,6 +452,11 @@ def classify(title, link="", org_key="", session=None):
         pdf_result = _classify_by_pdf(link, session)
         if pdf_result:
             return pdf_result
+
+    # Fallback: if it matched a generic keyword and didn't trigger any exclusion,
+    # it is relevant by default.
+    if has_generic:
+        return "relevant"
 
     return "uncertain"
 
