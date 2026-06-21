@@ -43,3 +43,6 @@ scraper/diff.py
 state.json
 *.txt
 *.html
+
+# Windows artifact (created by stdout redirection)
+nul

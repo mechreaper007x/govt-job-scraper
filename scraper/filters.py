@@ -27,6 +27,7 @@ INCLUDE_KEYWORDS = [
     "information technology", " it ", "i.t.",
     "software", "programmer", "programming",
     "full stack", "fullstack", "web develop", "app develop",
+    "web designer", "application developer",
     # data / AI
     "data science", "data analytics", "data analyst",
     "artificial intelligence", "machine learning", "ai/ml", " ai ", " ml ",
@@ -35,9 +36,26 @@ INCLUDE_KEYWORDS = [
     "cyber security", "cybersecurity", "network security", "information security",
     "devops", "cloud computing", "cloud engineer",
     "database", "dbms", "system administrator", "sysadmin",
+    "system analyst", "network engineer",
     "blockchain", "quantum computing", "high performance computing", " hpc",
     # explicit combined-discipline phrasing seen in ISRO/NIC-style postings
     "and computer science", "computer science engineering",
+    # PSU IT project roles (CDAC, DRDO, ISRO style)
+    "project engineer", "project manager", "project associate",
+    "project scientist", "project staff", "project technician",
+    "senior project", "project support",
+    # Scientist grades at NIC, DRDO, ISRO
+    "scientist/engineer", "scientist b", "scientist-b",
+    "scientist c", "scientist-c", "scientist d", "scientist-d",
+    "scientist 'sc'", "scientist 'sd'",
+    # Research roles relevant for CSE
+    "junior research fellow", "junior research fellowship", " jrf",
+    "research associate", "research scientist", "research fellow",
+    # CDAC-specific roles
+    "adjunct scientist", "adjunct engineer",
+    # General technical roles
+    "technical assistant", "technical consultant",
+    "it officer", "information officer",
 ]
 
 EXCLUDE_KEYWORDS = [
@@ -57,6 +75,14 @@ EXCLUDE_KEYWORDS = [
     # administrative, legal, hr, and financial roles
     "legal", "law ", "law officer", "finance", "accounts", "audit", "marketing",
     "administrative officer", " admin ", "admin officer", "human resource", " hr ",
+    "personal assistant", "private secretary",
+    # management / executive roles (not CSE-specific)
+    # Note: intentionally NOT excluding "director" — too broad (e.g. "Director of IT" is CSE-relevant)
+    "chairman", "controller", "managing director",
+    # teaching / academic non-research
+    "guest faculty", "teacher", "professor", "principal", "lecturer",
+    # language / translation
+    "translator", "translation officer",
 ]
 
 
