@@ -15,8 +15,10 @@ integration without changing the pipeline flow.
 import ssl
 import sys
 import time
+import signal
 import threading
 import requests
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.poolmanager import PoolManager
@@ -414,6 +416,85 @@ class GovJobCrawler:
         for key, stats in ranked[-5:]:
             print(f"    {stats['name'][:30]} — {stats['relevant_pct']}% relevant ({stats['relevant']}/{stats['total']})")
         print("=" * 60)
+
+    # ── Watch mode ─────────────────────────────────────────────────────
+
+    def run_watch(self, orgs=None, interval_minutes=30):
+        """
+        Watch mode: re-scrape every N minutes and alert on new postings.
+
+        Runs indefinitely until interrupted (Ctrl+C). Each cycle:
+          1. Scrape all orgs concurrently
+          2. Diff against previous state (saves to state.json)
+          3. Send Discord/email alerts only for new postings
+          4. Wait for the next interval
+
+        Args:
+            orgs: List of org keys. Defaults to MAIN_ORGS.
+            interval_minutes: Minutes between scrape cycles (default 30).
+        """
+        if orgs is None:
+            orgs = MAIN_ORGS
+
+        # Graceful shutdown on Ctrl+C / SIGTERM
+        stop_event = threading.Event()
+
+        def _shutdown(signum, frame):
+            print(f"\n\n[{datetime.now():%H:%M:%S}] Received signal {signum}, shutting down...")
+            stop_event.set()
+
+        signal.signal(signal.SIGINT, _shutdown)
+        if sys.platform != "win32":
+            signal.signal(signal.SIGTERM, _shutdown)
+
+        cycle = 0
+        total_new = 0
+        interval_sec = interval_minutes * 60
+
+        print("=" * 60)
+        print("  CRAWLER — WATCH MODE")
+        print(f"  Orgs: {', '.join(orgs)}")
+        print(f"  Interval: {interval_minutes} min")
+        print(f"  Press Ctrl+C to stop")
+        print("=" * 60)
+
+        while not stop_event.is_set():
+            cycle += 1
+            now = datetime.now()
+            print(f"\n{'─' * 60}")
+            print(f"  CYCLE {cycle} — {now:%Y-%m-%d %H:%M:%S}")
+            print(f"{'─' * 60}")
+
+            try:
+                scraped_data = self.run_scrape(orgs=orgs)
+                new_postings = diff_and_update_state(scraped_data)
+                cycle_new = sum(len(v) for v in new_postings.values())
+                total_new += cycle_new
+
+                if cycle_new > 0:
+                    print(f"\n🔔 Detected {cycle_new} new posting(s)! Sending alerts...")
+                    send_discord_notifications(new_postings, ORGS_CONFIG)
+                    send_email_notifications(new_postings, ORGS_CONFIG)
+                else:
+                    print(f"\nNo new postings this cycle.")
+
+                # Count total tracked
+                total_tracked = sum(
+                    len(v) for v in scraped_data.values() if v
+                )
+                print(f"  Running totals: {total_tracked} tracked, {total_new} new since start")
+
+            except Exception as exc:
+                print(f"\n⚠️  Cycle {cycle} failed: {exc}")
+
+            # Sleep in 1-second increments so Ctrl+C is responsive
+            print(f"\n  Next scan in {interval_minutes} min...")
+            while not stop_event.wait(1):
+                pass
+
+        print(f"\n{'=' * 60}")
+        print(f"  WATCH MODE STOPPED — {cycle} cycle(s), {total_new} new posting(s)")
+        print(f"{'=' * 60}")
 
     # ── Full pipeline ─────────────────────────────────────────────────────
 

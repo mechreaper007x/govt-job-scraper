@@ -31,6 +31,14 @@ def main():
         help="Run scrape and generate CS/IT coverage report (signal vs noise)"
     )
     parser.add_argument(
+        "--watch", action="store_true",
+        help="Watch mode: re-scrape every N minutes and alert on new postings"
+    )
+    parser.add_argument(
+        "--interval", type=int, default=30,
+        help="Minutes between watch mode cycles (default: 30)"
+    )
+    parser.add_argument(
         "--uppsc", action="store_true",
         help="Run UPPSC job scraper"
     )
@@ -63,6 +71,10 @@ def main():
         report = crawler.generate_report(orgs=target_keys)
         crawler.print_report(report)
         return  # report only, no diff/notify
+
+    if args.watch:
+        crawler.run_watch(orgs=target_keys, interval_minutes=args.interval)
+        return  # watch runs indefinitely until Ctrl+C
 
     # ── Scrape pipeline (single run) ──────────────────────────────────────
     scraped_data = crawler.run_scrape(orgs=target_keys)
