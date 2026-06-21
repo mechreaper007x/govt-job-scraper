@@ -124,6 +124,60 @@ ORGS_CONFIG = {
         "name": "Indian Railways (RRB) — Static Board",
         "url": "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
         "note": "Static fallback page with older recruitment links"
+    },
+    "sameer": {
+        "name": "SAMEER (R&D under MeitY)",
+        "url": "https://recruit.sameer.gov.in/"
+    },
+    "ernet": {
+        "name": "ERNET India (MeitY)",
+        "url": "https://ernet.in/career",
+        "special": "playwright"
+    },
+    "uidai": {
+        "name": "UIDAI (Aadhaar)",
+        "url": "https://uidai.gov.in/en/about-uidai/work-with-uidai.html"
+    },
+    "pgcil": {
+        "name": "PGCIL (Power Grid Corporation of India)",
+        "url": "https://www.powergrid.in/job-opportunities"
+    },
+    "iocl": {
+        "name": "IOCL (Indian Oil Corporation)",
+        "url": "https://iocl.com/Pages/Careers.aspx"
+    },
+    "bhel": {
+        "name": "BHEL (Bharat Heavy Electricals)",
+        "url": "https://www.bhel.com/recruitment"
+    },
+    "coal_india": {
+        "name": "Coal India Limited",
+        "url": "https://www.coalindia.in/career-cil/jobs-coal-india/"
+    },
+    "railtel": {
+        "name": "RailTel Corporation of India",
+        "url": "https://www.railtel.in"
+    },
+    "becil": {
+        "name": "BECIL (Broadcast Engineering Consultants)",
+        "url": "https://www.becil.com"
+    },
+    "sebi": {
+        "name": "SEBI (Securities & Exchange Board)",
+        "url": "https://www.sebi.gov.in"
+    },
+    "sidbi": {
+        "name": "SIDBI (Small Industries Development Bank)",
+        "url": "https://www.sidbi.in/en/careers"
+    },
+    "sjvn": {
+        "name": "SJVN Limited",
+        "url": "https://recruitment.sjvn.co.in/ErecruitLogin/Login.jsp",
+        "special": "playwright"
+    },
+    "tcil": {
+        "name": "TCIL (Telecommunications Consultants)",
+        "url": "https://www.tcil.net.in"
     }
 }
 
@@ -132,7 +186,10 @@ MAIN_ORGS = [
     "cdac", "nielit", "stpi", "nic", "cdot", "certin",
     "drdo", "bel", "barc", "isro", "hal", "ecil", "cris",
     "bsnl", "employment_news", "ncs",
-    "ongc", "sail", "ntpc", "aai"
+    "ongc", "sail", "ntpc", "aai",
+    "sameer", "ernet", "uidai", "pgcil", "iocl", "bhel",
+    "coal_india", "railtel", "becil", "sebi", "sidbi", "sjvn",
+    "tcil"
 ]
 UPPSC_ORGS = ["uppsc"]
 

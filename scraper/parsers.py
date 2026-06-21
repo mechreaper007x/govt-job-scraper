@@ -1309,6 +1309,94 @@ def parse_rrb(html_content):
     return postings
 
 
+def _parse_generic_page(html_content, base_url, container_id=None, container_class=None, container_tag=None):
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    container = None
+    if container_id:
+        container = soup.find(id=container_id)
+    elif container_class:
+        container = soup.find(class_=container_class)
+    elif container_tag:
+        container = soup.find(container_tag)
+        
+    if not container:
+        container = soup
+        
+    for a in container.find_all('a'):
+        href = a.get('href', '').strip()
+        if not href or href.startswith('javascript:') or href.startswith('mailto:') or href == '#':
+            continue
+            
+        title = a.get_text(separator=' ', strip=True)
+        if not title:
+            title = " ".join(a.stripped_strings)
+            
+        title = re.sub(r'\s+', ' ', title).strip()
+        if len(title) < 5:
+            continue
+            
+        title_lower = title.lower()
+        if any(w in title_lower for w in ['home', 'contact', 'feedback', 'site map', 'about us', 'privacy policy', 'terms of use', 'skip to']):
+            continue
+            
+        link = urljoin(base_url, href)
+        
+        postings.append({
+            "title": title,
+            "link": link,
+            "date": ""
+        })
+        
+    seen = set()
+    deduped = []
+    for p in postings:
+        if p["link"] not in seen:
+            seen.add(p["link"])
+            deduped.append(p)
+    return deduped
+
+def parse_sameer(html_content):
+    return _parse_generic_page(html_content, "https://recruit.sameer.gov.in/")
+
+def parse_ernet(html_content):
+    return _parse_generic_page(html_content, "https://www.ernet.in/careers")
+
+def parse_uidai(html_content):
+    return _parse_generic_page(html_content, "https://uidai.gov.in/en/about-uidai/work-with-uidai.html")
+
+def parse_pgcil(html_content):
+    return _parse_generic_page(html_content, "https://careers.powergrid.in/")
+
+def parse_iocl(html_content):
+    return _parse_generic_page(html_content, "https://iocl.com/Pages/Careers.aspx")
+
+def parse_bhel(html_content):
+    return _parse_generic_page(html_content, "https://careers.bhel.com")
+
+def parse_coal_india(html_content):
+    return _parse_generic_page(html_content, "https://www.coalindia.in/career-cil/jobs-coal-india/")
+
+def parse_railtel(html_content):
+    return _parse_generic_page(html_content, "https://www.railtel.in")
+
+def parse_becil(html_content):
+    return _parse_generic_page(html_content, "https://www.becil.com")
+
+def parse_sebi(html_content):
+    return _parse_generic_page(html_content, "https://www.sebi.gov.in")
+
+def parse_sidbi(html_content):
+    return _parse_generic_page(html_content, "https://www.sidbi.in/en/careers")
+
+def parse_sjvn(html_content):
+    return _parse_generic_page(html_content, "https://sjvn.nic.in/en/career.htm")
+
+def parse_tcil(html_content):
+    return _parse_generic_page(html_content, "https://www.tcil.net.in")
+
+
 def test_parsers():
     """
     Utility testing routine to pull live websites and check parsing yields.

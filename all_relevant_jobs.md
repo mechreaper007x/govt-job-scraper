@@ -1,6 +1,6 @@
 # All Relevant CS/IT Government Job Postings
 
-**Total Relevant Postings:** 437
+**Total Relevant Postings:** 452
 
 | # | Organization | Title | Date | Link |
 | --- | --- | --- | --- | --- |
@@ -21,168 +21,168 @@
 | 15 | NIC (National Informatics Centre) | Candidates are requested to to Download Provisional Offer Letter for the post of Scientist-B. Candidates are requested to to Download Provisional Offer Letter for the post of Scientific Officer/Engineer-SB. Candidates are requested to to submit their state preferences for further place of posting as DIO. Candidates are requested to to Download Authorization letter for verification of documents for the post of Scientific/Technical Assistant-A. Candidates are requested to to Download Provisional Offer Letter for the post of Scientific/Technical Assistant-A | - | [Link](https://recruitment.nic.in/RISOFFER/Pages/LoginHomePage.php?cmd=370) |
 | 16 | NIC (National Informatics Centre) | https://www.calicut.nielit.in/nic21 | - | [Link](https://www.calicut.nielit.in/nic21) |
 | 17 | NIC (National Informatics Centre) | Advertisement No. NIELIT/NIC/2022/2 List of Provisionally selected candidates for the post of Scientist F, E, D & C in NIC vide advertisement number NIELIT/NIC/2022/2 is uploaded in the portal https://www.calicut.nielit.in/nic21 . NOTICE FOR CANCELLATION OF RECRUITMENT PROCESS FOR THE POSTS OF SCIENTIST-D AND SCIENTIST-C in National Informatics Centre | - | [Link](https://recruitment.nic.in/notirect.pdf) |
-| 18 | STPI (Software Technology Parks of India) | Vacancy for various posts for SmartAgri CoE at Bhilai | July 09, 2026 | [Link](http://www.stpi.in/sites/default/files/career-documents/notice_21.pdf) |
-| 19 | STPI (Software Technology Parks of India) | Vacancy for various S&T and non-S&T posts (Group-A & below Group-A) | - | [Link](https://www.stpi.in/sites/default/files/inline-files/taclaim2026.pdf) |
-| 20 | C-DOT (Centre for Development of Telematics) | AI Expert & Scientist B/C/D | 19-07-2026 23:59:59 | [Link](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-AI-Expert-Sc-BCD-2026.pdf) |
-| 21 | CERT-In (Indian Computer Emergency Response Team) | Advance Notice for Recruitment to the post of Scientist 'B' on Direct Recruitment Basis | - | [Link](https://www.cert-in.org.in/PDF/Advance_Notice_CERT-In_SCB_2026_1.pdf) |
-| 22 | DRDO (Defence Research and Development Organisation) | List of selected candidate for JRF/RA 2026 in DIPR, Delhi | 18/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/list-selected-candidate-jrfra-2026-dipr-delhi) |
-| 23 | DRDO (Defence Research and Development Organisation) | DYSL-QT, Pune invites applications for the selection of Junior Research Fellowship (JRF) | 16/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/dysl-qt-pune-invites-applications-selection-junior-research-fellowship-jrf) |
-| 24 | DRDO (Defence Research and Development Organisation) | RAC invites applications for Scientist posts in the DRDS cadre of DRDO | 04/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/rac-invites-applications-scientist-posts-drds-cadre-drdo) |
-| 25 | DRDO (Defence Research and Development Organisation) | INMAS, Delhi calls for Interviews for the Award of DRDO Research Associate and Junior Research Fellowship… | 03/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/inmas-delhi-calls-interviews-award-drdo-research-associate-and-junior-research) |
-| 26 | DRDO (Defence Research and Development Organisation) | CAIR, Bengaluru invites for walk-in interview for the post of Junior Research Fellowship on 04th July 2026… | 27/05/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/cair-bengaluru-invites-walk-interview-post-junior-research-fellowship-04th-july) |
-| 27 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of  Junior Research Fellow (JRF) at U R Rao Satellite Centre,(URSC) (Advt: URSC:02:2026) | June 12, 2026 | [Link](https://www.isro.gov.in/URSCRecruitment11.html) |
-| 28 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer - 'SC',
+| 18 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Walk-In Interview for the positions of Project Manager, Senior Project Engineer, Project Engineer, Project Associate and Project Support Staff to be posted in Guwahati, Assam | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=walkin-CINE-REC-2026-01.pdf) |
+| 19 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] C-DAC invites online applications for various contractual positions for different locations across India. Last date of application is 20th June 2026 | - | [Link](https://careers.cdac.in/) |
+| 20 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment for Project Staff on Various Contract positions @ Various locations for CDAC, Thiruvananthapuram through WALK IN/ONLINE interview | - | [Link](https://www.cdac.in/index.aspx?id=ca_TvmContractStaff130526) |
+| 21 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Notice Regarding Advertisement no. C-DACK/COCP/2025/01 dated 12.12.2025 | - | [Link](https://www.cdac.in/index.aspx?id=ca_Notification_kol_19_1_26) |
+| 22 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment for Project Engineer on various contract positions for C-DAC, Bengaluru through walk in interview. | - | [Link](https://www.cdac.in/index.aspx?id=ca_AdvtNoCDACBRCT2026_15012026) |
+| 23 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Walk-in interview for recruitment on  contract on consolidated salary basis for project location at Duliajan, Assam &  Guwahati, Assam. (ADVT No: CINE/REC/2025/01) | - | [Link](https://www.cdac.in/index.aspx?id=ca_Silchar-SPE-PE-dec2025) |
+| 24 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Notification for inviting application for the engagement of Consultant at C-DAC Thiruvananthapuram | - | [Link](https://www.cdac.in/index.aspx?id=ca_NotificationConsultant04122025) |
+| 25 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment Drive for Project "Advanced Computing Research (ACR)" | - | [Link](https://www.cdac.in/index.aspx?id=job_Advt_BLR_CDAC_05072025) |
+| 26 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Filling up of various Group A S&T posts in C-DAC on Deputation | - | [Link](https://careers.cdac.in/) |
+| 27 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Detailed advertisement for Deputation | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=20250428-Vacancy-Deputation.pdf) |
+| 28 | C-DAC (Centre for Development of Advanced Computing) | [Rolling Advertisements] Applications are invited (online only) for C-DAC Adjunct Engineer (CAE) scheme from motivated and experienced researchers for doing research in C-DAC interest areas | - | [Link](https://www.cdac.in/index.aspx?id=job_corp_CAE_2020) |
+| 29 | C-DAC (Centre for Development of Advanced Computing) | [Rolling Advertisements] Applications are invited (online only) for Adjunct Scientist (ADS) scheme from motivated and experienced researchers for doing research in C-DAC | - | [Link](https://www.cdac.in/index.aspx?id=job_corp_ADS_2020) |
+| 30 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Noida Centre:- Link to download 'Admit Card' for recruitment test for 'Technical Assistant' (Level-6) positions against advt. no.  CORP/Grp.A&BGA/04/2025/NOIDA | - | [Link](https://www.cdac.in/index.aspx?id=ca_Notification_for_AdmitCard) |
+| 31 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Recruitment of Below Group 'A' Posts - Chennai against Adv. No. CORP/GR.A&BGA/04/2025/CH | - | [Link](https://www.cdac.in/index.aspx?id=ca_Cancellation_of_Posts_Chennai) |
+| 32 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Corrigendum regarding the upper age limit for Project Associate (2-4 years experience) at Imphal Location under Advt No. CORP/JIT/02/2026-CINE | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=PA-Corrigendum.pdf) |
+| 33 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Posts - Pune - Adv. No. CORP/GR.A&BGA/04/2025/PN | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Cancellation-Posts-Pune.pdf) |
+| 34 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Posts - CINE - Adv. No. CORP/GR.A&BGA/04/2025/CINE | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=Cancellation-Posts-CINE.pdf) |
+| 35 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] C-DAC TVM - Cancellation of Recruitment- Project Technician-02 - CORP/JIT/07/2025-TVM | - | [Link](https://www.cdac.in/index.aspx?id=ca_CancellationofRecruitmentPT02JIT11CDAC TVM) |
+| 36 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Noida Centre:- Recruitment of Technical Assistant (Level-6): Screening Status and Exam Syllabus | - | [Link](https://www.cdac.in/index.aspx?id=ca_Screening_Syllabus) |
+| 37 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of recruitment of certain posts advertised vide no. CORP/GR.A&BGA/04/2025/NOIDA | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Cancellation-GRA-BGA042025.pdf) |
+| 38 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Notification for Rescheduling of the Walk-In Interview for the posts of SPE (Senior Project Engineer) and PE (Project Engineer) | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=Notification-for-Revision-of-Walk-in-Interview-Schedule-SPE-PE.pdf) |
+| 39 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of recruitment process for the post of HRD-Executive, Level – 7 of C-DAC Mohali. Vide notification no.CORP/Grp.A&BGA/04/2025/ML | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=CANCELLATION-MOHALI.pdf) |
+| 40 | C-DOT (Centre for Development of Telematics) | AI Expert & Scientist B/C/D | 19-07-2026 23:59:59 | [Link](https://www.cdot.in/cdotweb/assets/docs/curr_openings/adv/Notification-AI-Expert-Sc-BCD-2026.pdf) |
+| 41 | STPI (Software Technology Parks of India) | Vacancy for various posts for SmartAgri CoE at Bhilai | July 09, 2026 | [Link](http://www.stpi.in/sites/default/files/career-documents/notice_21.pdf) |
+| 42 | STPI (Software Technology Parks of India) | Vacancy for various S&T and non-S&T posts (Group-A & below Group-A) | - | [Link](https://www.stpi.in/sites/default/files/inline-files/taclaim2026.pdf) |
+| 43 | CERT-In (Indian Computer Emergency Response Team) | Advance Notice for Recruitment to the post of Scientist 'B' on Direct Recruitment Basis | - | [Link](https://www.cert-in.org.in/PDF/Advance_Notice_CERT-In_SCB_2026_1.pdf) |
+| 44 | DRDO (Defence Research and Development Organisation) | List of selected candidate for JRF/RA 2026 in DIPR, Delhi | 18/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/list-selected-candidate-jrfra-2026-dipr-delhi) |
+| 45 | DRDO (Defence Research and Development Organisation) | DYSL-QT, Pune invites applications for the selection of Junior Research Fellowship (JRF) | 16/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/dysl-qt-pune-invites-applications-selection-junior-research-fellowship-jrf) |
+| 46 | DRDO (Defence Research and Development Organisation) | RAC invites applications for Scientist posts in the DRDS cadre of DRDO | 04/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/rac-invites-applications-scientist-posts-drds-cadre-drdo) |
+| 47 | DRDO (Defence Research and Development Organisation) | INMAS, Delhi calls for Interviews for the Award of DRDO Research Associate and Junior Research Fellowship… | 03/06/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/inmas-delhi-calls-interviews-award-drdo-research-associate-and-junior-research) |
+| 48 | DRDO (Defence Research and Development Organisation) | CAIR, Bengaluru invites for walk-in interview for the post of Junior Research Fellowship on 04th July 2026… | 27/05/2026 | [Link](http://drdo.gov.in/drdo/en/offerings/vacancies/cair-bengaluru-invites-walk-interview-post-junior-research-fellowship-04th-july) |
+| 49 | BARC (Bhabha Atomic Research Centre) | Cancellation of selection process of stipendiary trainee (Caegory-I & II) and recruitment process of Scientific Assistant/B (Safety) and Technician/B (Library science & Rigger) | Thu, 02 Apr 2026 15:06:10 +0530 | [Link](http://www.barc.gov.in/careers/result6.pdf) |
+| 50 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of  Junior Research Fellow (JRF) at U R Rao Satellite Centre,(URSC) (Advt: URSC:02:2026) | June 12, 2026 | [Link](https://www.isro.gov.in/URSCRecruitment11.html) |
+| 51 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer - 'SC',
                                                     Scientist/Engineer - 'SD' & Medical Officer - 'SC' at U R Rao Satellite Centre,(URSC) (Advt: URSC:01:2026) | March 23, 2026 | [Link](https://www.isro.gov.in/URSCRecruitment2026_1.html) |
-| 29 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer 'SD'
+| 52 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer 'SD'
                                                     and Scientist/Engineer 'SC' at Space Applications Centre (SAC) (Advt: SAC:01:2026) | Jan 23,2026 | [Link](https://www.isro.gov.in/SACRecruitment20.html) |
-| 30 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
+| 53 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
                                                     Technician-B and Draughtsman-B at National Remote Sensing Centre (NRSC) (Advt: NRSC/RMT/4/2025) | November 10, 2025 | [Link](https://www.isro.gov.in/NRSCRecruitment2025_4.html) |
-| 31 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer
+| 54 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer
                                                     ‘SC,Technical Assistant,Scientific Assistant,Library Assistant
                                                     ‘A’,Radiographer-A,Technician ‘B’,Draughtsman ‘B’,Cook,Firemen ‘A’,
                                                     Light Vehicle Driver ‘A’,Nurse-B and Draughtsman ‘B. at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/01/2025) | October 16,2025 | [Link](https://www.isro.gov.in/SDSCRecruitment24.html) |
-| 32 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant and
+| 55 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant and
                                                     Technician-B at Physical Research Laboratory (PRL) , Ahmedabad (Advt: PRL:02/2025) | October 04, 2025 | [Link](https://www.isro.gov.in/PRLRecruitment6.html) |
-| 33 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Twelve (12) temporary
+| 56 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Twelve (12) temporary
                                                     positions of Project Associate-I and One (01) temporary positions of
                                                     Project Scientist-I at Space Applications Centre (SAC) (Advt: SAC:01:2025) | Sep 02,2025 | [Link](https://www.isro.gov.in/SACRecruitment16.html) |
-| 34 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
+| 57 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
                                                     Sub-Officer, Technician 'B', Heavy Vehicle Driver 'A' and Light
                                                     Vehicle Driver 'A' at Liquid Propulsion Systems Centre (LPSC) , Valiamala (Advt: LPSC/01/2025) | August 09, 2025 | [Link](https://www.isro.gov.in/LPSCRecruitment12.html) |
-| 35 | ISRO (Indian Space Research Organisation) | Research Scientist, Research Associate-I and Junior
+| 58 | ISRO (Indian Space Research Organisation) | Research Scientist, Research Associate-I and Junior
                                                     Research Fellow at North Eastern-Space Applications Centre (NE-SAC) ,
                                                     Shillong (Advt: NESAC/RMT-TEMP/WI-01/2025) | July 12, 2025 | [Link](https://www.isro.gov.in/NESACRecruitment21.html) |
-| 36 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
+| 59 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
                                                     the disciplines of Civil, Electrical, Refrigeration &
                                                     Air-conditioning and Architecture. at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:03(CEPO):2025) | June 24, 2025 | [Link](https://www.isro.gov.in/ICRB_Recruitment10.html) |
-| 37 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
+| 60 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
                                                     Scientific Assistant and Library Assistant-A at Vikram Sarabhai Space Centre (VSSC) (Advt: VSSC-335 DATED 31.05.2025) | June 04, 2025 | [Link](https://www.isro.gov.in/VSSCRecruitment37.html) |
-| 38 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
+| 61 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
                                                     the disciplines of Electronics, Mechanical and Computer Science. at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:02(EMC):2025) | May 27, 2025 | [Link](https://www.isro.gov.in/ICRB_Recruitment9.html) |
-| 39 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
+| 62 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' in
                                                     the disciplines of Electronics, Mechanical and Computer Science. at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:01(EMC):2025) | April 29, 2025 | [Link](https://www.isro.gov.in/ICRB_Recruitment8.html) |
-| 40 | ISRO (Indian Space Research Organisation) | Application for JUNIOR RESEARCH FELLOW (JRF) at Vikram Sarabhai Space Centre (VSSC) (Advt: VSSC – 333 Dated 20.03.2025) | Mar 20, 2025 | [Link](https://www.isro.gov.in/VSSCRecruitment33.html) |
-| 41 | ISRO (Indian Space Research Organisation) | Recruitment to the post of JUNIOR RESEARCH FELLOW
+| 63 | ISRO (Indian Space Research Organisation) | Application for JUNIOR RESEARCH FELLOW (JRF) at Vikram Sarabhai Space Centre (VSSC) (Advt: VSSC – 333 Dated 20.03.2025) | Mar 20, 2025 | [Link](https://www.isro.gov.in/VSSCRecruitment33.html) |
+| 64 | ISRO (Indian Space Research Organisation) | Recruitment to the post of JUNIOR RESEARCH FELLOW
                                                     (JRF), RESEARCH ASSOCIATE-I (RA-I) at U R Rao Satellite Centre,(URSC) (Advt: URSC:01:2025) | Mar 22, 2025 | [Link](https://www.isro.gov.in/URSCRecruitment2025_1.html) |
-| 42 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Research Associate-I (RA-I) at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/02/2024) | December 13,2024 | [Link](https://www.isro.gov.in/SDSCRecruitment23.html) |
-| 43 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Medical Officer-SD/
+| 65 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Research Associate-I (RA-I) at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/02/2024) | December 13,2024 | [Link](https://www.isro.gov.in/SDSCRecruitment23.html) |
+| 66 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Medical Officer-SD/
                                                     SC,Scientist/ Engineer-sc, Technical Assistant/ Scientific
                                                     Assistant, Technician-B/ Draughtsman-B, Assistant (Rajbhasha) at Human Space Flight Centre(HSFC) (Advt: HSFC:01:RMT:2024) | Sep 18,2024 | [Link](https://www.isro.gov.in/HSFCRecruitment2024_1.html) |
-| 44 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellows
+| 67 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellows
                                                     (JRFs) and Research Associates (RAs) at Space Applications Centre (SAC) (Advt: SAC:01:2024) | Sep 17,2024 | [Link](https://www.isro.gov.in/SACRecruitment15.html) |
-| 45 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant ,
+| 68 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant ,
                                                     Technician ‘B’, Heavy Vehicle Driver ‘A’ , Light Vehicle Driver ‘A’
                                                     and Cook at Liquid Propulsion Systems Centre (LPSC) , Bengaluru (Advt: LPSC/01/2024) | August 28, 2024 | [Link](https://www.isro.gov.in/LPSCRecruitment11.html) |
-| 46 | ISRO (Indian Space Research Organisation) | Research Scientist & Junior Research Fellow at North Eastern-Space Applications Centre (NE-SAC) ,
+| 69 | ISRO (Indian Space Research Organisation) | Research Scientist & Junior Research Fellow at North Eastern-Space Applications Centre (NE-SAC) ,
                                                     Shillong (Advt: NESAC/RMT-TEMP/WI-01/2024) | July 07, 2024 | [Link](https://www.isro.gov.in/NESACRecruitment20.html) |
-| 47 | ISRO (Indian Space Research Organisation) | Application for Research Scientist & Project
+| 70 | ISRO (Indian Space Research Organisation) | Application for Research Scientist & Project
                                                     Associate-I at Vikram Sarabhai Space Centre
                                                     (VSSC),Thiruvananthapuram (Advt: VSSC-330 DATED 20.04.2024) | April 20, 2024 | [Link](https://www.isro.gov.in/VSSCRecruitment32.html) |
-| 48 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Research Scientist (RS),
+| 71 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Research Scientist (RS),
                                                     Project Scientist, Project Associate and Junior Research Fellow
                                                     (JRF) at National Remote Sensing Centre (NRSC) (Advt: NRSC-RMT-2-2024) | March 18, 2024 | [Link](https://www.isro.gov.in/NRSCRecruitment2024_2.html) |
-| 49 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist / Engineer - ‘SC’
+| 72 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist / Engineer - ‘SC’
                                                     , Technical Assistant , Scientific Assistant ,Library Assistant
                                                     ,Technician - ‘B’ , Draughtsman - ‘B’ , Cook , Fireman - ‘A’ , Heavy
                                                     Vehicle Driver - ’A’ and Light Vehicle Driver - ’A’. at U R Rao Satellite Centre,(URSC) (Advt: URSC:ISTRAC:01:2024) | February 10, 2024 | [Link](https://www.isro.gov.in/URSC-ISTRAC-RMT-2024.html) |
-| 50 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellow (JRF) at Vikram Sarabhai Space Centre
+| 73 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellow (JRF) at Vikram Sarabhai Space Centre
                                                     (VSSC),Thiruvananthapuram (Advt: VSSC-329 Dated 16.01.2024) | January 16, 2024 | [Link](https://www.isro.gov.in/VSSCRecruitment31.html) |
-| 51 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' at Space Applications Centre (SAC) (Advt: SAC:04:2023) | December 26,2023 | [Link](https://www.isro.gov.in/SACRecruitment14.html) |
-| 52 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer ‘SC’ at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/05/2023) | October 14,2023 | [Link](https://www.isro.gov.in/SDSCRecruitment21.html) |
-| 53 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Research Associate-I(RA-I) at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/03/2023) | July 05, 2023 | [Link](https://www.isro.gov.in/SDSCRecruitment19.html) |
-| 54 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer-SD & SC
+| 74 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' at Space Applications Centre (SAC) (Advt: SAC:04:2023) | December 26,2023 | [Link](https://www.isro.gov.in/SACRecruitment14.html) |
+| 75 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Scientist/Engineer ‘SC’ at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/05/2023) | October 14,2023 | [Link](https://www.isro.gov.in/SDSCRecruitment21.html) |
+| 76 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Research Associate-I(RA-I) at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/03/2023) | July 05, 2023 | [Link](https://www.isro.gov.in/SDSCRecruitment19.html) |
+| 77 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer-SD & SC
                                                     in various ISRO Centres at Vikram Sarabhai Space Centre
                                                     (VSSC),Thiruvananthapuram (Advt: VSSC-327 DATED 01.07.2023) | July 05, 2023 | [Link](https://www.isro.gov.in/VSSCRecruitment27.html) |
-| 55 | ISRO (Indian Space Research Organisation) | Recruitment for the post of Scientist/Engineer
+| 78 | ISRO (Indian Space Research Organisation) | Recruitment for the post of Scientist/Engineer
                                                     'SC'(EMC). at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:02(EMC):2023) | May 25, 2023 | [Link](https://www.isro.gov.in/ICRB_Recruitment7.html) |
-| 56 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Technical Assistant. at Liquid Propulsion Systems Centre (LPSC) , Bengaluru (Advt: LPSC/01/2023) | May 16, 2023 | [Link](https://www.isro.gov.in/LPSCRecruitment9.html) |
-| 57 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
+| 79 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Technical Assistant. at Liquid Propulsion Systems Centre (LPSC) , Bengaluru (Advt: LPSC/01/2023) | May 16, 2023 | [Link](https://www.isro.gov.in/LPSCRecruitment9.html) |
+| 80 | ISRO (Indian Space Research Organisation) | Recruitment to the posts of Technical Assistant,
                                                     Scientific Assistant, Library Assistant ‘A’, Technician ‘B’ and
                                                     Draughtsman ‘B’ at SatishDhawan Space Centre (SDSC) SHAR , Sriharikota (Advt: SDSC SHAR/RMT/02/2023) | Apr 26, 2023 | [Link](https://www.isro.gov.in/SDSCRecruitment18.html) |
-| 58 | ISRO (Indian Space Research Organisation) | Recruitment for the posts of Technical Assistant ,
+| 81 | ISRO (Indian Space Research Organisation) | Recruitment for the posts of Technical Assistant ,
                                                     Scientific Assistant, Library Assistant A. at Vikram Sarabhai Space Centre
                                                     (VSSC),Thiruvananthapuram (Advt: VSSC-323 dated 29.04.2023) | May 02, 2023 | [Link](https://www.isro.gov.in/VSSCRecruitment25.html) |
-| 59 | ISRO (Indian Space Research Organisation) | Recruitment for the posts of Technical Assistant
+| 82 | ISRO (Indian Space Research Organisation) | Recruitment for the posts of Technical Assistant
                                                     ,Technician 'B',Draughtsman 'B',Heavy Vechicle Driver 'A', Light
                                                     Vechicle Driver 'A' and Fireman 'A'. at ISRO Propulsion Complex, Mahendragiri (Advt: IPRC/RMT/2023/01) | Mar 27,2023 | [Link](https://www.isro.gov.in/IPRCRecruitment3.html) |
-| 60 | ISRO (Indian Space Research Organisation) | Recruitment of Temporary Research Personnel i.e, JRF,
+| 83 | ISRO (Indian Space Research Organisation) | Recruitment of Temporary Research Personnel i.e, JRF,
                                                     RS, RA, PS-I and PA-I at National Remote Sensing Centre
                                                     (NRSC) (Advt: NRSC-RMT-1-2023) | Mar 25, 2023 | [Link](https://www.isro.gov.in/NRSCRecruitment2023_1.html) |
-| 61 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellows (JRFs) ,Research
+| 84 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Junior Research Fellows (JRFs) ,Research
                                                     Associates (RAs) and Project Associate -1 (PA-1) at Space Applications Centre (SAC) (Advt: SAC:01:2022) | Dec 19, 2022 | [Link](https://www.isro.gov.in/SACRecruitment10.html) |
-| 62 | ISRO (Indian Space Research Organisation) | Research Scientist & Junior Research Fellow at North Eastern-Space Applications Centre (NE-SAC)
+| 85 | ISRO (Indian Space Research Organisation) | Research Scientist & Junior Research Fellow at North Eastern-Space Applications Centre (NE-SAC)
                                                         , Meghalaya (Advt: NESAC/RMT-TEMP/02/2022) | November 14, 2022 | [Link](https://www.isro.gov.in/NESACRecruitment19.html) |
-| 63 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' (Electronics,
+| 86 | ISRO (Indian Space Research Organisation) | Recruitment to the post of Scientist/Engineer 'SC' (Electronics,
                                                     Mechanical and Computer Science) at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:03:2019) | Oct 15, 2019 | [Link](https://www.isro.gov.in/ICRBRecruitment2.html) |
-| 64 | ISRO (Indian Space Research Organisation) | RECRUITMENT OF TECHNICIAN-B / DRAUGHTSMAN-B / TECHNICAL
+| 87 | ISRO (Indian Space Research Organisation) | RECRUITMENT OF TECHNICIAN-B / DRAUGHTSMAN-B / TECHNICAL
                                                     ASSISTANT/ SCIENTIFIC ASSISTANT /LIBRARY ASSISTANT/ HINDI TYPIST/
                                                     CATERING ATTENDANT-‘A’/ COOK/ FIREMAN-‘A’/HEAVY VEHICLE DRIVER’A’/
                                                     LIGHT VEHICLE DRIVER ‘A’ at U R Rao Satellite Centre (URSC) , Bengaluru (Advt: URSC:01:2020) | September / October 2022. | [Link](https://www.isro.gov.in/iisacadvtnoURSC012020.html) |
-| 65 | ISRO (Indian Space Research Organisation) | Inviting online applications for Junior Research Fellow
+| 88 | ISRO (Indian Space Research Organisation) | Inviting online applications for Junior Research Fellow
                                                     (JRF) and Research Associate (RA) at U R Rao Satellite Centre (URSC) , Bengaluru (Advt: URSC: 01 :2021) | Sep 11,2021 | [Link](https://www.isro.gov.in/URSCRecruitment1.html) |
-| 66 | ISRO (Indian Space Research Organisation) | Recruitment of Scientific Assistant and Junior
+| 89 | ISRO (Indian Space Research Organisation) | Recruitment of Scientific Assistant and Junior
                                                     Translation Officer at Liquid Propulsion Systems Centre (LPSC) , Bengaluru (Advt: LPSC/01/2021) | Jul 03, 2021 | [Link](https://www.isro.gov.in/LPSCRecruitment2.html) |
-| 67 | ISRO (Indian Space Research Organisation) | Recruitment of Temporary Research Personnel i.e, JRF,
+| 90 | ISRO (Indian Space Research Organisation) | Recruitment of Temporary Research Personnel i.e, JRF,
                                                     RS, RA at National Remote Sensing Centre (NRSC) , Hyderabad (Advt: NRSC-RMT-1-2022) | Apr 23,2022 | [Link](https://www.isro.gov.in/NRSCRecruitment2022_1.html) |
-| 68 | ISRO (Indian Space Research Organisation) | Research Scientist [Level -10] at North Eastern-Space Applications Centre (NE-SAC) ,
+| 91 | ISRO (Indian Space Research Organisation) | Research Scientist [Level -10] at North Eastern-Space Applications Centre (NE-SAC) ,
                                                     Shillong (Advt: NESAC/RMT-TEMP/01/2021) | Feb 21,2022 | [Link](https://www.isro.gov.in/NESACRecruitment1.html) |
-| 69 | ISRO (Indian Space Research Organisation) | Recruitment for the Posts of Scientist Engineer-SD,
+| 92 | ISRO (Indian Space Research Organisation) | Recruitment for the Posts of Scientist Engineer-SD,
                                                     Sci/Engr-SC, Technical Assistants, Technicians & Draughtsman at Space Applications Centre (SAC) ,Ahmedabad (Advt: SAC:02:2020) | Mar 14,2020 | [Link](https://www.isro.gov.in/SACRecruitment1.html) |
-| 70 | ISRO (Indian Space Research Organisation) | JUNIOR RESEARCH FELLOW (JRF) at Vikram Sarabhai Space Centre
+| 93 | ISRO (Indian Space Research Organisation) | JUNIOR RESEARCH FELLOW (JRF) at Vikram Sarabhai Space Centre
                                                     (VSSC),Thiruvananthapuram (Advt: VSSC-320 Dated 25.07.2022) | Jul 25, 2022 | [Link](https://www.isro.gov.in/VSSCRecruitment23.html) |
-| 71 | BARC (Bhabha Atomic Research Centre) | Cancellation of selection process of stipendiary trainee (Caegory-I & II) and recruitment process of Scientific Assistant/B (Safety) and Technician/B (Library science & Rigger) | Thu, 02 Apr 2026 15:06:10 +0530 | [Link](http://www.barc.gov.in/careers/result6.pdf) |
-| 72 | ECIL (Electronics Corporation of India Ltd) | Walk-in Selections for the post of ‘Technical Officer on Contract’ to work for various Business verticals located at Hyderabad. | - | [Link](https://www.ecil.co.in/jobs/Advt_06_2026.pdf) |
-| 73 | ECIL (Electronics Corporation of India Ltd) | Online applications are invited for various posts purely on fixed tenure contract basis such as Project Engineers on Contract for an initial period of One Year | Reprint Application | [Link](https://www.ecil.co.in/jobs/Advt_03_2026.pdf) |
-| 74 | ECIL (Electronics Corporation of India Ltd) | Online applications are invited for various posts purely on fixed tenure contract basis such as Project Engineers on Contract for an initial period of One Year | Reprint Application | [Link](https://www.ecil.co.in/jobs/Advt_02_2026.pdf) |
-| 75 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Walk-In Interview for the positions of Project Manager, Senior Project Engineer, Project Engineer, Project Associate and Project Support Staff to be posted in Guwahati, Assam | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=walkin-CINE-REC-2026-01.pdf) |
-| 76 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] C-DAC invites online applications for various contractual positions for different locations across India. Last date of application is 20th June 2026 | - | [Link](https://careers.cdac.in/) |
-| 77 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment for Project Staff on Various Contract positions @ Various locations for CDAC, Thiruvananthapuram through WALK IN/ONLINE interview | - | [Link](https://www.cdac.in/index.aspx?id=ca_TvmContractStaff130526) |
-| 78 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Notice Regarding Advertisement no. C-DACK/COCP/2025/01 dated 12.12.2025 | - | [Link](https://www.cdac.in/index.aspx?id=ca_Notification_kol_19_1_26) |
-| 79 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment for Project Engineer on various contract positions for C-DAC, Bengaluru through walk in interview. | - | [Link](https://www.cdac.in/index.aspx?id=ca_AdvtNoCDACBRCT2026_15012026) |
-| 80 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Walk-in interview for recruitment on  contract on consolidated salary basis for project location at Duliajan, Assam &  Guwahati, Assam. (ADVT No: CINE/REC/2025/01) | - | [Link](https://www.cdac.in/index.aspx?id=ca_Silchar-SPE-PE-dec2025) |
-| 81 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Notification for inviting application for the engagement of Consultant at C-DAC Thiruvananthapuram | - | [Link](https://www.cdac.in/index.aspx?id=ca_NotificationConsultant04122025) |
-| 82 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Recruitment Drive for Project "Advanced Computing Research (ACR)" | - | [Link](https://www.cdac.in/index.aspx?id=job_Advt_BLR_CDAC_05072025) |
-| 83 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Filling up of various Group A S&T posts in C-DAC on Deputation | - | [Link](https://careers.cdac.in/) |
-| 84 | C-DAC (Centre for Development of Advanced Computing) | [Current Openings] Detailed advertisement for Deputation | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=20250428-Vacancy-Deputation.pdf) |
-| 85 | C-DAC (Centre for Development of Advanced Computing) | [Rolling Advertisements] Applications are invited (online only) for C-DAC Adjunct Engineer (CAE) scheme from motivated and experienced researchers for doing research in C-DAC interest areas | - | [Link](https://www.cdac.in/index.aspx?id=job_corp_CAE_2020) |
-| 86 | C-DAC (Centre for Development of Advanced Computing) | [Rolling Advertisements] Applications are invited (online only) for Adjunct Scientist (ADS) scheme from motivated and experienced researchers for doing research in C-DAC | - | [Link](https://www.cdac.in/index.aspx?id=job_corp_ADS_2020) |
-| 87 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Noida Centre:- Link to download 'Admit Card' for recruitment test for 'Technical Assistant' (Level-6) positions against advt. no.  CORP/Grp.A&BGA/04/2025/NOIDA | - | [Link](https://www.cdac.in/index.aspx?id=ca_Notification_for_AdmitCard) |
-| 88 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Recruitment of Below Group 'A' Posts - Chennai against Adv. No. CORP/GR.A&BGA/04/2025/CH | - | [Link](https://www.cdac.in/index.aspx?id=ca_Cancellation_of_Posts_Chennai) |
-| 89 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Corrigendum regarding the upper age limit for Project Associate (2-4 years experience) at Imphal Location under Advt No. CORP/JIT/02/2026-CINE | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=PA-Corrigendum.pdf) |
-| 90 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Posts - Pune - Adv. No. CORP/GR.A&BGA/04/2025/PN | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Cancellation-Posts-Pune.pdf) |
-| 91 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of Posts - CINE - Adv. No. CORP/GR.A&BGA/04/2025/CINE | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=Cancellation-Posts-CINE.pdf) |
-| 92 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] C-DAC TVM - Cancellation of Recruitment- Project Technician-02 - CORP/JIT/07/2025-TVM | - | [Link](https://www.cdac.in/index.aspx?id=ca_CancellationofRecruitmentPT02JIT11CDAC TVM) |
-| 93 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Noida Centre:- Recruitment of Technical Assistant (Level-6): Screening Status and Exam Syllabus | - | [Link](https://www.cdac.in/index.aspx?id=ca_Screening_Syllabus) |
-| 94 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of recruitment of certain posts advertised vide no. CORP/GR.A&BGA/04/2025/NOIDA | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=Cancellation-GRA-BGA042025.pdf) |
-| 95 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Notification for Rescheduling of the Walk-In Interview for the posts of SPE (Senior Project Engineer) and PE (Project Engineer) | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd_sil&dynamicId=Notification-for-Revision-of-Walk-in-Interview-Schedule-SPE-PE.pdf) |
-| 96 | C-DAC (Centre for Development of Advanced Computing) | [Notifications] Cancellation of recruitment process for the post of HRD-Executive, Level – 7 of C-DAC Mohali. Vide notification no.CORP/Grp.A&BGA/04/2025/ML | - | [Link](https://www.cdac.in/index.aspx?id=pdf_hrd&dynamicId=CANCELLATION-MOHALI.pdf) |
-| 97 | CRIS (Centre for Railway Information Systems) | One vacancy of Manager/Dy. Manager (Civil) at New Delhi on deputation basis | - | [Link](https://www.cris.org.in/PDF/Gazetted/Vacancy Notice 18-R 2025.pdf) |
-| 98 | CRIS (Centre for Railway Information Systems) | One vacancy of Manager/Dy. Manager (Civil) at New Delhi on deputation basis | - | [Link](https://www.cris.org.in/PDF/Gazetted/Vacancy Notice No16 -2025.pdf) |
-| 99 | CRIS (Centre for Railway Information Systems) | Twenty vacancy of Sr Executive/Executive at CRIS ,Mumbai on deputation basis | - | [Link](https://www.cris.org.in/PDF/Non_Gazetted/Vacancy notification no 27 of 2023_2 CRIS-2-5.pdf) |
-| 100 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in SLAM Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/Vacancy Notice 24 of 2024.pdf) |
-| 101 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in Finance Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/Vacancy Notice No. 05,2024.pdf) |
-| 102 | CRIS (Centre for Railway Information Systems) | Three vacancy of Project Assistant in UTS Group at CRIS Mumbai Office | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 2 OF 2024_UTS.pdf) |
-| 103 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in PRS Group at CRIS Mumbai Office | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 3 OF 2024_PRS.pdf) |
-| 104 | CRIS (Centre for Railway Information Systems) | Eighteen vacancy of Project Assistant in CCTIV Surveillance Project in CMM Group at different location of CRIS | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 01 OF 2024.pdf) |
-| 105 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in CEP-II Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/vacancy noticeCEP2.pdf) |
-| 106 | CRIS (Centre for Railway Information Systems) | Seven vacancy of Project Assistant in FOIS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 31 OF 2023_PA_FOIS (1).pdf) |
-| 107 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Finance Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE  30 OF 2023-PO-PA.pdf) |
-| 108 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Coach Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 29 OF 2023-PO-PA.pdf) |
-| 109 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Wagon Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 28 OF 2023-PO-PA.pdf) |
-| 110 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Station Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 27 OF 2023_PO_PA.pdf) |
-| 111 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in Account Department at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/vacancy notice no. 18-2023 for PO.pdf) |
-| 112 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in Finance Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/Vacancy Notice No. 05,2024.pdf) |
-| 113 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Finance Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE  30 OF 2023-PO-PA.pdf) |
-| 114 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Coach Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 29 OF 2023-PO-PA.pdf) |
-| 115 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Wagon Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 28 OF 2023-PO-PA.pdf) |
-| 116 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Station Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 27 OF 2023_PO_PA.pdf) |
-| 117 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in CMS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/Vacancy Notice No 26 of 2023_PO_PA.pdf) |
-| 118 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in Account Department at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/vacancy notice no. 18-2023 for PO.pdf) |
-| 119 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in PRS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_PRS Modernisation.pdf) |
-| 120 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Enterprise Architecture Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Enterprise Architecture.pdf) |
-| 121 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Cloud Management Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Cloud Management.pdf) |
-| 122 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Data Centre Design and Construction Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Data Centre.pdf) |
-| 123 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Cyber Security Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Cyber Security.pdf) |
+| 94 | CRIS (Centre for Railway Information Systems) | One vacancy of Manager/Dy. Manager (Civil) at New Delhi on deputation basis | - | [Link](https://www.cris.org.in/PDF/Gazetted/Vacancy Notice 18-R 2025.pdf) |
+| 95 | CRIS (Centre for Railway Information Systems) | One vacancy of Manager/Dy. Manager (Civil) at New Delhi on deputation basis | - | [Link](https://www.cris.org.in/PDF/Gazetted/Vacancy Notice No16 -2025.pdf) |
+| 96 | CRIS (Centre for Railway Information Systems) | Twenty vacancy of Sr Executive/Executive at CRIS ,Mumbai on deputation basis | - | [Link](https://www.cris.org.in/PDF/Non_Gazetted/Vacancy notification no 27 of 2023_2 CRIS-2-5.pdf) |
+| 97 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in SLAM Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/Vacancy Notice 24 of 2024.pdf) |
+| 98 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in Finance Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/Vacancy Notice No. 05,2024.pdf) |
+| 99 | CRIS (Centre for Railway Information Systems) | Three vacancy of Project Assistant in UTS Group at CRIS Mumbai Office | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 2 OF 2024_UTS.pdf) |
+| 100 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in PRS Group at CRIS Mumbai Office | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 3 OF 2024_PRS.pdf) |
+| 101 | CRIS (Centre for Railway Information Systems) | Eighteen vacancy of Project Assistant in CCTIV Surveillance Project in CMM Group at different location of CRIS | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE NO 01 OF 2024.pdf) |
+| 102 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in CEP-II Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/vacancy noticeCEP2.pdf) |
+| 103 | CRIS (Centre for Railway Information Systems) | Seven vacancy of Project Assistant in FOIS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 31 OF 2023_PA_FOIS (1).pdf) |
+| 104 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Finance Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE  30 OF 2023-PO-PA.pdf) |
+| 105 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Coach Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 29 OF 2023-PO-PA.pdf) |
+| 106 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Wagon Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 28 OF 2023-PO-PA.pdf) |
+| 107 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Assistant in MDMS Group for Station Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/VACANCY NOTICE 27 OF 2023_PO_PA.pdf) |
+| 108 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Assistant in Account Department at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Assistants/vacancy notice no. 18-2023 for PO.pdf) |
+| 109 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in Finance Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/Vacancy Notice No. 05,2024.pdf) |
+| 110 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Finance Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE  30 OF 2023-PO-PA.pdf) |
+| 111 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Coach Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 29 OF 2023-PO-PA.pdf) |
+| 112 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Wagon Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 28 OF 2023-PO-PA.pdf) |
+| 113 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Officer in MDMS Group for Station Entity at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/VACANCY NOTICE 27 OF 2023_PO_PA.pdf) |
+| 114 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in CMS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/Vacancy Notice No 26 of 2023_PO_PA.pdf) |
+| 115 | CRIS (Centre for Railway Information Systems) | Two vacancy of Project Officer in Account Department at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Officers/vacancy notice no. 18-2023 for PO.pdf) |
+| 116 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in PRS Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_PRS Modernisation.pdf) |
+| 117 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Enterprise Architecture Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Enterprise Architecture.pdf) |
+| 118 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Cloud Management Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Cloud Management.pdf) |
+| 119 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Data Centre Design and Construction Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Data Centre.pdf) |
+| 120 | CRIS (Centre for Railway Information Systems) | One vacancy of Project Consultant in Cyber Security Group at New Delhi | - | [Link](https://www.cris.org.in/PDF/Project_Consultant/Vacancy_Consultant_Cyber Security.pdf) |
+| 121 | ECIL (Electronics Corporation of India Ltd) | Walk-in Selections for the post of ‘Technical Officer on Contract’ to work for various Business verticals located at Hyderabad. | - | [Link](https://www.ecil.co.in/jobs/Advt_06_2026.pdf) |
+| 122 | ECIL (Electronics Corporation of India Ltd) | Online applications are invited for various posts purely on fixed tenure contract basis such as Project Engineers on Contract for an initial period of One Year | Reprint Application | [Link](https://www.ecil.co.in/jobs/Advt_03_2026.pdf) |
+| 123 | ECIL (Electronics Corporation of India Ltd) | Online applications are invited for various posts purely on fixed tenure contract basis such as Project Engineers on Contract for an initial period of One Year | Reprint Application | [Link](https://www.ecil.co.in/jobs/Advt_02_2026.pdf) |
 | 124 | BSNL (Bharat Sanchar Nigam Ltd) | Examination Notification DR JTO(T)NEW | - | [Link](https://externalexam.bsnl.co.in/Examination notification DR JTO(T).pdf) |
 | 125 | Employment News (Ministry of I&B) | NATIONAL DISASTER MANAGEMENT AUTHORITY — SENIOR CONSULTANT DISASTER MANAGEMENT | 30/06/2026 | [Link](https://employmentnews.gov.in/NewEmp/AllJobs.aspx?k=All) |
 | 126 | Employment News (Ministry of I&B) | NATIONAL DISASTER MANAGEMENT AUTHORITY — SENIOR CONSULTANT COMMUNITY BASED DISASTER RISK REDUCTION | 20/06/2026 | [Link](https://employmentnews.gov.in/NewEmp/AllJobs.aspx?k=All) |
@@ -494,6 +494,21 @@
 | 432 | NIELIT (National Institute of Electronics & IT) | [NIELIT-BBS] Last date for submission of Application vide NIELIT/NIC/2020/1 dated 23/2/2020 for recruitment of Scientist ‘B’ and Scientific/ Technical Assistant – “A” in NIC is extended to 30 April 2020 5:00PM.[However, the eligibility conditions w.r.t., cut off date for age, qualification and experience for applying for both the posts shall remain unchanged i.e., 26th March, 2020 as per clause 7.3 of the detailed advertisement] | 2020-04-30 | [Link](https://www.calicut.nielit.in/nic) |
 | 433 | NIELIT (National Institute of Electronics & IT) | [NIELIT-BBS] Recruitment for Scientist – ‘B’ and Scientific/Technical Assistant – ‘A’ posts in NIC on Direct Recruitment Basis (Advt. No. NIELIT/NIC/2020/1) | 2020-03-26 | [Link](https://www.calicut.nielit.in/nic) |
 | 434 | NIELIT (National Institute of Electronics & IT) | [NIELIT-BBS] Walk-in-interviews on 17, 18, 19 and 20 December 2019 for the positions of Jr. Resource Person, Resource Person, Sr. Resource Person and Chief Resource Person in Technical (Programmers, Technical Writer, Software tester etc.) and Non-Technical (Finance, Supervisory, Support staff etc.) category, purely on temporary and contract basis. | 2019-12-20 | [Link](https://www.nielit.gov.in/Recruitments/BBS) |
-| 435 | AAI (Airports Authority of India) | ADVERTISEMENT NO. 06/2026/CHQ/CN  ENGAGEMENT OF SENIOR CONSULTANT IN PENSION CELL, HRM DIRECTORATE, CHQ IN AIRPORTS AUTHORITY OF INDIA (AAI) ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/711268) |
-| 436 | AAI (Airports Authority of India) | ADVERTISEMENT NO. 12/2025/CHQ ENGAGEMENT OF PRINCIPAL CONSULTANT AND SENIOR CONSULTANT IN CAP DIRECTORATE FOR AIRPORTS AUTHORITY OF INDIA (AAI) ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/670042) |
-| 437 | AAI (Airports Authority of India) | ADVERTISEMENT NO.06/2025/CHQ: ENGAGEMENT OF SENIOR CONSULTANTS FOR AAI ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/612604) |
+| 435 | SAMEER (R&D under MeitY) | RESEARCH SCIENTIST (Electronics / Communication / Telecommunication) | - | [Link](https://recruit.sameer.gov.in/#0) |
+| 436 | SAMEER (R&D under MeitY) | Project Assistant – A (Electronics / Communication / Telecommunication) | - | [Link](https://recruit.sameer.gov.in/#1) |
+| 437 | SAMEER (R&D under MeitY) | Project Assistant - A (Mechanical) | - | [Link](https://recruit.sameer.gov.in/#2) |
+| 438 | SAMEER (R&D under MeitY) | Project Technician – A (Electronics / Communication / Telecommunication) | - | [Link](https://recruit.sameer.gov.in/#3) |
+| 439 | SAMEER (R&D under MeitY) | Project Technician – A (Mechanical,Fitter and Machinist) | - | [Link](https://recruit.sameer.gov.in/#4) |
+| 440 | UIDAI (Aadhaar) | Advertisement for Hiring of Technical Consultants | - | [Link](https://uidai.gov.in/en/about-uidai/work-with-uidai/advertisement-for-hiring-of-technical-consultants.html) |
+| 441 | UIDAI (Aadhaar) | click here ( Advertisement for Hiring of Technical Consultants) Type :PDF, Doc Size: 0.8 MB | - | [Link](https://uidai.gov.in/images/5_tech_consultant_open_adv.pdf) |
+| 442 | RailTel Corporation of India | Data Center Services | - | [Link](https://www.railtel.in/our-expertise/data-center-services2.html) |
+| 443 | RailTel Corporation of India | Software as a Serivce (SaaS)- Association with RailTel | - | [Link](https://www.railtelindia.com/images/pdf/Software as a Serivce (SaaS)- Association with RailTel-NOTICE.pdf) |
+| 444 | RailTel Corporation of India | Cyber Security Policy | - | [Link](https://www.railtel.in/resource-centre/cyber-security-policy.html) |
+| 445 | BECIL (Broadcast Engineering Consultants) | Triazine Software Pvt. Ltd. | - | [Link](https://triazinesoft.com/in/index.html) |
+| 446 | Coal India Limited | Cancellation of Notification for Engagement of Full Time Sr. Advisor (Technical) at BCCL | - | [Link](https://d3u7ubx0okog7j.cloudfront.net/documents/ADVISOR_TECHNICAL_16-5-24_mhDqwBw.pdf) |
+| 447 | Coal India Limited | Notification for Engagement of SR. Advisor (Technical) in BCCL | - | [Link](https://d3u7ubx0okog7j.cloudfront.net/documents/Sr._Advisor_Technical_Notification.pdf) |
+| 448 | SEBI (Securities & Exchange Board) | FAQ on Cybersecurity and Cyber Resilience Framework (CSCRF) | - | [Link](https://www.sebi.gov.in/sebi_data/faqfiles/jun-2025/1749647139924.pdf) |
+| 449 | SEBI (Securities & Exchange Board) | Information Technology Department (ITD) | - | [Link](https://www.sebi.gov.in/department/information-technology-department-35/overview.html) |
+| 450 | AAI (Airports Authority of India) | ADVERTISEMENT NO. 06/2026/CHQ/CN  ENGAGEMENT OF SENIOR CONSULTANT IN PENSION CELL, HRM DIRECTORATE, CHQ IN AIRPORTS AUTHORITY OF INDIA (AAI) ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/711268) |
+| 451 | AAI (Airports Authority of India) | ADVERTISEMENT NO. 12/2025/CHQ ENGAGEMENT OF PRINCIPAL CONSULTANT AND SENIOR CONSULTANT IN CAP DIRECTORATE FOR AIRPORTS AUTHORITY OF INDIA (AAI) ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/670042) |
+| 452 | AAI (Airports Authority of India) | ADVERTISEMENT NO.06/2025/CHQ: ENGAGEMENT OF SENIOR CONSULTANTS FOR AAI ON CONTRACT BASIS | Human Resource | [Link](https://www.aai.aero/en/recruitment/release/612604) |

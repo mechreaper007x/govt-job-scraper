@@ -114,6 +114,19 @@ PARSER_MAP = {
     "rrb": None,          # handled via _fetch_spa() — React SPA, needs Playwright
     "rrb_static": parsers.parse_rrb,
     "drdo_spa": None,     # handled via _fetch_spa() — Playwright variant for DRDO
+    "sameer": parsers.parse_sameer,
+    "ernet": parsers.parse_ernet,
+    "uidai": parsers.parse_uidai,
+    "pgcil": parsers.parse_pgcil,
+    "iocl": parsers.parse_iocl,
+    "bhel": parsers.parse_bhel,
+    "coal_india": parsers.parse_coal_india,
+    "railtel": parsers.parse_railtel,
+    "becil": parsers.parse_becil,
+    "sebi": parsers.parse_sebi,
+    "sidbi": parsers.parse_sidbi,
+    "sjvn": parsers.parse_sjvn,
+    "tcil": parsers.parse_tcil,
 }
 
 
