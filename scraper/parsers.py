@@ -571,6 +571,9 @@ def parse_ecil(html_content):
     Structure: Single HTML table with headers:
       S.No | Advt No | Short Description | Documents | Links
     Documents column contains PDF links (Advertisement, Application Form, Annexure).
+    
+    Note: Uses the 'Short Description' column (index 2) for the title, not
+    the 'S.No' column (index 0) which contains row numbers like "1", "2".
     """
     postings = []
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -578,14 +581,34 @@ def parse_ecil(html_content):
     # Try table first
     table = soup.find('table')
     if table:
-        for row in table.find_all('tr'):
+        # Find header row to map column indices
+        header_row = table.find('tr')
+        col_map = {}
+        if header_row:
+            headers = header_row.find_all(['th', 'td'])
+            for i, h in enumerate(headers):
+                text = h.get_text(strip=True).lower()
+                col_map[text] = i
+
+        # Determine title column: prefer 'short description', then 'description',
+        # then fall back to column 2. Skip S.No (column 0).
+        title_idx = col_map.get('short description',
+                     col_map.get('description',
+                     col_map.get('post',
+                     col_map.get('title', 2))))  # fallback to index 2
+
+        for row in table.find_all('tr')[1:]:  # skip header
             tds = row.find_all('td')
-            if len(tds) < 2:
+            if len(tds) < max(title_idx + 1, 2):
                 continue
-            title_td = tds[0]
-            title = title_td.get_text(strip=True)
-            if not title or title.lower() in ('s.no', 'sr.no', 'sno', 'sl.no', 'description', 'title', 'post'):
+
+            title = tds[title_idx].get_text(strip=True) if len(tds) > title_idx else ""
+            if not title or title.lower() in ('s.no', 'sr.no', 'sno', 'sl.no', 'description', 'title', 'post', ''):
                 continue
+            # Skip rows where title is a single digit (S.No column fallback)
+            if title.isdigit() and len(title) <= 2:
+                continue
+
             # Find link – could be in any td
             link = "https://www.ecil.co.in/index.php/career-at-ecil"
             for td in tds:

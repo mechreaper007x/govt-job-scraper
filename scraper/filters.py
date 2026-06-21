@@ -62,6 +62,10 @@ INCLUDE_KEYWORDS = [
     # General technical roles
     "technical assistant", "technical consultant",
     "it officer", "information officer",
+    # Telecom / PSU technical roles
+    "junior telecom officer", " jto",
+    # Scientific assistant roles (BARC, ISRO style)
+    "scientific assistant",
 ]
 
 EXCLUDE_KEYWORDS = [
