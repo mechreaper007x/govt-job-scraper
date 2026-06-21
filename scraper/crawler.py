@@ -243,8 +243,8 @@ class GovJobCrawler:
                 content = r.content if key in ("barc", "nic") else r.text
                 postings = parser_fn(content)
 
-            # ── Filter by relevance ──────────────────────────────────────
-            annotate(postings)
+            # ── Filter by relevance (with per-org context + URL awareness) ─
+            annotate(postings, org_key=key, session=self.session)
             filtered = [p for p in postings if p.get("relevance") != "excluded"]
             print(f"{len(filtered)} listings (from {len(postings)})")
             return filtered
