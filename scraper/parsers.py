@@ -477,8 +477,18 @@ def fetch_nielit_center(session, center_id, headers):
         expiry_date = rec.get("eventExpiryDate", "")
 
         # Strip HTML tags from title to get clean text
+        # Also extract any direct link from the title HTML for per-item URLs
+        perma_link = ""
         if title_html:
             title_soup = BeautifulSoup(title_html, 'html.parser')
+            # Try to extract a direct link from the title HTML first
+            a_in_title = title_soup.find('a')
+            if a_in_title and a_in_title.get('href'):
+                href_val = a_in_title['href']
+                if href_val.startswith('http'):
+                    perma_link = href_val
+                else:
+                    perma_link = urljoin(BASE, href_val)
             title = title_soup.get_text(separator=' ', strip=True)
             title = re.sub(r'\s+', ' ', title).strip()
         elif blog_name:
@@ -491,7 +501,10 @@ def fetch_nielit_center(session, center_id, headers):
             continue
 
         # Canonical link: the React SPA URL for this center's recruitment page
-        if center_id == "HQ":
+        # Prefer the direct link extracted from title HTML when available
+        if perma_link:
+            link = perma_link
+        elif center_id == "HQ":
             link = f"{BASE}/form?formName=Recruitments&center=HQ"
         else:
             link = f"{BASE}/Recruitments/{center_id}"
@@ -808,9 +821,10 @@ def parse_hal(html_content):
 
         # Extract link. The career listing payload does not include a per-item
         # URL — the Angular SPA routes to detail pages by ID client-side.
-        # Prefer any explicit link field if present, otherwise point at the
-        # careers page (the user can navigate from there).
+        # Prefer any explicit link field if present; otherwise construct a
+        # deep link using the item's unique id.
         link = HAL_CAREER_PAGE
+        # Check for explicit link fields first
         for link_key in ("link", "file_link", "pdf_link", "url", "apply_link", "detail_link"):
             val = item.get(link_key, "")
             if val and isinstance(val, str) and len(val) > 5:
@@ -819,6 +833,11 @@ def parse_hal(html_content):
                 else:
                     link = urljoin(HAL_BASE, val)
                 break
+        else:
+            # No explicit link found — construct a per-item link using the id
+            item_id = item.get("id")
+            if item_id:
+                link = f"{HAL_CAREER_PAGE}?id={item_id}"
 
         # Extract date. HAL uses `activeupto` (closing/deadline date) and
         # `floated_date` (publication date); prefer `activeupto` since it's
