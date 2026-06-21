@@ -37,6 +37,12 @@ ORGS_CONFIG = {
         "name": "DRDO (Defence Research and Development Organisation)",
         "url": "https://www.drdo.gov.in/drdo/en/offerings/vacancies"
     },
+    "drdo_spa": {
+        "name": "DRDO (Playwright SPA)",
+        "url": "https://www.drdo.gov.in/drdo/en/offerings/vacancies",
+        "special": "playwright",  # JS-rendered card layout; static parser already works, SPA validates framework
+        "note": "Playwright-powered variant of DRDO to validate the generic SPA parser on a second target."
+    },
     "bel": {
         "name": "BEL (Bharat Electronics Limited)",
         "url": "https://bel-india.in/job-notifications/",

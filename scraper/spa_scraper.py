@@ -311,6 +311,137 @@ def parse_rrb_spa(html_content):
     return postings
 
 
+# ─── DRDO-Specific Parser ────────────────────────────────────────────────────
+
+
+def parse_drdo_spa(html_content):
+    """
+    Parse DRDO vacancies page after Playwright rendering.
+
+    URL: https://www.drdo.gov.in/drdo/en/offerings/vacancies
+    After Playwright rendering, the page shows vacancy cards with:
+      - Headings (h2-h6) for vacancy titles
+      - 'View More' links to detail pages
+      - Published dates and advertisement numbers
+
+    The static parser (parse_drdo) works on the server-rendered HTML.
+    This SPA parser captures content from the JavaScript-rendered layout
+    which may include additional vacancies not in the static version.
+    """
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE = "https://www.drdo.gov.in"
+    seen = set()
+
+    # Strategy 1: Find 'View More' links and extract surrounding context
+    for a in soup.find_all('a'):
+        text = a.get_text(strip=True).lower()
+        href = a.get('href', '')
+
+        is_view_more = ('view more' in text) or ('/vacancies/' in href)
+        if not is_view_more:
+            continue
+
+        # Climb up to find the container with vacancy metadata
+        parent = a.parent
+        container = None
+        for _ in range(6):
+            if parent is None:
+                break
+            parent_text = parent.get_text()
+            if ('Advertisement No' in parent_text or
+                    'Published Date' in parent_text or
+                    'Last Date' in parent_text):
+                container = parent
+                break
+            parent = parent.parent
+
+        if container is None:
+            # Fallback: use the nearest heading as title
+            container = a.parent
+
+        # Extract title from heading
+        title = ""
+        heading = container.find(['h2', 'h3', 'h4', 'h5', 'h6'])
+        if heading:
+            title = heading.get_text(strip=True)
+        if not title:
+            # Try first link text that isn't 'View More'
+            for link_tag in container.find_all('a'):
+                lt = link_tag.get_text(strip=True)
+                if lt and lt.lower() != 'view more' and len(lt) > 5:
+                    title = lt
+                    break
+        if not title:
+            # Use first text block
+            text_blocks = [t.strip() for t in container.get_text().splitlines() if t.strip()]
+            if text_blocks:
+                title = text_blocks[0]
+
+        if not title or len(title) < 5:
+            continue
+
+        # Extract link
+        link = urljoin(BASE, href) if href else f"{BASE}/drdo/en/offerings/vacancies"
+        if link in seen:
+            continue
+        seen.add(link)
+
+        # Extract dates
+        container_text = container.get_text()
+        pub_date = ""
+        date_match = re.search(
+            r'Published Date\s*(\d{2}/\d{2}/\d{4})',
+            container_text, re.IGNORECASE
+        )
+        if date_match:
+            pub_date = date_match.group(1)
+        else:
+            # Try any date pattern
+            date_match = re.search(r'(\d{2}/\d{2}/\d{4})', container_text)
+            if date_match:
+                pub_date = date_match.group(1)
+
+        postings.append({
+            "title": f"[DRDO-SPA] {title}",
+            "link": link,
+            "date": pub_date,
+        })
+
+    # Strategy 2: Scan all links for vacancy/recruitment patterns
+    if not postings:
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href == '#':
+                continue
+
+            title = a.get_text(separator=' ', strip=True)
+            title = re.sub(r'\s+', ' ', title).strip()
+            if len(title) < 5:
+                continue
+
+            link = urljoin(BASE + "/", href) if not href.startswith('http') else href
+            if link in seen:
+                continue
+            seen.add(link)
+
+            title_lower = title.lower()
+            link_lower = link.lower()
+            if any(kw in title_lower or kw in link_lower
+                   for kw in ['vacanc', 'recruit', 'notification', 'apply',
+                              'advertisement', 'engagement']):
+                postings.append({
+                    "title": f"[DRDO-SPA] {title}",
+                    "link": link,
+                    "date": "",
+                })
+
+    return postings
+
+
 # ─── Generic SPA Parser ──────────────────────────────────────────────────────
 
 

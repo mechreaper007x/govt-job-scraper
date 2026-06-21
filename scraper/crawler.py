@@ -94,6 +94,7 @@ PARSER_MAP = {
     "aai": parsers.parse_aai,
     "rrb": None,          # handled via _fetch_spa() — React SPA, needs Playwright
     "rrb_static": parsers.parse_rrb,
+    "drdo_spa": None,     # handled via _fetch_spa() — Playwright variant for DRDO
 }
 
 
@@ -317,7 +318,7 @@ class GovJobCrawler:
         Falls back to the static parser (parse_rrb) for RRB if SPA returns
         no useful content.
         """
-        from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_generic_spa
+        from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_drdo_spa, parse_generic_spa
 
         print(f"[SPA] Launching Chromium for {key}...", end=" ")
 
@@ -331,14 +332,19 @@ class GovJobCrawler:
         if not html or len(html) < 500:
             return self._fallback_to_static("SPA empty")
 
-        # Parse the rendered HTML
+        # Parse the rendered HTML with org-specific parser
         if key == "rrb":
             postings = parse_rrb_spa(html)
+        elif key == "drdo_spa":
+            postings = parse_drdo_spa(html)
         else:
             postings = parse_generic_spa(html, base_url=url)
 
         if not postings:
-            return self._fallback_to_static(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)")
+            if key == "rrb":
+                return self._fallback_to_static(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)")
+            print(f"SPA rendered {len(html)} chars but parser found no listings")
+            return []
 
         print(f"got {len(postings)} listings")
         return postings
