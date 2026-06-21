@@ -39,7 +39,8 @@ ORGS_CONFIG = {
     },
     "bel": {
         "name": "BEL (Bharat Electronics Limited)",
-        "url": "https://bel-india.in/job-notifications/"
+        "url": "https://bel-india.in/job-notifications/",
+        "note": "Site frequently returns 500 Database Error (server-side). BEL also uses temporary portals on jobapply.in, cdn.digialm.com (TCS iON), and cbexams.com for specific drives, but these are per-drive only and cannot be used for ongoing monitoring."
     },
     "barc": {
         "name": "BARC (Bhabha Atomic Research Centre)",
