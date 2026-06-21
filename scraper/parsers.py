@@ -1396,6 +1396,67 @@ def parse_sjvn(html_content):
 def parse_tcil(html_content):
     return _parse_generic_page(html_content, "https://www.tcil.net.in")
 
+def parse_dic(html_content):
+    return _parse_generic_page(html_content, "https://www.dic.gov.in/careers")
+
+def parse_npcil(html_content):
+    return _parse_generic_page(html_content, "https://www.npcilcareers.co.in")
+
+def parse_rites(html_content):
+    return _parse_generic_page(html_content, "https://www.rites.com/Career")
+
+def parse_dfccil(html_content):
+    return _parse_generic_page(html_content, "https://dfccil.com")
+
+def parse_scl(html_content):
+    return _parse_generic_page(html_content, "https://www.scl.gov.in/career.html")
+
+def parse_csir_4pi(html_content):
+    return _parse_generic_page(html_content, "https://csir4pi.res.in/index.php/en/careers/apply-for-a-position")
+
+def parse_igcar(html_content):
+    return _parse_generic_page(html_content, "https://www.igcar.gov.in/recruitment.html")
+
+def parse_rrcat(html_content):
+    return _parse_generic_page(html_content, "https://www.rrcat.gov.in/hrd/Openings/Current_Openings.html")
+
+def parse_bpcl(html_content):
+    return _parse_generic_page(html_content, "https://www.bharatpetroleum.in/careers/job-openings")
+
+def parse_pfc(html_content):
+    return _parse_generic_page(html_content, "https://www.pfcindia.com/Home/VS/19")
+
+def parse_rec(html_content):
+    return _parse_generic_page(html_content, "https://www.recl.co.in/recljobs/career.php")
+
+def parse_iti(html_content):
+    return _parse_generic_page(html_content, "https://www.itiltd.in/careers.php")
+
+def parse_cel(html_content):
+    return _parse_generic_page(html_content, "https://www.celindia.co.in/career-opportunity")
+
+def parse_nhpc(html_content):
+    return _parse_generic_page(html_content, "http://www.nhpcindia.com/welcome/job")
+
+def parse_grid_india(html_content):
+    return _parse_generic_page(html_content, "https://grid-india.in/careers/")
+
+def parse_hpcl(html_content):
+    return _parse_generic_page(html_content, "https://www.hindustanpetroleum.com/careers")
+
+def parse_rbi(html_content):
+    return _parse_generic_page(html_content, "https://opportunities.rbi.org.in/scripts/vacancies.aspx")
+
+def parse_negd(html_content):
+    return _parse_generic_page(html_content, "https://negd.gov.in/careers/")
+
+def parse_nixi(html_content):
+    return _parse_generic_page(html_content, "https://nixi.in/career/")
+
+def parse_bisag_n(html_content):
+    return _parse_generic_page(html_content, "https://www.bisag-n.gov.in")
+
+
 
 def test_parsers():
     """

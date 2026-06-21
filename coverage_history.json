@@ -676,5 +676,315 @@
         "status": "ok"
       }
     }
+  },
+  {
+    "timestamp": "2026-06-22T00:11:54.616637",
+    "org_count": 37,
+    "summary": {
+      "total_postings": 2847,
+      "total_relevant": 458,
+      "total_uncertain": 2389,
+      "overall_relevant_pct": 16.1,
+      "orgs_ok": 35,
+      "orgs_failed": 2
+    },
+    "orgs": {
+      "cdac": {
+        "total": 22,
+        "relevant": 22,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "nielit": {
+        "total": 525,
+        "relevant": 304,
+        "uncertain": 221,
+        "relevant_pct": 57.9,
+        "signal_quality": "MEDIUM",
+        "status": "ok"
+      },
+      "stpi": {
+        "total": 2,
+        "relevant": 2,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "nic": {
+        "total": 17,
+        "relevant": 17,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "cdot": {
+        "total": 1,
+        "relevant": 1,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "certin": {
+        "total": 1,
+        "relevant": 1,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "drdo": {
+        "total": 7,
+        "relevant": 5,
+        "uncertain": 2,
+        "relevant_pct": 71.4,
+        "signal_quality": "MEDIUM",
+        "status": "ok"
+      },
+      "bel": {
+        "total": 0,
+        "relevant": 0,
+        "uncertain": 0,
+        "relevant_pct": 0.0,
+        "signal_quality": "N/A",
+        "status": "error"
+      },
+      "barc": {
+        "total": 3,
+        "relevant": 1,
+        "uncertain": 2,
+        "relevant_pct": 33.3,
+        "signal_quality": "LOW",
+        "status": "ok"
+      },
+      "isro": {
+        "total": 50,
+        "relevant": 44,
+        "uncertain": 6,
+        "relevant_pct": 88.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "hal": {
+        "total": 4,
+        "relevant": 0,
+        "uncertain": 4,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "ecil": {
+        "total": 10,
+        "relevant": 3,
+        "uncertain": 7,
+        "relevant_pct": 30.0,
+        "signal_quality": "LOW",
+        "status": "ok"
+      },
+      "cris": {
+        "total": 27,
+        "relevant": 27,
+        "uncertain": 0,
+        "relevant_pct": 100.0,
+        "signal_quality": "HIGH",
+        "status": "ok"
+      },
+      "bsnl": {
+        "total": 7,
+        "relevant": 1,
+        "uncertain": 6,
+        "relevant_pct": 14.3,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "employment_news": {
+        "total": 9,
+        "relevant": 6,
+        "uncertain": 3,
+        "relevant_pct": 66.7,
+        "signal_quality": "MEDIUM",
+        "status": "ok"
+      },
+      "ncs": {
+        "total": 7,
+        "relevant": 0,
+        "uncertain": 7,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "ongc": {
+        "total": 206,
+        "relevant": 0,
+        "uncertain": 206,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "sail": {
+        "total": 26,
+        "relevant": 0,
+        "uncertain": 26,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "ntpc": {
+        "total": 10,
+        "relevant": 0,
+        "uncertain": 10,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "aai": {
+        "total": 44,
+        "relevant": 3,
+        "uncertain": 41,
+        "relevant_pct": 6.8,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "sameer": {
+        "total": 8,
+        "relevant": 5,
+        "uncertain": 3,
+        "relevant_pct": 62.5,
+        "signal_quality": "MEDIUM",
+        "status": "ok"
+      },
+      "ernet": {
+        "total": 3,
+        "relevant": 0,
+        "uncertain": 3,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "uidai": {
+        "total": 136,
+        "relevant": 2,
+        "uncertain": 134,
+        "relevant_pct": 1.5,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "pgcil": {
+        "total": 652,
+        "relevant": 0,
+        "uncertain": 652,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "iocl": {
+        "total": 0,
+        "relevant": 0,
+        "uncertain": 0,
+        "relevant_pct": 0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "bhel": {
+        "total": 71,
+        "relevant": 0,
+        "uncertain": 71,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "coal_india": {
+        "total": 237,
+        "relevant": 2,
+        "uncertain": 235,
+        "relevant_pct": 0.8,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "railtel": {
+        "total": 107,
+        "relevant": 3,
+        "uncertain": 104,
+        "relevant_pct": 2.8,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "becil": {
+        "total": 58,
+        "relevant": 1,
+        "uncertain": 57,
+        "relevant_pct": 1.7,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "sebi": {
+        "total": 92,
+        "relevant": 2,
+        "uncertain": 90,
+        "relevant_pct": 2.2,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "sidbi": {
+        "total": 0,
+        "relevant": 0,
+        "uncertain": 0,
+        "relevant_pct": 0.0,
+        "signal_quality": "N/A",
+        "status": "error"
+      },
+      "sjvn": {
+        "total": 152,
+        "relevant": 0,
+        "uncertain": 152,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "tcil": {
+        "total": 81,
+        "relevant": 0,
+        "uncertain": 81,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "dic": {
+        "total": 46,
+        "relevant": 4,
+        "uncertain": 42,
+        "relevant_pct": 8.7,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "npcil": {
+        "total": 21,
+        "relevant": 0,
+        "uncertain": 21,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "rites": {
+        "total": 102,
+        "relevant": 2,
+        "uncertain": 100,
+        "relevant_pct": 2.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      },
+      "dfccil": {
+        "total": 103,
+        "relevant": 0,
+        "uncertain": 103,
+        "relevant_pct": 0.0,
+        "signal_quality": "NOISE",
+        "status": "ok"
+      }
+    }
   }
 ]

@@ -178,6 +178,86 @@ ORGS_CONFIG = {
     "tcil": {
         "name": "TCIL (Telecommunications Consultants)",
         "url": "https://www.tcil.net.in"
+    },
+    "dic": {
+        "name": "Digital India Corporation (DIC)",
+        "url": "https://www.dic.gov.in/careers"
+    },
+    "npcil": {
+        "name": "Nuclear Power Corporation of India (NPCIL)",
+        "url": "https://www.npcilcareers.co.in"
+    },
+    "rites": {
+        "name": "RITES Limited",
+        "url": "https://www.rites.com/Career"
+    },
+    "dfccil": {
+        "name": "Dedicated Freight Corridor Corporation (DFCCIL)",
+        "url": "https://dfccil.com"
+    },
+    "scl": {
+        "name": "Semi-Conductor Laboratory (SCL) Mohali",
+        "url": "https://www.scl.gov.in/career.html"
+    },
+    "csir_4pi": {
+        "name": "CSIR Fourth Paradigm Institute",
+        "url": "https://csir4pi.res.in/index.php/en/careers/apply-for-a-position"
+    },
+    "igcar": {
+        "name": "Indira Gandhi Centre for Atomic Research (IGCAR)",
+        "url": "https://www.igcar.gov.in/recruitment.html"
+    },
+    "rrcat": {
+        "name": "Raja Ramanna Centre for Advanced Technology (RRCAT)",
+        "url": "https://www.rrcat.gov.in/hrd/Openings/Current_Openings.html"
+    },
+    "bpcl": {
+        "name": "Bharat Petroleum Corporation Limited (BPCL)",
+        "url": "https://www.bharatpetroleum.in/careers/job-openings"
+    },
+    "pfc": {
+        "name": "Power Finance Corporation (PFC)",
+        "url": "https://www.pfcindia.com/Home/VS/19"
+    },
+    "rec": {
+        "name": "REC Limited",
+        "url": "https://www.recl.co.in/recljobs/career.php"
+    },
+    "iti": {
+        "name": "ITI Limited (Indian Telephone Industries)",
+        "url": "https://www.itiltd.in/careers.php"
+    },
+    "cel": {
+        "name": "Central Electronics Limited (CEL)",
+        "url": "https://www.celindia.co.in/career-opportunity"
+    },
+    "nhpc": {
+        "name": "NHPC Limited",
+        "url": "http://www.nhpcindia.com/welcome/job"
+    },
+    "grid_india": {
+        "name": "Grid Controller of India Limited (GRID-INDIA)",
+        "url": "https://grid-india.in/careers/"
+    },
+    "hpcl": {
+        "name": "Hindustan Petroleum Corporation Limited (HPCL)",
+        "url": "https://www.hindustanpetroleum.com/careers"
+    },
+    "rbi": {
+        "name": "Reserve Bank of India (RBI)",
+        "url": "https://opportunities.rbi.org.in/scripts/vacancies.aspx"
+    },
+    "negd": {
+        "name": "National e-Governance Division (NeGD)",
+        "url": "https://negd.gov.in/careers/"
+    },
+    "nixi": {
+        "name": "National Internet Exchange of India (NIXI)",
+        "url": "https://nixi.in/career/"
+    },
+    "bisag_n": {
+        "name": "BISAG-N (Bhaskaracharya National Institute for Space Applications)",
+        "url": "https://www.bisag-n.gov.in"
     }
 }
 
@@ -189,7 +269,9 @@ MAIN_ORGS = [
     "ongc", "sail", "ntpc", "aai",
     "sameer", "ernet", "uidai", "pgcil", "iocl", "bhel",
     "coal_india", "railtel", "becil", "sebi", "sidbi", "sjvn",
-    "tcil"
+    "tcil", "dic", "npcil", "rites", "dfccil",
+    "scl", "csir_4pi", "igcar", "rrcat", "bpcl", "pfc", "rec", "iti",
+    "cel", "nhpc", "grid_india", "hpcl", "rbi", "negd", "nixi", "bisag_n"
 ]
 UPPSC_ORGS = ["uppsc"]
 
@@ -307,5 +389,85 @@ DISCOVERY_CONFIG = {
         "name": "Indian Railways (RRB)",
         "homepages": ["https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554"],
         "patterns": [r"recruit", r"vacanc", r"notification", r"censal"],
+    },
+    "scl": {
+        "name": "Semi-Conductor Laboratory (SCL) Mohali",
+        "homepages": ["https://www.scl.gov.in/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"job"],
+    },
+    "csir_4pi": {
+        "name": "CSIR Fourth Paradigm Institute",
+        "homepages": ["https://csir4pi.res.in/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"position", r"job"],
+    },
+    "igcar": {
+        "name": "Indira Gandhi Centre for Atomic Research (IGCAR)",
+        "homepages": ["https://www.igcar.gov.in/"],
+        "patterns": [r"recruit", r"vacanc", r"job", r"career"],
+    },
+    "rrcat": {
+        "name": "Raja Ramanna Centre for Advanced Technology (RRCAT)",
+        "homepages": ["https://www.rrcat.gov.in/"],
+        "patterns": [r"opening", r"recruit", r"vacanc", r"career", r"hrd"],
+    },
+    "bpcl": {
+        "name": "Bharat Petroleum Corporation Limited (BPCL)",
+        "homepages": ["https://www.bharatpetroleum.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"opening", r"vacanc"],
+    },
+    "pfc": {
+        "name": "Power Finance Corporation (PFC)",
+        "homepages": ["https://www.pfcindia.com/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"job", r"opening"],
+    },
+    "rec": {
+        "name": "REC Limited",
+        "homepages": ["https://www.recl.co.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "iti": {
+        "name": "ITI Limited (Indian Telephone Industries)",
+        "homepages": ["https://www.itiltd.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "cel": {
+        "name": "Central Electronics Limited (CEL)",
+        "homepages": ["https://www.celindia.co.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "nhpc": {
+        "name": "NHPC Limited",
+        "homepages": ["http://www.nhpcindia.com/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "grid_india": {
+        "name": "Grid Controller of India Limited (GRID-INDIA)",
+        "homepages": ["https://grid-india.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "hpcl": {
+        "name": "Hindustan Petroleum Corporation Limited (HPCL)",
+        "homepages": ["https://www.hindustanpetroleum.com/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "rbi": {
+        "name": "Reserve Bank of India (RBI)",
+        "homepages": ["https://opportunities.rbi.org.in/"],
+        "patterns": [r"vacancy", r"recruit", r"job", r"opportunity", r"career"],
+    },
+    "negd": {
+        "name": "National e-Governance Division (NeGD)",
+        "homepages": ["https://negd.gov.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "nixi": {
+        "name": "National Internet Exchange of India (NIXI)",
+        "homepages": ["https://nixi.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"opening"],
+    },
+    "bisag_n": {
+        "name": "BISAG-N (Bhaskaracharya National Institute for Space Applications)",
+        "homepages": ["https://www.bisag-n.gov.in/"],
+        "patterns": [r"notice", r"recruit", r"vacanc", r"career", r"job"],
     },
 }
