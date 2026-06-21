@@ -45,6 +45,7 @@ scraper/diff.py
 # Other
 state.json
 *.txt
+!requirements.txt
 *.html
 
 # Windows artifact (created by stdout redirection)
