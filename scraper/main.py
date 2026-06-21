@@ -60,6 +60,18 @@ def main():
         "--org", type=str,
         help="Run a specific organization scraper by key"
     )
+    parser.add_argument(
+        "--scale-all", action="store_true",
+        help="Run the seeder and crawl all 2,500+ discovered portals in batches"
+    )
+    parser.add_argument(
+        "--limit", type=int, default=None,
+        help="Limit the number of domains processed in --scale-all mode"
+    )
+    parser.add_argument(
+        "--offset", type=int, default=0,
+        help="Starting offset for domains processed in --scale-all mode"
+    )
 
     args = parser.parse_args()
 
@@ -71,6 +83,19 @@ def main():
         target_keys = [args.org]
     elif args.uppsc:
         target_keys = UPPSC_ORGS
+    elif args.scale_all:
+        from scraper.domain_seeder import generate_domains
+        seeded_domains = generate_domains()
+        # Merge seeded_domains into ORGS_CONFIG and mark them for career URL resolution
+        for k, v in seeded_domains.items():
+            if k not in ORGS_CONFIG:
+                v["resolve_career"] = True
+                ORGS_CONFIG[k] = v
+        all_keys = sorted(list(seeded_domains.keys()))
+        start = args.offset
+        end = (start + args.limit) if args.limit is not None else len(all_keys)
+        target_keys = all_keys[start:end]
+        print(f"Scaling to all portals. Batch range: {start} to {end} (out of {len(all_keys)} total)")
     else:
         target_keys = MAIN_ORGS
 

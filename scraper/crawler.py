@@ -332,12 +332,19 @@ class GovJobCrawler:
         cfg = ORGS_CONFIG[key]
         org_name = cfg["name"]
         url = cfg["url"]
+        if cfg.get("resolve_career"):
+            from scraper.domain_seeder import resolve_career_url
+            try:
+                resolved = resolve_career_url(url, session=self.session)
+                if resolved:
+                    url = resolved
+            except Exception:
+                pass
         parser_fn = PARSER_MAP.get(key)
         is_special = cfg.get("special") in ("api", "json_api", "hal_api", "ncs_api", "playwright")
 
-        if not parser_fn and not is_special:
-            print(f"  ERROR: No parser mapped for {org_name} ({key})")
-            return None
+        # Standard HTML pages can be parsed via the AdaptiveParser even without custom parser mapped.
+        # No error return needed if not parser_fn.
 
         print(f"  Fetching {org_name}...", end=" ")
 
@@ -356,9 +363,15 @@ class GovJobCrawler:
                 r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=15)
                 r.raise_for_status()
 
-                # Some parsers need raw bytes (NIC, BARC)
-                content = r.content if key in ("barc", "nic") else r.text
-                postings = parser_fn(content)
+                if key in ("barc", "nic"):
+                    content = r.content
+                    postings = parser_fn(content)
+                else:
+                    from scraper.adaptive_parser import parse_adaptive
+                    postings = parse_adaptive(r.text, base_url=url)
+                    # Fallback to legacy custom parser if adaptive found nothing
+                    if not postings and parser_fn:
+                        postings = parser_fn(r.text)
 
             # ── Filter by relevance (with per-org context + URL awareness) ─
             annotate(postings, org_key=key, session=self.session)
