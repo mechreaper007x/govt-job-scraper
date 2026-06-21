@@ -335,6 +335,50 @@ ORGS_CONFIG = {
     "jpsc": {
         "name": "JPSC (Jharkhand Public Service Commission)",
         "url": "https://www.jpsc.gov.in/"
+    },
+    "ibps": {
+        "name": "IBPS (Institute of Banking Personnel Selection)",
+        "url": "https://www.ibps.in/"
+    },
+    "sbi": {
+        "name": "SBI Careers (State Bank of India)",
+        "url": "https://sbi.co.in/web/careers/current-openings"
+    },
+    "nabard": {
+        "name": "NABARD (National Bank for Agriculture and Rural Development)",
+        "url": "https://www.nabard.org/"
+    },
+    "nhb": {
+        "name": "NHB (National Housing Bank)",
+        "url": "https://www.nhb.org.in/careers-with-nhb-archives/"
+    },
+    "gail": {
+        "name": "GAIL (India) Limited",
+        "url": "https://gailonline.com/"
+    },
+    "oil": {
+        "name": "OIL (Oil India Limited)",
+        "url": "https://www.oil-india.com/advertisement-list"
+    },
+    "nalco": {
+        "name": "NALCO (National Aluminium Company)",
+        "url": "https://nalcoindia.com/career/"
+    },
+    "mdl": {
+        "name": "MDL (Mazagon Dock Shipbuilders)",
+        "url": "https://mazagondock.in/"
+    },
+    "dsssb": {
+        "name": "DSSSB (Delhi Subordinate Services Selection Board)",
+        "url": "https://dsssb.delhi.gov.in/"
+    },
+    "rsmssb": {
+        "name": "RSMSSB (Rajasthan Staff Selection Board)",
+        "url": "https://rsmssb.rajasthan.gov.in/"
+    },
+    "hssc": {
+        "name": "HSSC (Haryana Staff Selection Commission)",
+        "url": "https://www.hssc.gov.in/"
     }
 }
 
@@ -350,7 +394,8 @@ MAIN_ORGS = [
     "scl", "csir_4pi", "igcar", "rrcat", "bpcl", "pfc", "rec", "iti",
     "cel", "nhpc", "grid_india", "hpcl", "rbi", "negd", "nixi", "bisag_n",
     "upsc", "ssc", "irctc", "concor", "eil", "mpsc", "gpsc", "keralapsc", "rpsc",
-    "tnpsc", "opsc", "wbpsc", "appsc", "mppsc", "hpsc", "ppsc", "ukpsc", "cgpsc", "jpsc"
+    "tnpsc", "opsc", "wbpsc", "appsc", "mppsc", "hpsc", "ppsc", "ukpsc", "cgpsc", "jpsc",
+    "ibps", "sbi", "nabard", "nhb", "gail", "oil", "nalco", "mdl", "dsssb", "rsmssb", "hssc"
 ]
 UPPSC_ORGS = ["uppsc"]
 
@@ -643,5 +688,60 @@ DISCOVERY_CONFIG = {
         "name": "JPSC (Jharkhand Public Service Commission)",
         "homepages": ["https://www.jpsc.gov.in/"],
         "patterns": [r"advertisement", r"notification", r"recruit", r"vacanc"],
+    },
+    "ibps": {
+        "name": "IBPS (Institute of Banking Personnel Selection)",
+        "homepages": ["https://www.ibps.in/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "sbi": {
+        "name": "SBI Careers (State Bank of India)",
+        "homepages": ["https://sbi.co.in/web/careers/current-openings"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"opening", r"career"],
+    },
+    "nabard": {
+        "name": "NABARD (National Bank for Agriculture and Rural Development)",
+        "homepages": ["https://www.nabard.org/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "nhb": {
+        "name": "NHB (National Housing Bank)",
+        "homepages": ["https://www.nhb.org.in/careers-with-nhb-archives/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "gail": {
+        "name": "GAIL (India) Limited",
+        "homepages": ["https://gailonline.com/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "oil": {
+        "name": "OIL (Oil India Limited)",
+        "homepages": ["https://www.oil-india.com/advertisement-list"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "nalco": {
+        "name": "NALCO (National Aluminium Company)",
+        "homepages": ["https://nalcoindia.com/career/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "mdl": {
+        "name": "MDL (Mazagon Dock Shipbuilders)",
+        "homepages": ["https://mazagondock.in/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"career"],
+    },
+    "dsssb": {
+        "name": "DSSSB (Delhi Subordinate Services Selection Board)",
+        "homepages": ["https://dsssb.delhi.gov.in/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"vacancy"],
+    },
+    "rsmssb": {
+        "name": "RSMSSB (Rajasthan Staff Selection Board)",
+        "homepages": ["https://rsmssb.rajasthan.gov.in/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"vacancy"],
+    },
+    "hssc": {
+        "name": "HSSC (Haryana Staff Selection Commission)",
+        "homepages": ["https://www.hssc.gov.in/"],
+        "patterns": [r"recruit", r"advertisement", r"notification", r"vacancy"],
     },
 }

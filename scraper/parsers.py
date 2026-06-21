@@ -1510,6 +1510,39 @@ def parse_cgpsc(html_content):
 def parse_jpsc(html_content):
     return _parse_generic_page(html_content, "https://www.jpsc.gov.in/")
 
+def parse_ibps(html_content):
+    return _parse_generic_page(html_content, "https://www.ibps.in/")
+
+def parse_sbi(html_content):
+    return _parse_generic_page(html_content, "https://sbi.co.in/web/careers/current-openings")
+
+def parse_nabard(html_content):
+    return _parse_generic_page(html_content, "https://www.nabard.org/")
+
+def parse_nhb(html_content):
+    return _parse_generic_page(html_content, "https://www.nhb.org.in/careers-with-nhb-archives/")
+
+def parse_gail(html_content):
+    return _parse_generic_page(html_content, "https://gailonline.com/")
+
+def parse_oil(html_content):
+    return _parse_generic_page(html_content, "https://www.oil-india.com/advertisement-list")
+
+def parse_nalco(html_content):
+    return _parse_generic_page(html_content, "https://nalcoindia.com/career/")
+
+def parse_mdl(html_content):
+    return _parse_generic_page(html_content, "https://mazagondock.in/")
+
+def parse_dsssb(html_content):
+    return _parse_generic_page(html_content, "https://dsssb.delhi.gov.in/")
+
+def parse_rsmssb(html_content):
+    return _parse_generic_page(html_content, "https://rsmssb.rajasthan.gov.in/")
+
+def parse_hssc(html_content):
+    return _parse_generic_page(html_content, "https://www.hssc.gov.in/")
+
 def test_parsers():
     """
     Utility testing routine to pull live websites and check parsing yields.

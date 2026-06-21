@@ -166,6 +166,17 @@ PARSER_MAP = {
     "ukpsc": parsers.parse_ukpsc,
     "cgpsc": parsers.parse_cgpsc,
     "jpsc": parsers.parse_jpsc,
+    "ibps": parsers.parse_ibps,
+    "sbi": parsers.parse_sbi,
+    "nabard": parsers.parse_nabard,
+    "nhb": parsers.parse_nhb,
+    "gail": parsers.parse_gail,
+    "oil": parsers.parse_oil,
+    "nalco": parsers.parse_nalco,
+    "mdl": parsers.parse_mdl,
+    "dsssb": parsers.parse_dsssb,
+    "rsmssb": parsers.parse_rsmssb,
+    "hssc": parsers.parse_hssc,
 }
 
 

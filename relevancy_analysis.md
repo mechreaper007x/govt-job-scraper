@@ -1,14 +1,14 @@
 # Relevancy Classification and Percentage Analysis
 
 **Generated on:** Live Run
-**Total Listings Crawled:** 6772
+**Total Listings Crawled:** 7907
 
 ## Global Breakdown
 | Category | Count | Percentage | Description |
 | --- | --- | --- | --- |
-| **Relevant** | 575 | 8.5% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
-| **Uncertain** | 5226 | 77.2% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
-| **Excluded** | 971 | 14.3% | Confirmed noise (Civil, Mechanical, Drivers, Doctors, Trade Apprentices, etc.) |
+| **Relevant** | 586 | 7.4% | Explicit CS/IT roles (Scientist CS, Programmer, Software Developer, etc.) |
+| **Uncertain** | 6250 | 79.0% | General engineering/officer titles without explicit branch in title (requires PDF scan/details) |
+| **Excluded** | 1071 | 13.5% | Confirmed noise (Civil, Mechanical, Drivers, Doctors, Trade Apprentices, etc.) |
 
 ## Per-Organization Relevancy Breakdown
 | Organization | Status | Total Scraped | Relevant % | Uncertain % | Excluded (Noise) % |
@@ -35,6 +35,7 @@
 | AAI (Airports Authority of India) | Success | 50 | 6.0% (3) | 82.0% (41) | 12.0% (6) |
 | BISAG-N (Bhaskaracharya National Institute for Space Applications) | Success | 35 | 5.7% (2) | 91.4% (32) | 2.9% (1) |
 | UPSC (Union Public Service Commission) | Success | 59 | 5.1% (3) | 91.5% (54) | 3.4% (2) |
+| MDL (Mazagon Dock Shipbuilders) | Success | 64 | 4.7% (3) | 92.2% (59) | 3.1% (2) |
 | WBPSC (West Bengal Public Service Commission) | Success | 245 | 4.5% (11) | 63.3% (155) | 32.2% (79) |
 | Hindustan Petroleum Corporation Limited (HPCL) | Success | 118 | 3.4% (4) | 96.6% (114) | 0.0% (0) |
 | National e-Governance Division (NeGD) | Success | 60 | 3.3% (2) | 90.0% (54) | 6.7% (4) |
@@ -45,46 +46,56 @@
 | ITI Limited (Indian Telephone Industries) | Success | 145 | 2.8% (4) | 86.2% (125) | 11.0% (16) |
 | Raja Ramanna Centre for Advanced Technology (RRCAT) | Success | 186 | 2.7% (5) | 90.9% (169) | 6.5% (12) |
 | SEBI (Securities & Exchange Board) | Success | 98 | 2.0% (2) | 91.8% (90) | 6.1% (6) |
+| IBPS (Institute of Banking Personnel Selection) | Success | 49 | 2.0% (1) | 91.8% (45) | 6.1% (3) |
+| NALCO (National Aluminium Company) | Success | 50 | 2.0% (1) | 98.0% (49) | 0.0% (0) |
 | RITES Limited | Success | 103 | 1.9% (2) | 97.1% (100) | 1.0% (1) |
 | BECIL (Broadcast Engineering Consultants) | Success | 61 | 1.6% (1) | 93.4% (57) | 4.9% (3) |
 | RPSC (Rajasthan Public Service Commission) | Success | 321 | 1.6% (5) | 41.7% (134) | 56.7% (182) |
+| UIDAI (Aadhaar) | Success | 138 | 1.4% (2) | 97.1% (134) | 1.4% (2) |
 | UKPSC (Uttarakhand Public Service Commission) | Success | 74 | 1.4% (1) | 90.5% (67) | 8.1% (6) |
+| DSSSB (Delhi Subordinate Services Selection Board) | Success | 90 | 1.1% (1) | 98.9% (89) | 0.0% (0) |
+| SBI Careers (State Bank of India) | Success | 321 | 0.9% (3) | 73.5% (236) | 25.5% (82) |
 | Coal India Limited | Success | 255 | 0.8% (2) | 92.2% (235) | 7.1% (18) |
 | Power Finance Corporation (PFC) | Success | 185 | 0.5% (1) | 99.5% (184) | 0.0% (0) |
 | Bharat Petroleum Corporation Limited (BPCL) | Success | 303 | 0.3% (1) | 98.3% (298) | 1.3% (4) |
 | BEL (Bharat Electronics Limited) | Failed | 0 | - | - | - |
-| NCS (National Career Service - Ministry of Labour & Employment) | Success | 10 | 0.0% (0) | 70.0% (7) | 30.0% (3) |
 | HAL (Hindustan Aeronautics Limited) | Success | 9 | 0.0% (0) | 44.4% (4) | 55.6% (5) |
+| NCS (National Career Service - Ministry of Labour & Employment) | Success | 10 | 0.0% (0) | 70.0% (7) | 30.0% (3) |
 | SAIL (Steel Authority of India) | Success | 27 | 0.0% (0) | 96.3% (26) | 3.7% (1) |
 | NTPC (National Thermal Power Corporation) | Success | 16 | 0.0% (0) | 62.5% (10) | 37.5% (6) |
-| ONGC (Oil and Natural Gas Corporation) | Success | 259 | 0.0% (0) | 79.5% (206) | 20.5% (53) |
 | PGCIL (Power Grid Corporation of India) | Success | 661 | 0.0% (0) | 98.6% (652) | 1.4% (9) |
 | IOCL (Indian Oil Corporation) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| ONGC (Oil and Natural Gas Corporation) | Success | 259 | 0.0% (0) | 79.5% (206) | 20.5% (53) |
 | BHEL (Bharat Heavy Electricals) | Success | 76 | 0.0% (0) | 93.4% (71) | 6.6% (5) |
 | SIDBI (Small Industries Development Bank) | Failed | 0 | - | - | - |
 | TCIL (Telecommunications Consultants) | Success | 82 | 0.0% (0) | 98.8% (81) | 1.2% (1) |
 | SJVN Limited | Success | 166 | 0.0% (0) | 91.6% (152) | 8.4% (14) |
-| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
 | Nuclear Power Corporation of India (NPCIL) | Success | 21 | 0.0% (0) | 100.0% (21) | 0.0% (0) |
 | Dedicated Freight Corridor Corporation (DFCCIL) | Success | 109 | 0.0% (0) | 94.5% (103) | 5.5% (6) |
 | Semi-Conductor Laboratory (SCL) Mohali | Success | 23 | 0.0% (0) | 95.7% (22) | 4.3% (1) |
 | REC Limited | Success | 4 | 0.0% (0) | 100.0% (4) | 0.0% (0) |
 | Central Electronics Limited (CEL) | Success | 99 | 0.0% (0) | 98.0% (97) | 2.0% (2) |
-| NHPC Limited | Success | 151 | 0.0% (0) | 100.0% (151) | 0.0% (0) |
 | Grid Controller of India Limited (GRID-INDIA) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
+| ERNET India (MeitY) | Success | 3 | 0.0% (0) | 100.0% (3) | 0.0% (0) |
+| NHPC Limited | Success | 151 | 0.0% (0) | 100.0% (151) | 0.0% (0) |
 | Reserve Bank of India (RBI) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | IRCTC (Indian Railway Catering and Tourism Corporation) | Success | 76 | 0.0% (0) | 96.1% (73) | 3.9% (3) |
 | SSC (Staff Selection Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | MPSC (Maharashtra Public Service Commission) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
-| GPSC (Gujarat Public Service Commission) | Success | 342 | 0.0% (0) | 85.4% (292) | 14.6% (50) |
-| EIL (Engineers India Limited) | Success | 82 | 0.0% (0) | 98.8% (81) | 1.2% (1) |
 | Kerala Public Service Commission | Success | 71 | 0.0% (0) | 98.6% (70) | 1.4% (1) |
+| GPSC (Gujarat Public Service Commission) | Success | 342 | 0.0% (0) | 85.4% (292) | 14.6% (50) |
 | TNPSC (Tamil Nadu Public Service Commission) | Success | 92 | 0.0% (0) | 100.0% (92) | 0.0% (0) |
 | OPSC (Odisha Public Service Commission) | Success | 32 | 0.0% (0) | 96.9% (31) | 3.1% (1) |
 | APPSC (Andhra Pradesh Public Service Commission) | Success | 4 | 0.0% (0) | 100.0% (4) | 0.0% (0) |
 | CONCOR (Container Corporation of India) | Success | 0 | 0% (0) | 0% (0) | 0% (0) |
 | CGPSC (Chhattisgarh Public Service Commission) | Success | 44 | 0.0% (0) | 100.0% (44) | 0.0% (0) |
-| UIDAI (Aadhaar) | Failed | 0 | - | - | - |
+| NABARD (National Bank for Agriculture and Rural Development) | Success | 82 | 0.0% (0) | 100.0% (82) | 0.0% (0) |
+| GAIL (India) Limited | Success | 42 | 0.0% (0) | 97.6% (41) | 2.4% (1) |
+| NHB (National Housing Bank) | Success | 117 | 0.0% (0) | 93.2% (109) | 6.8% (8) |
+| OIL (Oil India Limited) | Success | 114 | 0.0% (0) | 99.1% (113) | 0.9% (1) |
+| HSSC (Haryana Staff Selection Commission) | Success | 34 | 0.0% (0) | 100.0% (34) | 0.0% (0) |
+| RSMSSB (Rajasthan Staff Selection Board) | Success | 34 | 0.0% (0) | 97.1% (33) | 2.9% (1) |
+| EIL (Engineers India Limited) | Success | 82 | 0.0% (0) | 98.8% (81) | 1.2% (1) |
 
 ## Relevancy Verification Samples
 
@@ -141,58 +152,56 @@ These listings were successfully identified as non-CS (e.g. Civil, Mechanical, N
    Link: [https://www.cert-in.org.in/PDF/Deputy_Director_Legal_RR.pdf](https://www.cert-in.org.in/PDF/Deputy_Director_Legal_RR.pdf)
 8. **[CERT-In (Indian Computer Emergency Response Team)]** Inviting comments of the stakeholders on the draft Non S&T RR of {Section Officer (Legal) } Group B of CERT-In  
    Link: [https://www.cert-in.org.in/PDF/Section_Officer_Legal_RR.pdf](https://www.cert-in.org.in/PDF/Section_Officer_Legal_RR.pdf)
-9. **[ISRO (Indian Space Research Organisation)]** Recruitment for the post of Registrar at Indian Institute of Space Science and Technology (IIST) (Advt: IIST/Admin/RMT/14-2026 (1))  
-   Link: [https://www.isro.gov.in/IISTRecruitment4.html](https://www.isro.gov.in/IISTRecruitment4.html)
-10. **[ISRO (Indian Space Research Organisation)]** Inviting applications for the post of Director at National Atmospheric Research Laboratory (NARL) (Advt: DS_8C-12013/4/2025-Sec.VIII)  
-   Link: [https://www.isro.gov.in/NARLRecruitment1.html](https://www.isro.gov.in/NARLRecruitment1.html)
-11. **[ISRO (Indian Space Research Organisation)]** Application for the position of Legal Consultant at Department of Space (DOS) (Advt: DOS/IV/1/2026)  
-   Link: [https://www.isro.gov.in/DOSRecruitment8.html](https://www.isro.gov.in/DOSRecruitment8.html)
-12. **[ISRO (Indian Space Research Organisation)]** Inviting applications for the post of Director (Finance) in Antrix
-                                                    Corporation Limited on Immediate Absorption/Deputation Basis at ISRO Headquarters (ISRO HQ) (Advt: B.31012/10/2016-DS (Vol-II))  
-   Link: [https://www.isro.gov.in/ISROHQRecruitment3.html](https://www.isro.gov.in/ISROHQRecruitment3.html)
-13. **[ISRO (Indian Space Research Organisation)]** Recruitment to the posts of Technician 'B' and
-                                                    Pharmacist 'A' at Space Applications Centre (SAC) (Advt: SAC:04:2025)  
-   Link: [https://www.isro.gov.in/SACRecruitment19.html](https://www.isro.gov.in/SACRecruitment19.html)
-14. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Junior Translation Officer at Space Applications Centre (SAC) (Advt: SAC:03:2025)  
-   Link: [https://www.isro.gov.in/SACRecruitment18.html](https://www.isro.gov.in/SACRecruitment18.html)
-15. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Assistant (Rajbhasha) at Space Applications Centre (SAC) (Advt: SAC:02:2025)  
-   Link: [https://www.isro.gov.in/SACRecruitment17.html](https://www.isro.gov.in/SACRecruitment17.html)
+9. **[BARC (Bhabha Atomic Research Centre)]** Walk-in-interview for appointment of Medical Officer (Dental) on Adhoc basisClick Hereto Download Form  
+   Link: [http://www.barc.gov.in/careers/vacancy19.pdf](http://www.barc.gov.in/careers/vacancy19.pdf)
+10. **[BARC (Bhabha Atomic Research Centre)]** Walk-in-interview for appointment of General Duty Medical Officers on Adhoc/Locum basisClick Hereto Download Form  
+   Link: [http://www.barc.gov.in/careers/vacancy18.pdf](http://www.barc.gov.in/careers/vacancy18.pdf)
+11. **[BARC (Bhabha Atomic Research Centre)]** Diploma in Radiological Physics (DipRP) - One year Post-M.Sc. programme  
+   Link: [http://www.barc.gov.in/careers/vacancy17.pdf](http://www.barc.gov.in/careers/vacancy17.pdf)
+12. **[BARC (Bhabha Atomic Research Centre)]** Minutes of the meeting of the Compassionate Appointments Committee (CAC) held on 02/04/2026 in NRB, Tarapur  
+   Link: [http://www.barc.gov.in/careers/result14.pdf](http://www.barc.gov.in/careers/result14.pdf)
+13. **[BARC (Bhabha Atomic Research Centre)]** Minutes of the meeting of the Compassionate Appointments Committee (CAC) held on 03/02/2026 & 08/04/2026  
+   Link: [http://www.barc.gov.in/careers/result13.pdf](http://www.barc.gov.in/careers/result13.pdf)
+14. **[BARC (Bhabha Atomic Research Centre)]** Cancellation of recruitment process in respect of Work Assistant/A  
+   Link: [http://www.barc.gov.in/careers/result12.pdf](http://www.barc.gov.in/careers/result12.pdf)
+15. **[BARC (Bhabha Atomic Research Centre)]** Result of the Walk-in-Interview of Locum Dialysis Technologist at SA/B level  
+   Link: [http://www.barc.gov.in/careers/result11.pdf](http://www.barc.gov.in/careers/result11.pdf)
 
 ### Sample Uncertain Listings (General titles)
 These titles did not have a clear discipline keyword in the header. For these, Layer 3 (PDF scanning) or manual review is required to verify CS/IT relevance.
 
-1. **[ISRO (Indian Space Research Organisation)]** For the posts of Temporary Research Personnel at National Remote Sensing Centre (NRSC) (Advt: NRSC-RMT-2-2025)  
+1. **[BARC (Bhabha Atomic Research Centre)]** Result of the Walk-in-Interview of Part time consultants posts conducted on 3rd and 4th June 2026  
+   Link: [http://www.barc.gov.in/careers/result15.pdf](http://www.barc.gov.in/careers/result15.pdf)
+2. **[BARC (Bhabha Atomic Research Centre)]** List of candidates selected for apprenticeship training in BARC for the year 2026-27  
+   Link: [http://www.barc.gov.in/careers/result10.pdf](http://www.barc.gov.in/careers/result10.pdf)
+3. **[DRDO (Defence Research and Development Organisation)]** Pagination  
+   Link: [https://www.drdo.gov.in/drdo/en/offerings/vacancies/know-more](https://www.drdo.gov.in/drdo/en/offerings/vacancies/know-more)
+4. **[DRDO (Defence Research and Development Organisation)]** Pagination  
+   Link: [https://www.drdo.gov.in/drdo/en/offerings/vacancies/archive](https://www.drdo.gov.in/drdo/en/offerings/vacancies/archive)
+5. **[ISRO (Indian Space Research Organisation)]** For the posts of Temporary Research Personnel at National Remote Sensing Centre (NRSC) (Advt: NRSC-RMT-2-2025)  
    Link: [https://www.isro.gov.in/NRSCRecruitment2025_2.html](https://www.isro.gov.in/NRSCRecruitment2025_2.html)
-2. **[ISRO (Indian Space Research Organisation)]** Recruitment to the posts of Scientist/ Engineer 'SC' at National Remote Sensing Centre (NRSC) (Advt: NRSC-RMT-1-2025)  
+6. **[ISRO (Indian Space Research Organisation)]** Recruitment to the posts of Scientist/ Engineer 'SC' at National Remote Sensing Centre (NRSC) (Advt: NRSC-RMT-1-2025)  
    Link: [https://www.isro.gov.in/NRSCRecruitment2025_1.html](https://www.isro.gov.in/NRSCRecruitment2025_1.html)
-3. **[ISRO (Indian Space Research Organisation)]** Recruitment to the posts of Graduate Apprentice
+7. **[ISRO (Indian Space Research Organisation)]** Recruitment to the posts of Graduate Apprentice
                                                     Trainee,Diploma Apprentice Trainee,Diploma in Commercial Practice
                                                     and Trade ITI. at ISRO Telemetry, Tracking and Command Network
                                                     (ISTRAC) (Advt: ISTRAC/APPRMT/2025)  
    Link: [https://www.isro.gov.in/ISTRACRecruitment2.html](https://www.isro.gov.in/ISTRACRecruitment2.html)
-4. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Technician - B at National Remote Sensing Centre (NRSC) (Advt: NRSC/RMT/4/2023)  
+8. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Technician - B at National Remote Sensing Centre (NRSC) (Advt: NRSC/RMT/4/2023)  
    Link: [https://www.isro.gov.in/NRSCRecruitment2023_3.html](https://www.isro.gov.in/NRSCRecruitment2023_3.html)
-5. **[ISRO (Indian Space Research Organisation)]** Recruitment for the post of Scientists/Engineers
+9. **[ISRO (Indian Space Research Organisation)]** Recruitment for the post of Scientists/Engineers
                                                     'SC'(CEPO). at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:01(CEPO):2023)  
    Link: [https://www.isro.gov.in/ICRB_Recruitment6.html](https://www.isro.gov.in/ICRB_Recruitment6.html)
-6. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Sci/Engr 'SC' on the
+10. **[ISRO (Indian Space Research Organisation)]** Recruitment to the post of Sci/Engr 'SC' on the
                                                     basis of GATE Score at Centralised Recruitment (ICRB) (Advt: ISRO:ICRB:01(1)(EMC):2022)  
    Link: [https://www.isro.gov.in/ICRB_Recruitment4.html](https://www.isro.gov.in/ICRB_Recruitment4.html)
-7. **[BARC (Bhabha Atomic Research Centre)]** Result of the Walk-in-Interview of Part time consultants posts conducted on 3rd and 4th June 2026  
-   Link: [http://www.barc.gov.in/careers/result15.pdf](http://www.barc.gov.in/careers/result15.pdf)
-8. **[BARC (Bhabha Atomic Research Centre)]** List of candidates selected for apprenticeship training in BARC for the year 2026-27  
-   Link: [http://www.barc.gov.in/careers/result10.pdf](http://www.barc.gov.in/careers/result10.pdf)
-9. **[DRDO (Defence Research and Development Organisation)]** Pagination  
-   Link: [https://www.drdo.gov.in/drdo/en/offerings/vacancies/know-more](https://www.drdo.gov.in/drdo/en/offerings/vacancies/know-more)
-10. **[DRDO (Defence Research and Development Organisation)]** Pagination  
-   Link: [https://www.drdo.gov.in/drdo/en/offerings/vacancies/archive](https://www.drdo.gov.in/drdo/en/offerings/vacancies/archive)
-11. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] PROVISIONALLY SHORTLISTED CANDIDATES FOR DOCUMENT VERIFICATION AND INTERVIEW (Against Advertisement No. NHQ-12/6/2026-NIELIT-3173104)  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=3MlpYIVOC0C8ODk2D+Wh+w==](https://www.nielit.gov.in/Fileviewer?fileId=3MlpYIVOC0C8ODk2D+Wh+w==)
-12. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] List of Eligible Candidates for Interview for the Post of CEO Scheduled on 11.06.2026 against Advt. No. NHQ-39/10/2025-NIELIT (3158711)  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==](https://www.nielit.gov.in/Fileviewer?fileId=f/CLyGepHK/UNDQJyTi4rg==)
-13. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in-Interview for the post of VLSI Design Expert/Junior VLSI Engineer (Post-02) on Contract basis for a period of 01 year at NIELIT CoE Noida Date of walk in interview: 25/02/2026  
-   Link: [https://www.nielit.gov.in/form?formName=Recruitments&center=HQ](https://www.nielit.gov.in/form?formName=Recruitments&center=HQ)
-14. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Schedule Document Verification and Interview-Advt. No. NHQ-12023/36/2025-NIELIT (3164855)  
-   Link: [https://www.nielit.gov.in/Fileviewer?fileId=s2UvoDPNzm7s2EwzWuvZBQ==](https://www.nielit.gov.in/Fileviewer?fileId=s2UvoDPNzm7s2EwzWuvZBQ==)
-15. **[NIELIT (National Institute of Electronics & IT)]** [NIELIT-HQ] Walk-in Interview for position of Technical Programme Consultant (Advanced Skills Programme) purely on contract basis (advt. no. NC-SW040/14/2025-NC). Last date to apply - 9th Nov 2025  
-   Link: [https://www.nielit.gov.in/Recruitments/DEL](https://www.nielit.gov.in/Recruitments/DEL)
+11. **[ECIL (Electronics Corporation of India Ltd)]** Empanelment of Retired Government Executives as Inquiry Officers for conducting Departmental Inquiries  
+   Link: [https://www.ecil.co.in/jobs/Advt_10_2026.pdf](https://www.ecil.co.in/jobs/Advt_10_2026.pdf)
+12. **[ECIL (Electronics Corporation of India Ltd)]** Walk-in interview for selection of dynamic, experienced and result oriented personnel for various posts purely on fixed tenure contract basis  
+   Link: [https://www.ecil.co.in/jobs/Advt_09_2026.pdf](https://www.ecil.co.in/jobs/Advt_09_2026.pdf)
+13. **[ECIL (Electronics Corporation of India Ltd)]** Walk-in interview for selection of dynamic, experienced and result oriented personnel for various posts purely on fixed tenure contract basis  
+   Link: [https://www.ecil.co.in/jobs/Advt_08_2026.pdf](https://www.ecil.co.in/jobs/Advt_08_2026.pdf)
+14. **[ECIL (Electronics Corporation of India Ltd)]** Walk-in interview for selection of dynamic, experienced and result oriented personnel for various posts purely on fixed tenure contract basis  
+   Link: [https://www.ecil.co.in/jobs/Advt_07_2026.pdf](https://www.ecil.co.in/jobs/Advt_07_2026.pdf)
+15. **[ECIL (Electronics Corporation of India Ltd)]** Walk-in Interviews for Executive Officer on Contract posts purely on fixed tenure contract basis for various Business verticals located in Hyderabad  
+   Link: [https://www.ecil.co.in/jobs/Advt_05_2026.pdf](https://www.ecil.co.in/jobs/Advt_05_2026.pdf)
