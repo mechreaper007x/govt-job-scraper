@@ -47,6 +47,7 @@ state.json
 *.txt
 !requirements.txt
 *.html
+coverage_report.json
 
 # Windows artifact (created by stdout redirection)
 nul
