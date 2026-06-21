@@ -57,12 +57,107 @@ job-scraper/
 ---
 
 ## Target Job Portals (83 Core Channels)
-The crawler monitors 83 core agencies including:
-* **MeitY & Strategic:** C-DAC, NIELIT, STPI, NIC, C-DOT, CERT-In, SAMEER, ERNET.
-* **Defense & Space:** DRDO, ISRO, BARC, BEL, IGCAR, RRCAT, SCL Mohali.
-* **Maharatna & Navratna PSUs:** HAL, ECIL, ONGC, SAIL, NTPC, AAI, IOCL, BHEL, Coal India, PGCIL, BPCL, HPCL, GAIL.
-* **Banking & Finance:** RBI, SEBI, SBI, IBPS, NABARD, NHB, SIDBI.
-* **Commissions & Staff Boards:** UPSC, SSC, DSSSB, RSMSSB, HSSC, and all State Public Service Commissions (UPPSC, MPSC, GPSC, PPSC, etc.).
+
+The crawler monitors the following 83 core agencies:
+
+### 1. MeitY & Core IT/Electronics Agencies (10)
+* **C-DAC** (Centre for Development of Advanced Computing)
+* **NIELIT** (National Institute of Electronics & IT)
+* **STPI** (Software Technology Parks of India)
+* **NIC** (National Informatics Centre)
+* **C-DOT** (Centre for Development of Telematics)
+* **CERT-In** (Indian Computer Emergency Response Team)
+* **SAMEER** (R&D under MeitY)
+* **ERNET India** (MeitY)
+* **Digital India Corporation** (DIC)
+* **National e-Governance Division** (NeGD)
+
+### 2. Defense, Space & Atomic Research (8)
+* **DRDO** (Defence Research and Development Organisation)
+* **ISRO** (Indian Space Research Organisation)
+* **BARC** (Bhabha Atomic Research Centre)
+* **BEL** (Bharat Electronics Limited)
+* **IGCAR** (Indira Gandhi Centre for Atomic Research)
+* **RRCAT** (Raja Ramanna Centre for Advanced Technology)
+* **Semi-Conductor Laboratory** (SCL Mohali)
+* **UIDAI** (Aadhaar)
+
+### 3. Public Sector Undertakings (PSUs) (35)
+* **HAL** (Hindustan Aeronautics Limited)
+* **ECIL** (Electronics Corporation of India Ltd)
+* **CRIS** (Centre for Railway Information Systems)
+* **BSNL** (Bharat Sanchar Nigam Ltd)
+* **ONGC** (Oil and Natural Gas Corporation)
+* **SAIL** (Steel Authority of India)
+* **NTPC** (National Thermal Power Corporation)
+* **AAI** (Airports Authority of India)
+* **PGCIL** (Power Grid Corporation of India)
+* **IOCL** (Indian Oil Corporation)
+* **BHEL** (Bharat Heavy Electricals)
+* **Coal India Limited**
+* **RailTel Corporation of India**
+* **BECIL** (Broadcast Engineering Consultants)
+* **SJVN Limited**
+* **TCIL** (Telecommunications Consultants)
+* **Nuclear Power Corporation of India** (NPCIL)
+* **RITES Limited**
+* **Dedicated Freight Corridor Corporation** (DFCCIL)
+* **CSIR Fourth Paradigm Institute**
+* **Bharat Petroleum Corporation Limited** (BPCL)
+* **Power Finance Corporation** (PFC)
+* **REC Limited**
+* **ITI Limited** (Indian Telephone Industries)
+* **Central Electronics Limited** (CEL)
+* **NHPC Limited**
+* **Grid Controller of India Limited** (GRID-INDIA)
+* **Hindustan Petroleum Corporation Limited** (HPCL)
+* **National Internet Exchange of India** (NIXI)
+* **BISAG-N** (Bhaskaracharya National Institute for Space Applications)
+* **IRCTC** (Indian Railway Catering and Tourism Corporation)
+* **CONCOR** (Container Corporation of India)
+* **EIL** (Engineers India Limited)
+* **GAIL** (India) Limited
+* **OIL** (Oil India Limited)
+* **NALCO** (National Aluminium Company)
+* **MDL** (Mazagon Dock Shipbuilders)
+
+### 4. Banking, Financial & Insurance (7)
+* **RBI** (Reserve Bank of India)
+* **SEBI** (Securities & Exchange Board)
+* **SBI Careers** (State Bank of India)
+* **IBPS** (Institute of Banking Personnel Selection)
+* **NABARD** (National Bank for Agriculture and Rural Development)
+* **NHB** (National Housing Bank)
+* **SIDBI** (Small Industries Development Bank)
+
+### 5. National Commissions & Selection Boards (5)
+* **UPSC** (Union Public Service Commission)
+* **SSC** (Staff Selection Commission)
+* **DSSSB** (Delhi Subordinate Services Selection Board)
+* **RSMSSB** (Rajasthan Staff Selection Board)
+* **HSSC** (Haryana Staff Selection Commission)
+
+### 6. State Public Service Commissions (15)
+* **UPPSC** (Uttar Pradesh Public Service Commission)
+* **MPSC** (Maharashtra Public Service Commission)
+* **GPSC** (Gujarat Public Service Commission)
+* **Kerala Public Service Commission**
+* **RPSC** (Rajasthan Public Service Commission)
+* **TNPSC** (Tamil Nadu Public Service Commission)
+* **OPSC** (Odisha Public Service Commission)
+* **WBPSC** (West Bengal Public Service Commission)
+* **APPSC** (Andhra Pradesh Public Service Commission)
+* **MPPSC** (Madhya Pradesh Public Service Commission)
+* **HPSC** (Haryana Public Service Commission)
+* **PPSC** (Punjab Public Service Commission)
+* **UKPSC** (Uttarakhand Public Service Commission)
+* **CGPSC** (Chhattisgarh Public Service Commission)
+* **JPSC** (Jharkhand Public Service Commission)
+
+### 7. Aggregators & Job Services (3)
+* **Employment News** (Ministry of I&B)
+* **NCS** (National Career Service)
+* **Indian Railways (RRB)** (Railway Recruitment Board)
 
 ---
 
