@@ -14,6 +14,8 @@ integration without changing the pipeline flow.
 
 import ssl
 import sys
+import os
+import json
 import time
 import signal
 import threading
@@ -364,6 +366,33 @@ class GovJobCrawler:
         }
 
         return report
+
+    def save_report_json(self, report, path=None):
+        """
+        Save coverage report to a JSON file.
+
+        Args:
+            report: Report dict from generate_report().
+            path: Output file path. Defaults to 'coverage_report.json'.
+
+        Returns:
+            str: Absolute path to the written file.
+        """
+        if path is None:
+            path = "coverage_report.json"
+
+        # Add metadata for dashboards
+        report_out = {
+            "generated_at": datetime.now().isoformat(),
+            **report,
+        }
+
+        abs_path = os.path.abspath(path)
+        with open(abs_path, "w", encoding="utf-8") as f:
+            json.dump(report_out, f, indent=2, ensure_ascii=False)
+
+        print(f"Report saved to {abs_path}")
+        return abs_path
 
     def print_report(self, report):
         """Pretty-print a coverage report."""

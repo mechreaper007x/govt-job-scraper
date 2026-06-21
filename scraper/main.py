@@ -31,6 +31,11 @@ def main():
         help="Run scrape and generate CS/IT coverage report (signal vs noise)"
     )
     parser.add_argument(
+        "--report-json", nargs="?", const="coverage_report.json", default=None,
+        metavar="FILE",
+        help="Export coverage report to JSON (default: coverage_report.json)"
+    )
+    parser.add_argument(
         "--watch", action="store_true",
         help="Watch mode: re-scrape every N minutes and alert on new postings"
     )
@@ -70,6 +75,12 @@ def main():
     if args.report:
         report = crawler.generate_report(orgs=target_keys)
         crawler.print_report(report)
+        return  # report only, no diff/notify
+
+    if args.report_json is not None:
+        report = crawler.generate_report(orgs=target_keys)
+        crawler.print_report(report)
+        crawler.save_report_json(report, path=args.report_json)
         return  # report only, no diff/notify
 
     if args.watch:
