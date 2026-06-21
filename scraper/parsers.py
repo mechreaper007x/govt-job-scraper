@@ -897,15 +897,24 @@ def test_parsers():
     """
     import sys
     import ssl
+    import io
     from requests.adapters import HTTPAdapter
     from urllib3.poolmanager import PoolManager
     from scraper.config import ORGS_CONFIG, DEFAULT_HEADERS
     from scraper.filters import classify
+
+    # Ensure console can handle Unicode output (Windows cp1252 workaround)
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='backslashreplace')
+    elif hasattr(sys.stdout, 'buffer'):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='backslashreplace')
     
     class LegacyAdapter(HTTPAdapter):
         def init_poolmanager(self, connections, maxsize, block=False):
             ctx = ssl.create_default_context()
             ctx.options |= 0x4  # ssl.OP_LEGACY_SERVER_CONNECT
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
             self.poolmanager = PoolManager(
                 num_pools=connections, maxsize=maxsize, block=block, ssl_context=ctx
             )
@@ -918,15 +927,39 @@ def test_parsers():
     for key, val in ORGS_CONFIG.items():
         print(f"\nTargeting: {val['name']} ({val['url']})...")
         try:
-            r = session.get(val['url'], headers=DEFAULT_HEADERS, timeout=15)
-            r.raise_for_status()
+            # Special handling for orgs that don't use simple GET + HTML parse
+            if key == "nielit":
+                # NIELIT uses a JSON API session, not static HTML
+                results = parse_nielit(session=session)
+                print(f"  Postings Found: {len(results)}")
+            elif key == "hal":
+                # HAL endpoint requires POST with browser-like headers
+                hal_headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                  "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                  "Chrome/120.0.0.0 Safari/537.36",
+                    "Accept": "application/json, text/plain, */*",
+                    "Content-Type": "application/json",
+                    "Referer": "https://hal-india.co.in/",
+                    "Origin": "https://hal-india.co.in",
+                }
+                r = session.post(val['url'], headers=hal_headers, json={}, timeout=30)
+                r.raise_for_status()
+                print(f"  Status Code: {r.status_code}")
+                results = parse_hal(r.text)
+                print(f"  Postings Found: {len(results)}")
+            else:
+                r = session.get(val['url'], headers=DEFAULT_HEADERS, timeout=15)
+                r.raise_for_status()
+                
+                # Map parser functions dynamically
+                parser_fn = getattr(sys.modules[__name__], f"parse_{key}")
+                # NIC uses windows-1251 charset; pass bytes to avoid decode errors
+                results = parser_fn(r.content if key in ('barc', 'nic') else r.text)
+                
+                print(f"  Status Code: {r.status_code}")
+                print(f"  Postings Found: {len(results)}")
             
-            # Map parser functions dynamically
-            parser_fn = getattr(sys.modules[__name__], f"parse_{key}")
-            results = parser_fn(r.content if key == 'barc' else r.text)
-            
-            print(f"  Status Code: {r.status_code}")
-            print(f"  Postings Found: {len(results)}")
             if results:
                 # Count by relevance
                 relevant_cnt = 0
@@ -941,6 +974,7 @@ def test_parsers():
                     else:
                         excluded_cnt += 1
                 print(f"  Relevance Breakdown: relevant={relevant_cnt}, uncertain={uncertain_cnt}, excluded={excluded_cnt}")
+                # Windows console encoding handled globally via sys.stdout.reconfigure above
                 print(f"  First Posting Sample: {results[0]}")
             else:
                 print("  WARNING: Scraped 0 postings. Check selector status.")

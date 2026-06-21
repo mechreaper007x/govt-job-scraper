@@ -137,7 +137,8 @@ def main():
 
                 # Feedparser can decode bytes itself; BeautifulSoup handles HTML strings
                 # HAL's parser receives raw JSON text from the WP REST API
-                content = r.content if key == "barc" else r.text
+                # NIC uses windows-1251 charset; pass bytes to avoid decode errors
+                content = r.content if key in ("barc", "nic") else r.text
 
                 parser_fn = PARSER_MAP.get(key)
                 if not parser_fn:
