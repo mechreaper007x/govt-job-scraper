@@ -31,6 +31,9 @@ Thumbs.db
 *.network-request
 *.network-response
 
+# PDF scan cache
+.pdf_cache/
+
 # Debug files
 scraper/debug_*.py
 scraper/test_*.py
