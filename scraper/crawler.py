@@ -92,7 +92,8 @@ PARSER_MAP = {
     "sail": parsers.parse_sail,
     "ntpc": parsers.parse_ntpc,
     "aai": parsers.parse_aai,
-    "rrb": parsers.parse_rrb,
+    "rrb": None,          # handled via _fetch_spa() — React SPA, needs Playwright
+    "rrb_static": parsers.parse_rrb,
 }
 
 
@@ -249,7 +250,7 @@ class GovJobCrawler:
         org_name = cfg["name"]
         url = cfg["url"]
         parser_fn = PARSER_MAP.get(key)
-        is_special = cfg.get("special") in ("api", "json_api", "hal_api", "ncs_api")
+        is_special = cfg.get("special") in ("api", "json_api", "hal_api", "ncs_api", "playwright")
 
         if not parser_fn and not is_special:
             print(f"  ERROR: No parser mapped for {org_name} ({key})")
@@ -265,6 +266,8 @@ class GovJobCrawler:
                 postings = parsers.parse_ncs(session=self.session)
             elif cfg.get("special") == "hal_api":
                 postings = self._fetch_hal(url)
+            elif cfg.get("special") == "playwright":
+                postings = self._fetch_spa(key, url)
             else:
                 # ── Standard HTTP fetch ──────────────────────────────────
                 r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=15)
@@ -283,6 +286,68 @@ class GovJobCrawler:
         except Exception as exc:
             print(f"ERROR: {exc}")
             return None  # None = failed, preserves state in diff
+
+    def _fetch_spa(self, key, url):
+        """
+        Fetch a page using Playwright headless Chromium for SPAs.
+
+        Uses the spa_scraper module to render JavaScript and extract HTML,
+        then passes the rendered content to the org's parser function.
+
+        Falls back to the static parser (parse_rrb) for RRB if SPA returns
+        no useful content.
+        """
+        from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_generic_spa
+
+        print(f"[SPA] Launching Chromium for {key}...", end=" ")
+
+        # Wait selector: try to find job listing containers
+        wait_sel = None
+        if key == "rrb":
+            wait_sel = "div[class*='card'], div[class*='cen'], div[class*='recruit'], table, .job-listing"
+
+        html = fetch_spa_page(url, wait_selector=wait_sel, timeout_ms=30000)
+
+        if not html or len(html) < 500:
+            print("SPA empty, falling back to static page...", end=" ")
+            # Fallback: try the static board page
+            try:
+                r = self.session.get(
+                    "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
+                    headers=DEFAULT_HEADERS, timeout=15,
+                )
+                r.raise_for_status()
+                postings = parsers.parse_rrb(r.text)
+                print(f"got {len(postings)} listings")
+                return postings
+            except Exception:
+                print("static fallback also failed")
+                return []
+
+        # Parse the rendered HTML
+        if key == "rrb":
+            postings = parse_rrb_spa(html)
+        else:
+            postings = parse_generic_spa(html, base_url=url)
+
+        if not postings:
+            print(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)", end=" ")
+            # Fall back to static page
+            try:
+                r = self.session.get(
+                    "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
+                    headers=DEFAULT_HEADERS, timeout=15,
+                )
+                r.raise_for_status()
+                postings = parsers.parse_rrb(r.text)
+                print(f"→ static fallback got {len(postings)} listings")
+                return postings
+            except Exception:
+                print("→ static fallback also failed")
+                return []
+
+        print(f"got {len(postings)} listings")
+        return postings
 
     def _fetch_hal(self, url):
         """

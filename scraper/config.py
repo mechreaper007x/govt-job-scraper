@@ -110,8 +110,14 @@ ORGS_CONFIG = {
     # ── Indian Railways ────────────────────────────────────────────────────
     "rrb": {
         "name": "Indian Railways (RRB)",
+        "url": "https://rrbapply.gov.in/#/auth/landing",
+        "special": "playwright",  # React SPA — requires browser rendering
+        "note": "rrbapply.gov.in is a React SPA with hash routing; static HTML returns nothing. Uses Playwright headless Chromium."
+    },
+    "rrb_static": {
+        "name": "Indian Railways (RRB) — Static Board",
         "url": "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
-        "note": "Static board page with recruitment links — rrbapply.gov.in is SPA and not scrapable"
+        "note": "Static fallback page with older recruitment links"
     }
 }
 

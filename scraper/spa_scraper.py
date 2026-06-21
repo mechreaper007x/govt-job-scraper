@@ -1,0 +1,369 @@
+"""
+scraper/spa_scraper.py
+
+Playwright-based SPA scraper for government job portals that require
+JavaScript rendering (e.g., rrbapply.gov.in, rrbapply.gov.in).
+
+Uses Playwright's async API with headless Chromium to:
+  1. Navigate to the target URL
+  2. Wait for JavaScript to render dynamic content
+  3. Extract HTML after rendering for standard parsers
+
+Extension point for future SPAs like DRDO portals, BEL TCS iON drives, etc.
+"""
+
+import asyncio
+import sys
+import re
+import atexit
+import threading
+from datetime import datetime
+
+
+# ─── Playwright lazy imports ─────────────────────────────────────────────────
+# Playwright is an optional dependency — only imported when SPA scraping is used.
+# This avoids forcing all users to install Playwright + Chromium.
+
+_playwright = None
+_browser = None
+_init_lock = threading.Lock()
+
+# Compiled regex for blocking unnecessary resources (images, fonts)
+_BLOCKED_RESOURCES = re.compile(r"\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$")
+
+# Compiled regex for RRB card/container detection
+_RRB_CARD_RE = re.compile(r'card|cen|notification|recruit|job|listing', re.I)
+
+
+def _ensure_playwright():
+    """Lazy-import and initialize Playwright if not already done.
+
+    Thread-safe: uses a double-checked locking pattern so concurrent
+    threads in ThreadPoolExecutor don't race on initialization.
+    """
+    global _playwright, _browser
+    if _playwright is not None:
+        return _browser
+    with _init_lock:
+        if _playwright is not None:  # double-check after acquiring lock
+            return _browser
+        try:
+            from playwright.sync_api import sync_playwright
+            _playwright = sync_playwright().start()
+            _browser = _playwright.chromium.launch(
+                headless=True,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                ],
+            )
+            atexit.register(close_playwright)
+        except ImportError:
+            raise ImportError(
+                "Playwright is required for SPA scraping. Install with:\n"
+                "  pip install playwright\n"
+                "  playwright install chromium"
+            )
+    return _browser
+
+
+def close_playwright():
+    """Shut down Playwright and release resources. Call at program exit."""
+    global _playwright, _browser
+    if _browser:
+        try:
+            _browser.close()
+        except Exception:
+            pass
+        _browser = None
+    if _playwright:
+        try:
+            _playwright.stop()
+        except Exception:
+            pass
+        _playwright = None
+
+
+# ─── SPA Page Fetcher ────────────────────────────────────────────────────────
+
+
+def fetch_spa_page(url, wait_selector=None, timeout_ms=30000, scroll=True):
+    """
+    Fetch a page using Playwright, wait for JS rendering, return HTML.
+
+    Args:
+        url: Target URL to fetch.
+        wait_selector: CSS selector to wait for before extracting HTML.
+                       If None, waits for 'networkidle' state.
+        timeout_ms: Max wait time in milliseconds (default 30s).
+        scroll: If True, scroll to bottom to trigger lazy-loaded content.
+
+    Returns:
+        str: Rendered HTML content, or empty string on failure.
+    """
+    browser = _ensure_playwright()
+
+    try:
+        context = browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/120.0.0.0 Safari/537.36"
+            ),
+            viewport={"width": 1920, "height": 1080},
+            java_script_enabled=True,
+            ignore_https_errors=True,
+        )
+
+        page = context.new_page()
+
+        # Block unnecessary resources to speed up loading
+        page.route(_BLOCKED_RESOURCES, lambda route: route.abort())
+
+        # Navigate to the page
+        page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
+
+        # Wait for dynamic content
+        if wait_selector:
+            try:
+                page.wait_for_selector(wait_selector, timeout=timeout_ms)
+            except Exception:
+                # Selector not found — try networkidle as fallback
+                try:
+                    page.wait_for_load_state("networkidle", timeout=timeout_ms)
+                except Exception:
+                    pass  # Continue with whatever loaded
+        else:
+            try:
+                page.wait_for_load_state("networkidle", timeout=timeout_ms)
+            except Exception:
+                pass  # Continue with whatever loaded
+
+        # Scroll to trigger lazy-loaded content
+        if scroll:
+            _scroll_page(page)
+
+        # Extract rendered HTML
+        html = page.content()
+        context.close()
+        return html
+
+    except Exception as exc:
+        print(f"  [SPA] Error fetching {url}: {exc}", file=sys.stderr)
+        try:
+            context.close()
+        except Exception:
+            pass
+        return ""
+
+
+def _scroll_page(page):
+    """Scroll to bottom of page to trigger lazy-loaded content."""
+    try:
+        page.evaluate("""
+            async () => {
+                await new Promise((resolve) => {
+                    let totalHeight = 0;
+                    const distance = 300;
+                    const timer = setInterval(() => {
+                        const scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+                        if (totalHeight >= scrollHeight) {
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100);
+                    // Safety timeout
+                    setTimeout(() => { clearInterval(timer); resolve(); }, 5000);
+                });
+            }
+        """)
+        # Wait a bit for any triggered lazy loads
+        page.wait_for_timeout(1000)
+    except Exception:
+        pass  # Scroll failure is non-fatal
+
+
+# ─── RRB-Specific Parser ─────────────────────────────────────────────────────
+
+
+def parse_rrb_spa(html_content):
+    """
+    Parse RRB (Indian Railways) SPA content after Playwright rendering.
+
+    rrbapply.gov.in is a React SPA with hash-based routing.
+    After rendering, it shows CEN (Centralized Employment Notification) cards
+    with job titles, post names, and application dates.
+
+    Falls back to link-based extraction if card structure isn't found.
+    """
+    from bs4 import BeautifulSoup
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Strategy 1: Look for CEN cards/sections (React-rendered content)
+    # RRB typically shows cards with CEN number, post name, dates
+    for card in soup.find_all(['div', 'section', 'article'], class_=_RRB_CARD_RE):
+        title = ""
+        link = ""
+        date_str = ""
+
+        # Extract title from headings or strong text
+        heading = card.find(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+        if heading:
+            title = heading.get_text(strip=True)
+        if not title:
+            strong = card.find('strong') or card.find('b')
+            if strong:
+                title = strong.get_text(strip=True)
+        if not title:
+            # Use first substantial text block
+            for p in card.find_all('p'):
+                text = p.get_text(strip=True)
+                if len(text) > 10:
+                    title = text
+                    break
+
+        if not title or len(title) < 5:
+            continue
+
+        # Extract link
+        a_tag = card.find('a')
+        if a_tag and a_tag.get('href'):
+            href = a_tag['href']
+            if href.startswith('http'):
+                link = href
+            elif href.startswith('/'):
+                link = f"https://rrbapply.gov.in{href}"
+            elif href.startswith('#'):
+                link = f"https://rrbapply.gov.in/{href}"
+            else:
+                link = f"https://rrbapply.gov.in/{href}"
+
+        # Extract dates
+        date_match = re.search(
+            r'(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})',
+            card.get_text()
+        )
+        if date_match:
+            date_str = date_match.group(1)
+
+        if title:
+            postings.append({
+                "title": f"[RRB-SPA] {title}",
+                "link": link or "https://rrbapply.gov.in/",
+                "date": date_str,
+            })
+
+    # Strategy 2: If no cards found, scan all links for CEN/recruitment patterns
+    if not postings:
+        seen = set()
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href == '#':
+                continue
+
+            title = a.get_text(separator=' ', strip=True)
+            title = re.sub(r'\s+', ' ', title).strip()
+            if len(title) < 5:
+                continue
+
+            if href.startswith('http'):
+                link = href
+            elif href.startswith('/'):
+                link = f"https://rrbapply.gov.in{href}"
+            else:
+                link = f"https://rrbapply.gov.in/{href}"
+
+            if link in seen:
+                continue
+            seen.add(link)
+
+            title_lower = title.lower()
+            link_lower = link.lower()
+            if any(kw in title_lower or kw in link_lower
+                   for kw in ['cen', 'recruit', 'vacanc', 'notification',
+                              'apply', 'group', 'alp', 'technician', 'rrb']):
+                postings.append({
+                    "title": f"[RRB-SPA] {title}",
+                    "link": link,
+                    "date": "",
+                })
+
+    # Strategy 3: Extract any visible text that mentions CEN numbers
+    if not postings:
+        text = soup.get_text()
+        cen_matches = re.findall(
+            r'(CEN\s*\d+/\d{4}[^.\n]{0,200})',
+            text, re.IGNORECASE
+        )
+        for match in cen_matches[:20]:  # Limit to 20
+            clean = re.sub(r'\s+', ' ', match).strip()
+            if len(clean) > 10:
+                postings.append({
+                    "title": f"[RRB-SPA] {clean}",
+                    "link": "https://rrbapply.gov.in/",
+                    "date": "",
+                })
+
+    return postings
+
+
+# ─── Generic SPA Parser ──────────────────────────────────────────────────────
+
+
+def parse_generic_spa(html_content, base_url="", keywords=None):
+    """
+    Generic SPA parser that extracts job-related links after JS rendering.
+
+    Used as a fallback when no org-specific parser is available.
+    Scans for links matching the provided keywords.
+
+    Args:
+        html_content: Rendered HTML from Playwright.
+        base_url: Base URL for resolving relative links.
+        keywords: List of keywords to match in link text/href.
+                  Defaults to common recruitment terms.
+    """
+    from bs4 import BeautifulSoup
+    if keywords is None:
+        keywords = ['recruit', 'vacanc', 'career', 'job', 'notification', 'apply']
+
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    seen = set()
+
+    for a in soup.find_all('a'):
+        href = a.get('href', '').strip()
+        if not href or href.startswith('javascript:') or href == '#':
+            continue
+
+        title = a.get_text(separator=' ', strip=True)
+        title = re.sub(r'\s+', ' ', title).strip()
+        if len(title) < 5:
+            continue
+
+        if href.startswith('http'):
+            link = href
+        elif href.startswith('/') and base_url:
+            from urllib.parse import urljoin
+            link = urljoin(base_url, href)
+        else:
+            link = href
+
+        if link in seen:
+            continue
+        seen.add(link)
+
+        title_lower = title.lower()
+        link_lower = link.lower()
+        if any(kw in title_lower or kw in link_lower for kw in keywords):
+            postings.append({
+                "title": title,
+                "link": link,
+                "date": "",
+            })
+
+    return postings
