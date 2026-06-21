@@ -91,6 +91,7 @@ jobs:
           "
 
       - name: Test stealth mode (navigator.webdriver patch)
+        id: stealth-test
         env:
           PYTHONIOENCODING: utf-8
         run: |
@@ -113,4 +114,43 @@ jobs:
           else:
               print(f'FAIL: navigator.webdriver = {webdriver_val} (stealth not working)')
               sys.exit(1)
+          "
+
+      - name: Notify Discord on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python -c "
+          import os, requests, json
+          from datetime import datetime, timezone
+
+          webhook = os.environ.get('DISCORD_WEBHOOK_URL')
+          if not webhook:
+              print('No DISCORD_WEBHOOK_URL configured, skipping notification')
+              exit(0)
+
+          run_url = f\"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}\"
+          now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+
+          embed = {
+              'title': '🚨 SPA Scraper Test Failed',
+              'description': (
+                  f'SPA test workflow failed in CI.\n\n'
+                  f'**Possible causes:**\n'
+                  f'• Government site changed its HTML structure\n'
+                  f'• Site is temporarily down or blocking\n'
+                  f'• Playwright/Chromium version incompatibility\n'
+                  f'• Anti-bot detection upgraded\n\n'
+                  f'[View workflow run]({run_url})'
+              ),
+              'color': 16711680,  # Red
+              'footer': {'text': f'SPA Test • {now}'},
+              'url': run_url,
+          }
+
+          payload = {'embeds': [embed]}
+          r = requests.post(webhook, json=payload, timeout=10)
+          r.raise_for_status()
+          print(f'Discord failure notification sent')
           "
