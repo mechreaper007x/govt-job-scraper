@@ -909,6 +909,113 @@ def parse_cris(html_content):
     return postings
 
 
+def parse_ncs(session=None):
+    """
+    Fetches government job listings from the National Career Service (NCS) beta portal.
+    API: POST https://betacloud.ncs.gov.in/api/v1/job-posts/search
+
+    Uses employerType=Government filter. The API has no apply links and no dates,
+    so this serves as a change-detection source — alerts when new govt jobs appear.
+    Link points to the NCS search page since per-item URLs aren't available.
+    """
+    if session is None:
+        session = requests.Session()
+
+    BASE = "https://betacloud.ncs.gov.in"
+    API_URL = f"{BASE}/api/v1/job-posts/search"
+    HEADERS = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "Origin": BASE,
+        "Referer": f"{BASE}/",
+    }
+
+    all_postings = []
+    seen_ids = set()
+    page = 0
+    page_size = 100  # max page size for fewer API calls
+    max_pages = 5    # limit to 500 jobs per run (avoids rate limiting)
+    NCS_SEARCH_URL = "https://betacloud.ncs.gov.in/job-listing?employerType=Government"
+
+    while page < max_pages:
+        payload = {
+            "employerType": "Government",
+            "page": page,
+            "size": page_size,
+        }
+        try:
+            r = session.post(API_URL, json=payload, headers=HEADERS, timeout=20)
+            r.raise_for_status()
+            data = r.json()
+            inner = data.get("data", {})
+            items = inner.get("content", [])
+
+            if not items:
+                break
+
+            total_elements = inner.get("totalElements", 0)
+            total_pages = inner.get("totalPages", 0)
+
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+
+                job_id = item.get("id", "")
+                if job_id in seen_ids:
+                    continue
+                seen_ids.add(job_id)
+
+                title = item.get("jobTitle", "")
+                if not title:
+                    continue
+
+                org = item.get("organizationName", "") or item.get("companyName", "") or ""
+                # jobLocations can be strings or dicts; handle both
+                location = ""
+                locs = item.get("jobLocations", [])
+                if locs and isinstance(locs, list):
+                    loc_strs = []
+                    for loc in locs[:3]:
+                        if isinstance(loc, dict):
+                            loc_str = loc.get("city", "") or loc.get("name", "") or ""
+                        else:
+                            loc_str = str(loc)
+                        if loc_str:
+                            loc_strs.append(loc_str)
+                    location = ", ".join(loc_strs)
+
+                title_full = title
+                if org:
+                    title_full = f"{org} — {title}"
+                if location and org:
+                    title_full += f" ({location})"
+                elif location:
+                    title_full += f" ({location})"
+
+                # No dates available from API
+                date_str = ""
+
+                all_postings.append({
+                    "title": title_full,
+                    "link": NCS_SEARCH_URL,  # generic — no per-item URLs
+                    "date": date_str,
+                })
+
+            page += 1
+
+            # Stop if we've reached the last page (total_pages may be None)
+            if total_pages and page >= total_pages:
+                break
+
+        except Exception as exc:
+            import sys
+            print(f"  [NCS] page {page} fetch error: {exc}", file=sys.stderr)
+            break
+
+    return all_postings
+
+
 def test_parsers():
 
     """
