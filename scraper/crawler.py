@@ -287,6 +287,26 @@ class GovJobCrawler:
             print(f"ERROR: {exc}")
             return None  # None = failed, preserves state in diff
 
+    # Static fallback URL for RRB when SPA returns no useful content
+    _RRB_STATIC_URL = "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554"
+
+    def _fallback_to_static(self, reason=""):
+        """Fetch RRB static board page as fallback when SPA returns no data."""
+        if reason:
+            print(f"{reason}, falling back to static page...", end=" ")
+        try:
+            r = self.session.get(
+                self._RRB_STATIC_URL,
+                headers=DEFAULT_HEADERS, timeout=15,
+            )
+            r.raise_for_status()
+            postings = parsers.parse_rrb(r.text)
+            print(f"→ static fallback got {len(postings)} listings")
+            return postings
+        except Exception:
+            print("→ static fallback also failed")
+            return []
+
     def _fetch_spa(self, key, url):
         """
         Fetch a page using Playwright headless Chromium for SPAs.
@@ -309,20 +329,7 @@ class GovJobCrawler:
         html = fetch_spa_page(url, wait_selector=wait_sel, timeout_ms=30000)
 
         if not html or len(html) < 500:
-            print("SPA empty, falling back to static page...", end=" ")
-            # Fallback: try the static board page
-            try:
-                r = self.session.get(
-                    "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
-                    headers=DEFAULT_HEADERS, timeout=15,
-                )
-                r.raise_for_status()
-                postings = parsers.parse_rrb(r.text)
-                print(f"got {len(postings)} listings")
-                return postings
-            except Exception:
-                print("static fallback also failed")
-                return []
+            return self._fallback_to_static("SPA empty")
 
         # Parse the rendered HTML
         if key == "rrb":
@@ -331,20 +338,7 @@ class GovJobCrawler:
             postings = parse_generic_spa(html, base_url=url)
 
         if not postings:
-            print(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)", end=" ")
-            # Fall back to static page
-            try:
-                r = self.session.get(
-                    "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
-                    headers=DEFAULT_HEADERS, timeout=15,
-                )
-                r.raise_for_status()
-                postings = parsers.parse_rrb(r.text)
-                print(f"→ static fallback got {len(postings)} listings")
-                return postings
-            except Exception:
-                print("→ static fallback also failed")
-                return []
+            return self._fallback_to_static(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)")
 
         print(f"got {len(postings)} listings")
         return postings
@@ -548,7 +542,6 @@ class GovJobCrawler:
 
         cycle = 0
         total_new = 0
-        interval_sec = interval_minutes * 60
 
         print("=" * 60)
         print("  CRAWLER — WATCH MODE")
