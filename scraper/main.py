@@ -27,6 +27,10 @@ def main():
         help="Run discovery engine to find new/changed job listing URLs"
     )
     parser.add_argument(
+        "--report", action="store_true",
+        help="Run scrape and generate CS/IT coverage report (signal vs noise)"
+    )
+    parser.add_argument(
         "--uppsc", action="store_true",
         help="Run UPPSC job scraper"
     )
@@ -54,6 +58,11 @@ def main():
     if args.discover:
         crawler.run_discovery(orgs=target_keys)
         return  # discovery only, no scrape/diff/notify
+
+    if args.report:
+        report = crawler.generate_report(orgs=target_keys)
+        crawler.print_report(report)
+        return  # report only, no diff/notify
 
     # ── Scrape pipeline (single run) ──────────────────────────────────────
     scraped_data = crawler.run_scrape(orgs=target_keys)
