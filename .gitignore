@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+*.log
+
+# Network captures
+*.network-request
+*.network-response
+
+# Debug files
+scraper/debug_*.py
+scraper/test_*.py
+scraper/probe_*.py
+scraper/list_*.py
+scraper/search_*.py
+scraper/diff.py
+
+# Other
+state.json
+*.txt
+*.html
