@@ -1039,6 +1039,256 @@ def parse_ncs(session=None):
     return all_postings
 
 
+def parse_ongc(html_content):
+    """
+    Parses ONGC recruitment notices page.
+    URL: https://ongcindia.com/web/eng/career/recruitment-notice
+    Structure: HTML page with grouped links to recruitment notices and PDFs.
+    """
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE = "https://ongcindia.com"
+    seen = set()
+
+    for a in soup.find_all('a'):
+        href = a.get('href', '').strip()
+        if not href or href.startswith('javascript:') or href.startswith('mailto:') or href == '#':
+            continue
+
+        title = a.get_text(separator=' ', strip=True)
+        title = re.sub(r'\s+', ' ', title).strip()
+        if len(title) < 5:
+            continue
+
+        link = urljoin(BASE + "/", href)
+        if link in seen:
+            continue
+        seen.add(link)
+
+        # Filter to recruitment-related links only
+        link_lower = link.lower()
+        title_lower = title.lower()
+        # Only track links that point to actual PDFs, notifications, or specific recruitment pages
+        # Exclude generic nav links like "Why Work With ONGC", "Recruitment Policy", etc.
+        generic_titles = ['why work', 'recruitment policy', 'recruitment notices', 'our vision',
+                          'about us', 'contact', 'home', 'site map', 'feedback', 'photo gallery']
+        if any(g in title_lower for g in generic_titles):
+            continue
+        if any(kw in link_lower for kw in ['recruit', 'vacanc', 'notification', 'engagement']):
+            # Also require the link to point to a PDF or a specific notification page
+            if any(ext in link_lower for ext in ['.pdf', 'notification', 'recruit', 'vacanc', 'engagement']):
+                postings.append({"title": title, "link": link, "date": ""})
+
+    return postings
+
+
+def parse_sail(html_content):
+    """
+    Parses SAIL careers page.
+    URL: https://www.sail.co.in/careers
+    Structure: HTML page with links to recruitment notifications.
+    """
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE = "https://www.sail.co.in"
+    seen = set()
+
+    # Try table rows first
+    for table in soup.find_all('table'):
+        rows = table.find_all('tr')
+        for row in rows:
+            tds = row.find_all('td')
+            if len(tds) >= 2:
+                title_cell = tds[0]
+                a_tag = title_cell.find('a')
+                if a_tag and a_tag.get('href'):
+                    title = a_tag.get_text(strip=True)
+                    href = a_tag['href']
+                    if title and len(title) > 5:
+                        link = urljoin(BASE + "/", href)
+                        date_str = tds[-1].get_text(strip=True) if len(tds) > 1 else ""
+                        if link not in seen:
+                            seen.add(link)
+                            postings.append({"title": title, "link": link, "date": date_str})
+
+    # Fallback: scan all links
+    if not postings:
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href == '#':
+                continue
+            title = a.get_text(strip=True)
+            if len(title) < 8:
+                continue
+            link = urljoin(BASE + "/", href)
+            if link in seen:
+                continue
+            link_lower = link.lower()
+            title_lower = title.lower()
+            if any(kw in link_lower or kw in title_lower
+                   for kw in ['recruit', 'vacanc', 'notification', 'career', 'engagement']):
+                seen.add(link)
+                postings.append({"title": title, "link": link, "date": ""})
+
+    return postings
+
+
+def parse_ntpc(html_content):
+    """
+    Parses NTPC careers portal.
+    URL: https://careers.ntpc.co.in/
+    Structure: Dynamic portal — may return HTML with job listings or a login page.
+    Fallback: extracts any recruitment links from the page.
+    """
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE = "https://careers.ntpc.co.in"
+    seen = set()
+
+    # If page has job listing cards or table rows
+    for card in soup.find_all(['tr', 'div', 'li']):
+        a_tag = card.find('a')
+        if not a_tag or not a_tag.get('href'):
+            continue
+        title = a_tag.get_text(strip=True)
+        href = a_tag['href']
+        if len(title) < 8:
+            continue
+        if href.startswith('javascript:') or href == '#':
+            continue
+        link = urljoin(BASE + "/", href)
+        if link in seen:
+            continue
+        seen.add(link)
+        date_str = ""
+        date_span = card.find('span', class_=re.compile(r'date|time', re.I))
+        if date_span:
+            date_str = date_span.get_text(strip=True)
+        postings.append({"title": title, "link": link, "date": date_str})
+
+    return postings
+
+
+def parse_aai(html_content):
+    """
+    Parses AAI (Airports Authority of India) recruitment page.
+    URL: https://www.aai.aero/en/careers/recruitment
+    Structure: HTML table with columns for Exam Name, Post Date, Links, Results.
+    """
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE = "https://www.aai.aero"
+    seen = set()
+
+    for table in soup.find_all('table'):
+        rows = table.find_all('tr')
+        if len(rows) < 2:
+            continue
+        # Detect header row
+        first_row_cells = [td.get_text(strip=True).lower() for td in rows[0].find_all(['th', 'td'])]
+        if not any(kw in ' '.join(first_row_cells) for kw in ['exam', 'recruit', 'post', 'vacanc', 'notification']):
+            continue
+
+        for row in rows[1:]:
+            cells = row.find_all('td')
+            if len(cells) < 2:
+                continue
+            # Title is usually the first cell
+            title = cells[0].get_text(strip=True)
+            if len(title) < 5:
+                continue
+            if title in seen:
+                continue
+            seen.add(title)
+
+            # Find link in any cell
+            link = BASE + "/en/careers/recruitment"
+            for cell in cells:
+                a = cell.find('a')
+                if a and a.get('href') and not a['href'].startswith('javascript'):
+                    link = urljoin(BASE + "/", a['href'])
+                    break
+
+            date_str = ""
+            if len(cells) >= 2:
+                date_str = cells[1].get_text(strip=True)
+
+            postings.append({"title": title, "link": link, "date": date_str})
+
+    # Fallback: scan links
+    if not postings:
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href == '#':
+                continue
+            title = a.get_text(strip=True)
+            if len(title) < 8:
+                continue
+            link = urljoin(BASE + "/", href)
+            if link in seen:
+                continue
+            link_lower = link.lower()
+            if any(kw in link_lower or kw in title.lower()
+                   for kw in ['recruit', 'vacanc', 'notification', 'career']):
+                seen.add(link)
+                postings.append({"title": title, "link": link, "date": ""})
+
+    return postings
+
+
+def parse_rrb(html_content):
+    """
+    Parses Indian Railways (RRB) notifications.
+    URL: https://www.rrbapply.gov.in/
+    Structure: SPA portal — static HTML may have no content.
+    Fallback: extracts CEN (Centralised Employment Notice) links from any
+    available text on the page. Also checks the static Indian Railways
+    board page for recruitment links.
+    """
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    BASE_RRB = "https://www.rrbapply.gov.in"
+    seen = set()
+
+    for a in soup.find_all('a'):
+        href = a.get('href', '').strip()
+        if not href or href.startswith('javascript:') or href.startswith('mailto:') or href == '#':
+            continue
+        title = a.get_text(separator=' ', strip=True)
+        title = re.sub(r'\s+', ' ', title).strip()
+        if len(title) < 5:
+            continue
+
+        # Resolve link — could be relative to rrbapply or indianrailways
+        if href.startswith('http'):
+            link = href
+        elif href.startswith('/'):
+            # Determine base from context
+            link = urljoin(BASE_RRB + "/", href)
+        else:
+            link = urljoin(BASE_RRB + "/", href)
+
+        if link in seen:
+            continue
+        seen.add(link)
+
+        title_lower = title.lower()
+        link_lower = link.lower()
+        if any(kw in title_lower or kw in link_lower
+               for kw in ['cen', 'recruit', 'vacanc', 'notification', 'apply', 'railway', 'group']):
+            date_str = ""
+            # Look for date in nearby text
+            parent = a.parent
+            if parent:
+                parent_text = parent.get_text()
+                date_match = re.search(r'(\d{2}[./-]\d{2}[./-]\d{4})', parent_text)
+                if date_match:
+                    date_str = date_match.group(1)
+            postings.append({"title": title, "link": link, "date": date_str})
+
+    return postings
+
+
 def test_parsers():
 
     """

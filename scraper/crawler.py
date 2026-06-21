@@ -88,6 +88,11 @@ PARSER_MAP = {
     "nic": parsers.parse_nic,
     "hal": parsers.parse_hal,
     "cris": parsers.parse_cris,
+    "ongc": parsers.parse_ongc,
+    "sail": parsers.parse_sail,
+    "ntpc": parsers.parse_ntpc,
+    "aai": parsers.parse_aai,
+    "rrb": parsers.parse_rrb,
 }
 
 

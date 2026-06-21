@@ -85,6 +85,32 @@ ORGS_CONFIG = {
     "uppsc": {
         "name": "UPPSC (Uttar Pradesh Public Service Commission)",
         "url": "https://uppsc.up.nic.in/"
+    },
+    # ── Oil & Gas PSUs ─────────────────────────────────────────────────────
+    "ongc": {
+        "name": "ONGC (Oil and Natural Gas Corporation)",
+        "url": "https://ongcindia.com/web/eng/career/recruitment-notice"
+    },
+    # ── Steel / Heavy Manufacturing PSUs ───────────────────────────────────
+    "sail": {
+        "name": "SAIL (Steel Authority of India)",
+        "url": "https://www.sail.co.in/careers"
+    },
+    # ── Power PSUs ─────────────────────────────────────────────────────────
+    "ntpc": {
+        "name": "NTPC (National Thermal Power Corporation)",
+        "url": "https://www.ntpc.co.in/page/career-opportunities"
+    },
+    # ── Aviation / Infrastructure ──────────────────────────────────────────
+    "aai": {
+        "name": "AAI (Airports Authority of India)",
+        "url": "https://www.aai.aero/en/careers/recruitment"
+    },
+    # ── Indian Railways ────────────────────────────────────────────────────
+    "rrb": {
+        "name": "Indian Railways (RRB)",
+        "url": "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554",
+        "note": "Static board page with recruitment links — rrbapply.gov.in is SPA and not scrapable"
     }
 }
 
@@ -92,7 +118,8 @@ ORGS_CONFIG = {
 MAIN_ORGS = [
     "cdac", "nielit", "stpi", "nic", "cdot", "certin",
     "drdo", "bel", "barc", "isro", "hal", "ecil", "cris",
-    "bsnl", "employment_news", "ncs"
+    "bsnl", "employment_news", "ncs",
+    "ongc", "sail", "ntpc", "aai"
 ]
 UPPSC_ORGS = ["uppsc"]
 
@@ -185,5 +212,30 @@ DISCOVERY_CONFIG = {
         "name": "UPPSC (Uttar Pradesh Public Service Commission)",
         "homepages": ["https://uppsc.up.nic.in/"],
         "patterns": [r"recruit", r"notif", r"vacanc", r"advert"],
+    },
+    "ongc": {
+        "name": "ONGC (Oil and Natural Gas Corporation)",
+        "homepages": ["https://ongcindia.com/web/eng/career"],
+        "patterns": [r"recruit", r"vacanc", r"career", r"job", r"engagement"],
+    },
+    "sail": {
+        "name": "SAIL (Steel Authority of India)",
+        "homepages": ["https://www.sail.co.in/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"job", r"engagement"],
+    },
+    "ntpc": {
+        "name": "NTPC (National Thermal Power Corporation)",
+        "homepages": ["https://www.ntpc.co.in/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"job"],
+    },
+    "aai": {
+        "name": "AAI (Airports Authority of India)",
+        "homepages": ["https://www.aai.aero/"],
+        "patterns": [r"career", r"recruit", r"vacanc", r"job", r"notification"],
+    },
+    "rrb": {
+        "name": "Indian Railways (RRB)",
+        "homepages": ["https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554"],
+        "patterns": [r"recruit", r"vacanc", r"notification", r"censal"],
     },
 }
