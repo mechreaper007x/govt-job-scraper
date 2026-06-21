@@ -33,6 +33,7 @@ jobs:
           SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
           SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
           NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
+          SCRAPER_PDF_SCAN: '1'
         run: python -m scraper.main --main
 
       - name: Commit and push state changes
