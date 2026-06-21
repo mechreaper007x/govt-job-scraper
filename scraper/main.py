@@ -8,6 +8,7 @@ import requests
 
 from scraper.config import ORGS_CONFIG, DEFAULT_HEADERS, MAIN_ORGS, UPPSC_ORGS
 import scraper.parsers as parsers
+import scraper.discovery as discovery
 from scraper.diff import diff_and_update_state
 from scraper.notify_discord import send_discord_notifications
 from scraper.notify_email import send_email_notifications
@@ -53,6 +54,7 @@ PARSER_MAP = {
     "cdot": parsers.parse_cdot,
     "uppsc": parsers.parse_uppsc,
     "nielit": None,  # special: uses parse_nielit(session) directly
+    "ncs": None,  # special: uses parse_ncs(session) via API
     "ecil": parsers.parse_ecil,
     "stpi": parsers.parse_stpi,
     "nic": parsers.parse_nic,
@@ -62,12 +64,64 @@ PARSER_MAP = {
 
 def main():
     parser = argparse.ArgumentParser(description="Indian Government Job Scraper and Notifier")
-    parser.add_argument("--main", action="store_true", help="Run main job scraper (CDAC, BEL, DRDO, ISRO, BARC, BSNL)")
+    parser.add_argument("--main", action="store_true", help="Run main job scraper across all configured orgs")
+    parser.add_argument("--discover", action="store_true", help="Run discovery engine to find new/changed job listing URLs")
     parser.add_argument("--uppsc", action="store_true", help="Run UPPSC job scraper")
     parser.add_argument("--org", type=str, help="Run a specific organization scraper by key")
     
     args = parser.parse_args()
     
+    # --discover flag: run URL discovery instead of scraping
+    if args.discover:
+        session = requests.Session()
+        session.mount('https://', RobustGovAdapter())
+
+        print("=" * 60)
+        print("  URL DISCOVERY ENGINE")
+        print("  Scanning org homepages & sitemaps for job-related URLs")
+        print("=" * 60)
+
+        # Determine which orgs to discover
+        if args.org:
+            if args.org in ORGS_CONFIG:
+                discover_keys = [args.org]
+            else:
+                print(f"Error: Organization '{args.org}' not found.")
+                sys.exit(1)
+        else:
+            discover_keys = MAIN_ORGS
+
+        results = discovery.discover_all(session, orgs=discover_keys)
+
+        print("\n" + "=" * 60)
+        print("  DISCOVERY SUMMARY")
+        print("=" * 60)
+
+        total_found = 0
+        for key, candidates in results.items():
+            name = ORGS_CONFIG.get(key, {}).get("name", key)
+            high_score = [c for c in candidates if c["score"] >= 50]
+            medium_score = [c for c in candidates if 30 <= c["score"] < 50]
+
+            if candidates:
+                print(f"\n{name} ({key}):")
+                print(f"  Strong matches (score >= 50): {len(high_score)}")
+                for c in high_score[:5]:
+                    print(f"    [{c['score']:>3}] {c['url'][:90]}")
+                if high_score:
+                    print(f"    from: {high_score[0]['source']}")
+                if medium_score:
+                    print(f"  Weak matches (score 30-49): {len(medium_score)}")
+                total_found += len(candidates)
+            else:
+                print(f"\n{name} ({key}): No job-related URLs discovered")
+
+        print(f"\n{'=' * 60}")
+        print(f"  Total discovered: {total_found} candidate URLs across {len(discover_keys)} orgs")
+        print("  Review candidates and add new URLs to ORGS_CONFIG in config.py")
+        print(f"{'=' * 60}")
+        return
+
     # Determine the target organizations based on arguments
     if args.org:
         if args.org in ORGS_CONFIG:
@@ -95,8 +149,8 @@ def main():
         url = ORGS_CONFIG[key]["url"]
         parser_fn = PARSER_MAP.get(key)
         
-        # NIELIT uses None in PARSER_MAP as a sentinel (handled by special API path below)
-        is_special_api = ORGS_CONFIG[key].get("special") in ("api", "json_api", "hal_api")
+        # NIELIT/NCS use None in PARSER_MAP as sentinels (handled by special API paths below)
+        is_special_api = ORGS_CONFIG[key].get("special") in ("api", "json_api", "hal_api", "ncs_api")
         if not parser_fn and not is_special_api:
             print(f"Error: No parser function mapped for {org_name} ({key})")
             continue
@@ -112,6 +166,9 @@ def main():
             # NIELIT uses an internal JSON API (React SPA backend) — no static HTML to GET
             if key == "nielit":
                 postings = parsers.parse_nielit(session=session)
+            elif key == "ncs":
+                # NCS uses the beta portal's internal job search API (POST)
+                postings = parsers.parse_ncs(session=session)
             elif ORGS_CONFIG[key].get("special") == "hal_api":
                 # HAL uses a custom WordPress POST API. The site's WAF blocks
                 # requests with the default script-style User-Agent and returns

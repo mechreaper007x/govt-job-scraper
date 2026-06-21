@@ -76,6 +76,11 @@ ORGS_CONFIG = {
         "name": "Employment News (Ministry of I&B)",
         "url": "https://employmentnews.gov.in/NewEmp/AllJobs.aspx?k=All"
     },
+    "ncs": {
+        "name": "NCS (National Career Service - Ministry of Labour & Employment)",
+        "url": "https://www.ncs.gov.in/",
+        "special": "ncs_api"  # uses internal JSON API (POST /api/v1/job-posts/search)
+    },
     # ── State PSC ──────────────────────────────────────────────────────────────
     "uppsc": {
         "name": "UPPSC (Uttar Pradesh Public Service Commission)",
@@ -87,6 +92,98 @@ ORGS_CONFIG = {
 MAIN_ORGS = [
     "cdac", "nielit", "stpi", "nic", "cdot", "certin",
     "drdo", "bel", "barc", "isro", "hal", "ecil", "cris",
-    "bsnl", "employment_news"
+    "bsnl", "employment_news", "ncs"
 ]
 UPPSC_ORGS = ["uppsc"]
+
+# ── Discovery Engine Configuration ────────────────────────────────────────────
+# Seed homepages and career-related URL patterns per org.
+# The discovery engine uses these to find new/changed job listing URLs.
+
+DISCOVERY_CONFIG = {
+    "cdac": {
+        "name": "C-DAC (Centre for Development of Advanced Computing)",
+        "homepages": ["https://www.cdac.in/"],
+        "patterns": [r"current.?job", r"career", r"openings", r"recruit", r"vacanc", r"notification"],
+    },
+    "nielit": {
+        "name": "NIELIT (National Institute of Electronics & IT)",
+        "homepages": ["https://www.nielit.gov.in/"],
+        "patterns": [r"recruit", r"career", r"job", r"vacanc"],
+    },
+    "stpi": {
+        "name": "STPI (Software Technology Parks of India)",
+        "homepages": ["https://www.stpi.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"openings"],
+    },
+    "nic": {
+        "name": "NIC (National Informatics Centre)",
+        "homepages": ["https://www.nic.in/", "https://recruitment.nic.in/"],
+        "patterns": [r"recruit", r"job", r"career", r"vacanc"],
+    },
+    "cdot": {
+        "name": "C-DOT (Centre for Development of Telematics)",
+        "homepages": ["https://www.cdot.in/"],
+        "patterns": [r"openings", r"career", r"recruit", r"job", r"vacanc"],
+    },
+    "certin": {
+        "name": "CERT-In (Indian Computer Emergency Response Team)",
+        "homepages": ["https://www.cert-in.org.in/"],
+        "patterns": [r"recruit", r"vacanc", r"job", r"career"],
+    },
+    "drdo": {
+        "name": "DRDO (Defence Research and Development Organisation)",
+        "homepages": ["https://www.drdo.gov.in/"],
+        "patterns": [r"vacanc", r"recruit", r"career", r"job", r"offerings"],
+    },
+    "bel": {
+        "name": "BEL (Bharat Electronics Limited)",
+        "homepages": ["https://bel-india.in/"],
+        "patterns": [r"job", r"career", r"recruit", r"notification", r"vacanc", r"engagement"],
+    },
+    "barc": {
+        "name": "BARC (Bhabha Atomic Research Centre)",
+        "homepages": ["https://www.barc.gov.in/"],
+        "patterns": [r"career", r"recruit", r"job", r"vacanc", r"rss"],
+    },
+    "isro": {
+        "name": "ISRO (Indian Space Research Organisation)",
+        "homepages": ["https://www.isro.gov.in/"],
+        "patterns": [r"opportunit", r"recruit", r"career", r"job", r"vacanc"],
+    },
+    "hal": {
+        "name": "HAL (Hindustan Aeronautics Limited)",
+        "homepages": ["https://hal-india.co.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"engagement"],
+    },
+    "ecil": {
+        "name": "ECIL (Electronics Corporation of India Ltd)",
+        "homepages": ["https://www.ecil.co.in/"],
+        "patterns": [r"job", r"career", r"recruit", r"openings", r"vacanc"],
+    },
+    "cris": {
+        "name": "CRIS (Centre for Railway Information Systems)",
+        "homepages": ["https://www.cris.org.in/"],
+        "patterns": [r"career", r"job", r"recruit", r"vacanc", r"openings"],
+    },
+    "bsnl": {
+        "name": "BSNL (Bharat Sanchar Nigam Ltd)",
+        "homepages": ["https://www.bsnl.co.in/"],
+        "patterns": [r"exam", r"recruit", r"career", r"job", r"vacanc"],
+    },
+    "employment_news": {
+        "name": "Employment News (Ministry of I&B)",
+        "homepages": ["https://employmentnews.gov.in/"],
+        "patterns": [r"job", r"vacanc", r"recruit", r"employment", r"all.?job"],
+    },
+    "ncs": {
+        "name": "NCS (National Career Service - Ministry of Labour & Employment)",
+        "homepages": ["https://www.ncs.gov.in/", "https://betacloud.ncs.gov.in/"],
+        "patterns": [r"job", r"career", r"search", r"listing", r"vacanc"],
+    },
+    "uppsc": {
+        "name": "UPPSC (Uttar Pradesh Public Service Commission)",
+        "homepages": ["https://uppsc.up.nic.in/"],
+        "patterns": [r"recruit", r"notif", r"vacanc", r"advert"],
+    },
+}

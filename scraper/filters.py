@@ -34,16 +34,21 @@ INCLUDE_KEYWORDS = [
     "deep learning", "nlp", "computer vision",
     # security / infra
     "cyber security", "cybersecurity", "network security", "information security",
-    "devops", "cloud computing", "cloud engineer",
+    "devops", "cloud computing", "cloud engineer", "cloud ",
     "database", "dbms", "system administrator", "sysadmin",
     "system analyst", "network engineer",
     "blockchain", "quantum computing", "high performance computing", " hpc",
+    # IT infrastructure & architecture
+    "data centre", "data center", "enterprise architecture",
+    "architect",
     # explicit combined-discipline phrasing seen in ISRO/NIC-style postings
     "and computer science", "computer science engineering",
     # PSU IT project roles (CDAC, DRDO, ISRO style)
     "project engineer", "project manager", "project associate",
     "project scientist", "project staff", "project technician",
     "senior project", "project support",
+    "project assistant", "project officer", "project consultant",
+    "senior consultant",
     # Scientist grades at NIC, DRDO, ISRO
     "scientist/engineer", "scientist b", "scientist-b",
     "scientist c", "scientist-c", "scientist d", "scientist-d",
@@ -51,6 +56,7 @@ INCLUDE_KEYWORDS = [
     # Research roles relevant for CSE
     "junior research fellow", "junior research fellowship", " jrf",
     "research associate", "research scientist", "research fellow",
+    "scientist ",
     # CDAC-specific roles
     "adjunct scientist", "adjunct engineer",
     # General technical roles
