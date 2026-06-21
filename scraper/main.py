@@ -36,6 +36,15 @@ def main():
         help="Export coverage report to JSON (default: coverage_report.json)"
     )
     parser.add_argument(
+        "--report-archive", nargs="?", const="coverage_history.json", default=None,
+        metavar="FILE",
+        help="Run scrape, generate report, and append to historical archive"
+    )
+    parser.add_argument(
+        "--trend", action="store_true",
+        help="Show historical accuracy trends from the coverage archive"
+    )
+    parser.add_argument(
         "--watch", action="store_true",
         help="Watch mode: re-scrape every N minutes and alert on new postings"
     )
@@ -82,6 +91,16 @@ def main():
         crawler.print_report(report)
         crawler.save_report_json(report, path=args.report_json)
         return  # report only, no diff/notify
+
+    if args.report_archive is not None:
+        report = crawler.generate_report(orgs=target_keys)
+        crawler.print_report(report)
+        crawler.archive_report(report, path=args.report_archive)
+        return
+
+    if args.trend:
+        crawler.print_trend()
+        return
 
     if args.watch:
         crawler.run_watch(orgs=target_keys, interval_minutes=args.interval)

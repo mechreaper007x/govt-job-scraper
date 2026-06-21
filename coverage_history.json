@@ -1,0 +1,54 @@
+[
+  {
+    "timestamp": "2026-06-21T10:00:00",
+    "org_count": 16,
+    "summary": {
+      "total_postings": 735,
+      "total_relevant": 419,
+      "total_uncertain": 316,
+      "overall_relevant_pct": 57.0,
+      "orgs_ok": 15,
+      "orgs_failed": 1
+    },
+    "orgs": {}
+  },
+  {
+    "timestamp": "2026-06-21T12:00:00",
+    "org_count": 16,
+    "summary": {
+      "total_postings": 735,
+      "total_relevant": 427,
+      "total_uncertain": 308,
+      "overall_relevant_pct": 58.1,
+      "orgs_ok": 15,
+      "orgs_failed": 1
+    },
+    "orgs": {}
+  },
+  {
+    "timestamp": "2026-06-21T14:00:00",
+    "org_count": 20,
+    "summary": {
+      "total_postings": 813,
+      "total_relevant": 422,
+      "total_uncertain": 391,
+      "overall_relevant_pct": 51.9,
+      "orgs_ok": 17,
+      "orgs_failed": 3
+    },
+    "orgs": {}
+  },
+  {
+    "timestamp": "2026-06-21T16:00:00",
+    "org_count": 20,
+    "summary": {
+      "total_postings": 810,
+      "total_relevant": 422,
+      "total_uncertain": 388,
+      "overall_relevant_pct": 52.1,
+      "orgs_ok": 17,
+      "orgs_failed": 3
+    },
+    "orgs": {}
+  }
+]

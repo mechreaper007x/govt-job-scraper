@@ -29,6 +29,21 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from scraper.config import ORGS_CONFIG, DEFAULT_HEADERS, MAIN_ORGS
+
+# ─── Helpers ────────────────────────────────────────────────────────────────
+
+_MAX_HISTORY_ENTRIES = 365  # cap archive at ~1 year of daily runs
+
+
+def _quality_label(pct):
+    """Map a relevance percentage to a quality label."""
+    if pct >= 80:
+        return "HIGH"
+    elif pct >= 50:
+        return "MEDIUM"
+    elif pct >= 20:
+        return "LOW"
+    return "NOISE"
 import scraper.parsers as parsers
 import scraper.discovery as discovery
 from scraper.filters import annotate
@@ -403,14 +418,7 @@ class GovJobCrawler:
             total = relevant + uncertain
             pct = round(100 * relevant / total, 1) if total else 0
 
-            if pct >= 80:
-                quality = "HIGH"
-            elif pct >= 50:
-                quality = "MEDIUM"
-            elif pct >= 20:
-                quality = "LOW"
-            else:
-                quality = "NOISE"
+            quality = _quality_label(pct)
 
             report["orgs"][key] = {
                 "name": name,
@@ -463,6 +471,145 @@ class GovJobCrawler:
 
         print(f"Report saved to {abs_path}")
         return abs_path
+
+    def archive_report(self, report, path=None):
+        """
+        Append the current report to a historical archive for trend tracking.
+
+        Each entry stores the timestamp, per-org stats, and overall summary.
+        The archive is a JSON array that grows over time.
+
+        Args:
+            report: Report dict from generate_report().
+            path: Archive file path. Defaults to 'coverage_history.json'.
+
+        Returns:
+            int: Total number of snapshots in the archive.
+        """
+        if path is None:
+            path = "coverage_history.json"
+
+        abs_path = os.path.abspath(path)
+
+        # Load existing archive
+        history = []
+        if os.path.exists(abs_path):
+            try:
+                with open(abs_path, "r", encoding="utf-8") as f:
+                    history = json.load(f)
+            except (json.JSONDecodeError, IOError):
+                history = []
+
+        # Build snapshot
+        snapshot = {
+            "timestamp": datetime.now().isoformat(),
+            "org_count": len(report.get("orgs", {})),
+            "summary": report.get("summary", {}),
+            "orgs": {},
+        }
+        for key, stats in report.get("orgs", {}).items():
+            snapshot["orgs"][key] = {
+                "total": stats.get("total", 0),
+                "relevant": stats.get("relevant", 0),
+                "uncertain": stats.get("uncertain", 0),
+                "relevant_pct": stats.get("relevant_pct", 0.0),
+                "signal_quality": stats.get("signal_quality", "N/A"),
+                "status": stats.get("status", "error"),
+            }
+
+        history.append(snapshot)
+
+        # Trim to max entries (keep most recent)
+        if len(history) > _MAX_HISTORY_ENTRIES:
+            history = history[-_MAX_HISTORY_ENTRIES:]
+
+        # Write archive
+        with open(abs_path, "w", encoding="utf-8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+
+        print(f"Archived report #{len(history)} to {abs_path}")
+        return len(history)
+
+    def print_trend(self, path=None, last_n=10):
+        """
+        Print historical accuracy trends from the coverage archive.
+
+        Shows a compact table of past runs with overall relevance %, total
+        listings, orgs scraped, and key changes.
+
+        Args:
+            path: Archive file path. Defaults to 'coverage_history.json'.
+            last_n: Number of recent snapshots to show (default 10).
+        """
+        if path is None:
+            path = "coverage_history.json"
+
+        abs_path = os.path.abspath(path)
+        if not os.path.exists(abs_path):
+            print(f"No history file found at {abs_path}")
+            print("Run --report-archive first to start tracking trends.")
+            return
+
+        with open(abs_path, "r", encoding="utf-8") as f:
+            history = json.load(f)
+
+        if not history:
+            print("History archive is empty.")
+            return
+
+        snapshots = history[-last_n:]
+
+        print("\n" + "=" * 70)
+        print("  HISTORICAL ACCURACY TREND")
+        print("=" * 70)
+        print(" {:<12} {:>6} {:>7} {:>6} {:>6} {:>8}".format(
+            "Date", "Orgs", "Total", "Rel", "Rel%", "Quality"
+        ))
+        print("-" * 70)
+
+        prev_pct = None
+        for snap in snapshots:
+            ts = snap.get("timestamp", "")[:10]  # YYYY-MM-DD
+            s = snap.get("summary", {})
+            orgs = snap.get("org_count", 0)
+            total = s.get("total_postings", 0)
+            rel = s.get("total_relevant", 0)
+            pct = s.get("overall_relevant_pct", 0.0)
+
+            # Trend arrow
+            arrow = ""
+            if prev_pct is not None:
+                diff = pct - prev_pct
+                if diff > 0:
+                    arrow = f" (+{diff:.1f})"
+                elif diff < 0:
+                    arrow = f" ({diff:.1f})"
+                else:
+                    arrow = " (=)"
+            prev_pct = pct
+
+            quality = _quality_label(pct)
+
+            print(" {:<12} {:>6} {:>7} {:>6} {:>5.1f}% {:>7}{}".format(
+                ts, orgs, total, rel, pct, quality, arrow
+            ))
+
+        print("-" * 70)
+        print(f"  Total snapshots: {len(history)}")
+
+        # Summary stats
+        if len(history) >= 2:
+            first = history[0].get("summary", {}).get("overall_relevant_pct", 0)
+            last = history[-1].get("summary", {}).get("overall_relevant_pct", 0)
+            change = last - first
+            if change > 0:
+                print(f"  Overall trend: +{change:.1f}% improvement from first to last run")
+            elif change < 0:
+                print(f"  Overall trend: {change:.1f}% change from first to last run")
+            else:
+                print(f"  Overall trend: stable at {last:.1f}%")
+
+        print("=" * 70)
 
     def print_report(self, report):
         """Pretty-print a coverage report."""
