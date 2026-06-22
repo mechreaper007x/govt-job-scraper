@@ -31,7 +31,7 @@ import hashlib
 
 # ─── Keyword lists & Regexes ────────────────────────────────────────────────
 
-STRONG_CS_KEYWORDS = [
+CORE_CS_KEYWORDS = [
     # core CS/IT terms
     "computer science", "computer engineering", "cse",
     "information technology", "i.t.", "software", "programmer", "programming",
@@ -49,11 +49,16 @@ STRONG_CS_KEYWORDS = [
     "blockchain", "quantum computing", "high performance computing", "hpc",
     # IT infrastructure & architecture
     "data centre", "data center", "enterprise architecture",
+    # specific technologies
+    "laravel", "php", "oracle"
+]
+
+OTHER_CS_KEYWORDS = [
     "architect",
     # IT professional roles
     "it officer", "information officer", "it resource", "it professional",
     "it support", "it manager", "it associate", "it consultant", "it specialist",
-    "it executive", "laravel", "php", "oracle", "developer", "it", "ai", "data"
+    "it executive", "developer", "it", "ai", "data"
 ]
 
 GENERIC_TECH_KEYWORDS = [
@@ -133,7 +138,8 @@ def _build_boundary_regex(keywords):
         patterns.append(pattern)
     return re.compile('|'.join(patterns), re.IGNORECASE)
 
-STRONG_CS_RE = _build_boundary_regex(STRONG_CS_KEYWORDS)
+CORE_CS_RE = _build_boundary_regex(CORE_CS_KEYWORDS)
+OTHER_CS_RE = _build_boundary_regex(OTHER_CS_KEYWORDS)
 GENERIC_TECH_RE = _build_boundary_regex(GENERIC_TECH_KEYWORDS)
 EXCLUDE_RE = _build_boundary_regex(EXCLUDE_KEYWORDS)
 
@@ -409,17 +415,25 @@ def classify(title, link="", org_key="", session=None):
         if max(years) <= 2025:
             return "excluded"
 
+    # Clean the title of organization name noise to avoid matching CS terms in organization names
+    title_clean = re.sub(r'\bnielit\b', '', title, flags=re.IGNORECASE)
+    title_clean = re.sub(r'national\s+institute\s+of\s+electronics\s+(&|and)\s+information\s+technology', '', title_clean, flags=re.IGNORECASE)
+
     # ── Layer 1: Title keyword matching with regex ──
-    # 1. Strong CS keywords always win
-    if STRONG_CS_RE.search(title):
+    # 1. Core CS wins
+    if CORE_CS_RE.search(title_clean):
         return "relevant"
 
-    # 2. Exclude keywords next (generic designations in non-CS depts are filtered out)
-    if EXCLUDE_RE.search(title):
+    # 2. Exclude wins over Other CS and Generic Tech
+    if EXCLUDE_RE.search(title_clean):
         return "excluded"
 
-    # 3. Generic tech keywords next
-    has_generic = bool(GENERIC_TECH_RE.search(title))
+    # 3. Other CS wins next
+    if OTHER_CS_RE.search(title_clean):
+        return "relevant"
+
+    # 4. Generic tech keywords next
+    has_generic = bool(GENERIC_TECH_RE.search(title_clean))
     if has_generic:
         if org_key in CS_FIRST_ORGS:
             return "relevant"

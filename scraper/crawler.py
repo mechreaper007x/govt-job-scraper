@@ -198,6 +198,14 @@ class GovJobCrawler:
 
     def __init__(self, session=None):
         self.session = session or self._create_session()
+        self.thread_local = threading.local()
+
+    def _log(self, msg, end="\n"):
+        log_list = getattr(self.thread_local, "log_list", None)
+        if log_list is not None:
+            log_list.append(msg + end)
+        else:
+            print(msg, end=end)
 
     # ── Session factory ─────────────────────────────────────────────────────
 
@@ -313,7 +321,7 @@ class GovJobCrawler:
 
         return scraped_data
 
-    def _scrape_org(self, key):
+    def _scrape_org(self, key, log_list=None):
         """
         Scrape a single organization. Handles all fetch strategies:
           - Standard GET + HTML parse
@@ -325,8 +333,10 @@ class GovJobCrawler:
 
         Extension point: Add Playwright browser scraping for SPAs here.
         """
+        self.thread_local.log_list = log_list
+
         if key not in ORGS_CONFIG:
-            print(f"  SKIP: {key} not in ORGS_CONFIG")
+            self._log(f"  SKIP: {key} not in ORGS_CONFIG")
             return None
 
         cfg = ORGS_CONFIG[key]
@@ -346,7 +356,7 @@ class GovJobCrawler:
         # Standard HTML pages can be parsed via the AdaptiveParser even without custom parser mapped.
         # No error return needed if not parser_fn.
 
-        print(f"  Fetching {org_name}...", end=" ")
+        self._log(f"  Fetching {org_name}...", end=" ")
 
         try:
             # ── Special API-based parsers ────────────────────────────────
@@ -376,11 +386,11 @@ class GovJobCrawler:
             # ── Filter by relevance (with per-org context + URL awareness) ─
             annotate(postings, org_key=key, session=self.session)
             filtered = [p for p in postings if p.get("relevance") != "excluded"]
-            print(f"{len(filtered)} listings (from {len(postings)})")
+            self._log(f"{len(filtered)} listings (from {len(postings)})")
             return filtered
 
         except Exception as exc:
-            print(f"ERROR: {exc}")
+            self._log(f"ERROR: {exc}")
             return None  # None = failed, preserves state in diff
 
     # Static fallback URL for RRB when SPA returns no useful content
@@ -389,7 +399,7 @@ class GovJobCrawler:
     def _fallback_to_static(self, reason=""):
         """Fetch RRB static board page as fallback when SPA returns no data."""
         if reason:
-            print(f"{reason}, falling back to static page...", end=" ")
+            self._log(f"{reason}, falling back to static page...", end=" ")
         try:
             r = self.session.get(
                 self._RRB_STATIC_URL,
@@ -397,10 +407,10 @@ class GovJobCrawler:
             )
             r.raise_for_status()
             postings = parsers.parse_rrb(r.text)
-            print(f"→ static fallback got {len(postings)} listings")
+            self._log(f"→ static fallback got {len(postings)} listings")
             return postings
         except Exception:
-            print("→ static fallback also failed")
+            self._log("→ static fallback also failed")
             return []
 
     def _fetch_spa(self, key, url):
@@ -415,7 +425,7 @@ class GovJobCrawler:
         """
         from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_drdo_spa, parse_generic_spa
 
-        print(f"[SPA] Launching Chromium for {key}...", end=" ")
+        self._log(f"[SPA] Launching Chromium for {key}...", end=" ")
 
         # Wait selector: try to find job listing containers
         wait_sel = None
@@ -438,10 +448,10 @@ class GovJobCrawler:
         if not postings:
             if key == "rrb":
                 return self._fallback_to_static(f"SPA rendered {len(html)} chars but no job data visible (auth-gated)")
-            print(f"SPA rendered {len(html)} chars but parser found no listings")
+            self._log(f"SPA rendered {len(html)} chars but parser found no listings")
             return []
 
-        print(f"got {len(postings)} listings")
+        self._log(f"got {len(postings)} listings")
         return postings
 
     def _fetch_hal(self, url):

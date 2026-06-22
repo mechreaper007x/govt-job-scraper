@@ -43,11 +43,13 @@ def main():
 
     crawler = GovJobCrawler()
     lock = threading.Lock()
+    failures_lock = threading.Lock()
     
     success_count = 0
     fail_count = 0
     total_postings = 0
     total_relevant = 0
+    failures = []
 
     def scrape_worker(index, key):
         nonlocal success_count, fail_count, total_postings, total_relevant
@@ -57,11 +59,8 @@ def main():
         short_name = name[:40] + ".." if len(name) > 42 else name
         
         try:
-            # Silence internal print statements from other threads to keep table intact
-            f_out = io.StringIO()
-            f_err = io.StringIO()
-            with contextlib.redirect_stdout(f_out), contextlib.redirect_stderr(f_err):
-                postings = crawler._scrape_org(key)
+            worker_logs = []
+            postings = crawler._scrape_org(key, log_list=worker_logs)
                 
             if postings is None:
                 status = "Fetch Error"
@@ -69,6 +68,9 @@ def main():
                 rel_cnt = 0
                 with lock:
                     fail_count += 1
+                err_msg = "".join(worker_logs).strip() or "Unknown Fetch Error"
+                with failures_lock:
+                    failures.append((name, key, err_msg))
             else:
                 status = "Success"
                 cnt = len(postings)
@@ -83,6 +85,8 @@ def main():
             rel_cnt = 0
             with lock:
                 fail_count += 1
+            with failures_lock:
+                failures.append((name, key, f"Crashed: {e}"))
                 
         # Print row directly to raw stdout stream to bypass global redirection
         row = fmt.format(index + 1, short_name, status, cnt, rel_cnt)
@@ -104,6 +108,15 @@ def main():
     print(f" Total Postings:  {total_postings}", file=sys.__stdout__)
     print(f" CS/IT Relevant:  {total_relevant}", file=sys.__stdout__)
     print("=" * 105, file=sys.__stdout__)
+
+    if failures:
+        print("\n" + "=" * 105, file=sys.__stdout__)
+        print(" DETAILED FAILURE REPORT", file=sys.__stdout__)
+        print("=" * 105, file=sys.__stdout__)
+        for name, key, err in sorted(failures):
+            clean_err = err.replace("\n", " | ")
+            print(f"- {name} ({key}): {clean_err}", file=sys.__stdout__)
+        print("=" * 105, file=sys.__stdout__)
 
 if __name__ == "__main__":
     main()

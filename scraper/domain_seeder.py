@@ -31,33 +31,33 @@ _DEPARTMENTS = [
 
 # Corrected Official State Domains Suffixes
 STATE_DOMAINS = {
-    "an": "andaman.gov.in",
+    "an": "andamannicobar.gov.in",
     "ap": "ap.gov.in",
-    "ar": "arunachal.gov.in",
+    "ar": "arunachalpradesh.gov.in",
     "as": "assam.gov.in",
-    "br": "bihar.gov.in",
-    "ch": "chd.gov.in",
+    "br": "state.bihar.gov.in",
+    "ch": "chandigarh.gov.in",
     "cg": "cgstate.gov.in",
-    "dn": "dadra.gov.in",
+    "dn": "dnh.gov.in",
     "dd": "daman.nic.in",
     "dl": "delhi.gov.in",
     "ga": "goa.gov.in",
-    "gj": "gujarat.gov.in",
+    "gj": "gujaratindia.gov.in",
     "hr": "haryana.gov.in",
-    "hp": "hp.gov.in",
-    "jk": "jk.gov.in",
+    "hp": "himachal.gov.in",
+    "jk": "jk.nic.in",
     "jh": "jharkhand.gov.in",
     "ka": "karnataka.gov.in",
-    "kl": "kerala.gov.in",
+    "kl": "kerala.nic.in",
     "ld": "lakshadweep.gov.in",
     "mp": "mp.gov.in",
     "mh": "maharashtra.gov.in",
-    "mn": "manipur.gov.in",
+    "mn": "manipur.nic.in",
     "ml": "meghalaya.gov.in",
     "mz": "mizoram.gov.in",
     "nl": "nagaland.gov.in",
     "od": "odisha.gov.in",
-    "py": "puducherry.gov.in",
+    "py": "py.gov.in",
     "pb": "punjab.gov.in",
     "rj": "rajasthan.gov.in",
     "sk": "sikkim.gov.in",
@@ -102,11 +102,11 @@ STATE_PSC_DOMAINS = {
     "wb": "psc.wb.gov.in",
     "dl": "dsssb.delhi.gov.in",
     "py": "py.gov.in",
-    "ch": "chd.gov.in",
-    "an": "andaman.gov.in",
+    "ch": "chandigarh.gov.in",
+    "an": "erecruitment.andamannicobar.gov.in",
     "ld": "lakshadweep.gov.in",
     "dd": "daman.nic.in",
-    "dn": "dadra.gov.in"
+    "dn": "dnh.gov.in"
 }
 
 # Real official State SSBs / Selection Boards
@@ -119,7 +119,7 @@ STATE_SSB_DOMAINS = {
     "ga": "goa.gov.in",
     "gj": "gsssb.gujarat.gov.in",
     "hr": "hssc.gov.in",
-    "hp": "hpsssb.hp.gov.in",
+    "hp": "hppsc.hp.gov.in",
     "jk": "jkssb.nic.in",
     "jh": "jssc.nic.in",
     "ka": "kea.kar.nic.in",
@@ -142,11 +142,11 @@ STATE_SSB_DOMAINS = {
     "wb": "prb.wb.gov.in",
     "dl": "dsssb.delhi.gov.in",
     "py": "py.gov.in",
-    "ch": "chd.gov.in",
-    "an": "andaman.gov.in",
+    "ch": "chandigarh.gov.in",
+    "an": "erecruitment.andamannicobar.gov.in",
     "ld": "lakshadweep.gov.in",
     "dd": "daman.nic.in",
-    "dn": "dadra.gov.in"
+    "dn": "dnh.gov.in"
 }
 
 # Real official State Police recruitment
@@ -154,12 +154,12 @@ STATE_POLICE_DOMAINS = {
     "ap": "ap.gov.in",
     "ar": "arunpol.nic.in",
     "as": "assam.gov.in",
-    "br": "bihar.gov.in",
+    "br": "state.bihar.gov.in",
     "cg": "cgpolice.gov.in",
     "ga": "goa.gov.in",
     "gj": "gujarat.gov.in",
     "hr": "haryana.gov.in",
-    "hp": "hppolice.gov.in",
+    "hp": "citizenportal.hppolice.gov.in/citizen",
     "jk": "jkpolice.gov.in",
     "jh": "jhpolice.gov.in",
     "ka": "ksp.karnataka.gov.in",
@@ -182,11 +182,11 @@ STATE_POLICE_DOMAINS = {
     "wb": "wbpolice.gov.in",
     "dl": "delhi.gov.in",
     "py": "py.gov.in",
-    "ch": "chd.gov.in",
-    "an": "andaman.gov.in",
+    "ch": "chandigarh.gov.in",
+    "an": "police.andamannicobar.gov.in",
     "ld": "lakshadweep.gov.in",
     "dd": "ddpolice.gov.in",
-    "dn": "dadra.gov.in"
+    "dn": "dnh.gov.in"
 }
 
 # Real official State RTC (Transport PSU) Domains
@@ -196,8 +196,8 @@ STATE_RTC_DOMAINS = {
     "as": "astc.assam.gov.in",
     "br": "bsrtc.bihar.gov.in",
     "ch": "chdtransport.gov.in",
-    "cg": "cg.nic.in",
-    "dn": "dadra.gov.in",
+    "cg": "cgtransport.gov.in",
+    "dn": "dnh.gov.in",
     "dd": "daman.nic.in",
     "dl": "dtc.delhi.gov.in",
     "ga": "ktclgoa.com",
@@ -225,7 +225,7 @@ STATE_RTC_DOMAINS = {
     "tr": "tripura.gov.in",
     "up": "upsrtc.up.gov.in",
     "uk": "utc.uk.gov.in",
-    "wb": "wbtc.co.in"
+    "wb": "wbtconline.in"
 }
 
 # Corrected Municipality domains
@@ -237,44 +237,44 @@ MUNI_DOMAINS = {
     "mbmc": "mbmc.gov.in",
     "vvcmc": "vvcmc.in",
     "ulhasnagar": "umc.gov.in",
-    "bnmc": "bnmc.gov.in",
+    "bnmc": "bncmc.gov.in",
     "smc_gj": "suratmunicipal.gov.in",
     "amc_gj": "ahmedabadcity.gov.in",
     "vmc_gj": "vmc.gov.in",
     "rmc_gj": "rmc.gov.in",
     "jmc_rj": "jaipurmc.org",
     "jo_mc": "jodhpurmc.org",
-    "kmc_wb": "kmcgov.in",
-    "hmc_wb": "hmcgov.in",
+    "kmc_wb": "www.kmcgov.in",
+    "hmc_wb": "myhmc.in",
     "mcshimla": "shimlamc.hp.gov.in",
     "mcg": "mcg.gov.in",
-    "mcf": "mcfaridabad.gov.in",
+    "mcf": "www.mcf.gov.in",
     "mcc_ka": "mysurucity.mrc.gov.in",
     "bmrda": "bmrda.karnataka.gov.in",
     "hmrda": "hmda.gov.in",
     "cmda": "cmdachennai.gov.in",
     "ghmc": "ghmc.gov.in",
-    "gvmc": "gvmc.gov.in",
+    "gvmc": "gvmc.ap.gov.in",
     "vuda": "vuda.gov.in",
     "vada": "vada.gov.in",
     "kda": "kdaindia.co.in",
     "jda": "jda.rajasthan.gov.in",
     "uda": "udajodhpur.org",
-    "ada": "adaamritsar.org",
-    "gda": "gda.up.gov.in",
+    "ada": "adaamritsar.gov.in",
+    "gda": "gdaghaziabad.in",
     "udaipurmc": "udaipurmc.org",
-    "kotamc": "kotamunicipal.org",
+    "kotamc": "urban.rajasthan.gov.in",
     "bikanermc": "bikanermc.org",
     "ajmermc": "ajmermc.org",
-    "bhilwaramc": "bhilwaramc.org",
-    "alwarmc": "alwarmc.org",
+    "bhilwaramc": "bhilwara.rajasthan.gov.in",
+    "alwarmc": "alwar.rajasthan.gov.in",
     "sikarmc": "sikarmc.org",
     "pnbmc": "punjab.gov.in",
     "dharmc": "dhar.nic.in",
-    "gwalior-mc": "gwaliorcorporation.org",
+    "gwalior-mc": "gwalior.nic.in",
     "bhopal-mc": "bhopalmunicipal.com",
     "indore-mc": "imcindore.org",
-    "jabalpur-mc": "jmcjabalpur.org",
+    "jabalpur-mc": "jabalpur.nic.in",
     "sagar-mc": "sagarmunicipal.com",
     "satna-mc": "satnamunicipal.com",
     "rewa-mc": "rewamunicipal.com"
@@ -549,7 +549,6 @@ WORKING_DEPTS = {
     "rural.up.gov.in",
     "science.mizoram.gov.in",
     "science.odisha.gov.in",
-    "socialwelfare.assam.gov.in",
     "socialwelfare.delhi.gov.in",
     "socialwelfare.goa.gov.in",
     "socialwelfare.jharkhand.gov.in",
@@ -722,31 +721,31 @@ _MUNICIPALITIES = [
 
 # Central PSUs
 _PSU_DOMAINS = [
-    "gail.co.in", "gailonline.com", "oil-india.com", "nalcoindia.com", "mazagondock.in",
-    "bhel.com", "ongcindia.com", "sail.co.in", "ntpc.co.in", "powergrid.in", "iocl.com",
-    "coalindia.in", "railtel.in", "becil.com", "sidbi.in", "sjvn.co.in", "tcil.net.in",
-    "dic.gov.in", "npcilcareers.co.in", "rites.com", "dfccil.com", "bpcl.in", "pfcindia.com",
-    "recl.co.in", "itiltd.in", "celindia.co.in", "nhpcindia.com", "grid-india.in",
-    "hindustanpetroleum.com", "irctc.com", "concorindia.co.in", "engineersindia.com",
-    "hzlindia.com", "hzl.co.in", "balcoindia.com", "rinl.co.in",
-    "meconlimited.co.in", "hecltd.com", "kioclltd.in", "midhani-india.in", "bdl-india.in",
-    "grse.in", "goashipyard.co.in", "hsl.gov.in", "cochinshipyard.in", "hmtindia.com",
-    "nmdc.co.in", "nationalfertilizers.com", "rcfltd.com", "fact.co.in", "mfl.co.in"
+    "www.gail.co.in", "www.gailonline.com", "www.oil-india.com", "www.nalcoindia.com", "www.mazagondock.in",
+    "www.bhel.com", "www.ongcindia.com", "www.sail.co.in", "www.ntpc.co.in", "www.powergrid.in", "www.iocl.com",
+    "www.coalindia.in", "www.railtel.in", "www.becil.com", "www.sidbi.in", "www.sjvn.co.in", "www.tcil.net.in",
+    "www.dic.gov.in", "www.npcilcareers.co.in", "www.rites.com", "dfccil.com", "www.bharatpetroleum.in", "www.pfcindia.com",
+    "www.recl.co.in", "www.itiltd.in", "www.celindia.co.in", "www.nhpcindia.com", "www.grid-india.in",
+    "www.hindustanpetroleum.com", "www.irctc.com", "www.concorindia.co.in", "www.engineersindia.com",
+    "www.hzlindia.com", "www.balcoindia.com", "www.rinl.co.in",
+    "www.meconlimited.co.in", "www.hecltd.com", "www.kioclltd.in", "www.midhani-india.in", "www.bdl-india.in",
+    "www.grse.in", "www.goashipyard.co.in", "www.hslvizag.in", "www.cochinshipyard.in", "www.hmtindia.com",
+    "www.nmdc.co.in", "www.nationalfertilizers.com", "www.rcfltd.com", "www.fact.co.in", "www.mfl.co.in"
 ]
 
 # Public Banks, Insurance companies, and Regional Rural Banks
 _BANK_DOMAINS = [
-    "sbi.co.in", "pnbindia.in", "bankofbaroda.in", "canarabank.com", "unionbankofindia.co.in",
-    "indianbank.in", "mahabank.in", "indianoverseasbank.in", "ucobank.com", "bankofindia.co.in",
-    "centralbankofindia.co.in", "psbindia.com", "rbi.org.in", "sebi.gov.in", "nabard.org",
-    "nhb.org.in", "eximbankindia.in", "ecgc.in", "ibps.in", "licindia.in", "gicofindia.com",
-    "nia.co.in", "nationalinsurance.nic.in", "orientalinsurance.org.in", "newindia.co.in",
+    "www.sbi.co.in", "www.pnbindia.in", "www.bankofbaroda.in", "www.canarabank.com", "www.unionbankofindia.co.in",
+    "www.indianbank.in", "mahabank.in", "www.iob.in", "www.ucobank.com", "www.bankofindia.co.in",
+    "www.centralbankofindia.co.in", "www.psbindia.com", "www.rbi.org.in", "www.sebi.gov.in", "www.nabard.org",
+    "www.nhb.org.in", "www.eximbankindia.in", "www.ecgc.in", "www.ibps.in", "www.licindia.in", "www.gicre.in",
+    "www.niapune.org.in", "nationalinsurance.nic.co.in", "orientalinsurance.org.in", "www.newindia.co.in",
     # Regional Rural Banks (RRBs)
-    "apgbank.in", "apgvbank.in", "agb.co.in", "aryavartbank-rrb.com", "bgvb.in", "brkgb.com",
-    "cgrgb.co.in", "karnatakagraminbank.com", "kvgbank.co.in", "keralagbank.co.in", "mgbgrameen.in",
-    "mpgb.co.in", "meghalayagraminbank.co.in", "mizoramruralbank.co.in", "nagalandruralbank.co.in",
-    "ogb.co.in", "pgb.org.in", "sgbrrb.org", "utkalgrameenbank.co.in", "ubgb.in", "pbgb.org.in",
-    "prathamaupbank.com", "supgrrb.com"
+    "apgb.bank.in", "apgvbank.in", "agb.co.in", "aryavartbank-rrb.com", "bgvb.in", "brkgb.com",
+    "cgbank.in", "karnatakagraminbank.com", "karnatakagrameenabank.com", "kgb.bank.in",
+    "mpgb.bank.in", "meghalayaruralbank.bank.in", "mrb.bank.in", "www.nrb.bank.in",
+    "ogb.co.in", "pgb.org.in", "sgbrrb.org", "ubgb.in", "wbgb.bank.in",
+    "prathamaupbank.com"
 ]
 
 # Academic & Research Suffixes (IITs, NITs, IIITs, Universities)
@@ -777,21 +776,122 @@ _ACADEMIC_SEEDS = [
 
 # Key Ministries, Central Agencies, and Research Labs
 _MINISTRIES_LABS = [
-    "meity.gov.in", "education.gov.in", "mod.gov.in", "finmin.gov.in", "mha.gov.in",
-    "indianrailways.gov.in", "isro.gov.in", "drdo.gov.in", "barc.gov.in", "dae.gov.in",
-    "dst.gov.in", "dbtindia.gov.in", "csir.res.in", "icmr.gov.in", "icar.org.in",
-    "sac.isro.gov.in", "vssc.gov.in", "ursc.gov.in", "sdsc.gov.in", "iprc.gov.in",
-    "iist.ac.in", "nrsc.gov.in", "iirs.gov.in", "prl.res.in", "narl.gov.in",
-    "neist.res.in", "iict.res.in", "ncl-india.org", "nplindia.org", "ccmb.res.in",
-    "cdri.res.in", "iiim.res.in", "ihbt.res.in", "imtech.res.in", "nio.org",
-    "ngri.res.in", "neeri.res.in", "cgcri.org", "cecri.res.in", "clri.org"
+    "www.meity.gov.in", "www.education.gov.in", "www.mod.gov.in", "www.finmin.gov.in", "www.mha.gov.in",
+    "www.indianrailways.gov.in", "www.isro.gov.in", "www.drdo.gov.in", "www.barc.gov.in", "www.dae.gov.in",
+    "www.dst.gov.in", "www.dbtindia.gov.in", "www.csir.res.in", "www.icmr.gov.in", "www.icar.org.in",
+    "www.sac.gov.in", "www.vssc.gov.in", "www.ursc.gov.in", "www.shar.gov.in", "www.iprc.gov.in",
+    "www.iist.ac.in", "www.nrsc.gov.in", "www.iirs.gov.in", "www.prl.res.in", "www.narl.gov.in",
+    "www.neist.res.in", "www.iict.res.in", "www.ncl-india.org", "www.nplindia.org", "www.ccmb.res.in",
+    "www.cdri.res.in", "www.iiim.res.in", "www.ihbt.res.in", "www.imtech.res.in", "www.nio.org",
+    "www.ngri.res.in", "www.neeri.res.in", "www.cgcri.res.in", "www.cecri.res.in", "www.clri.org"
 ]
+
+# Overrides for district domains that do not conform to standard {dist}.nic.in
+# (due to spelling variations, state subdomain routing, or headquarters names)
+DISTRICT_OVERRIDES = {
+    # Rajasthan (subdomains of rajasthan.gov.in)
+    "alwar": "alwar.rajasthan.gov.in",
+    "ajmer": "ajmer.rajasthan.gov.in",
+    "jaipur": "jaipur.rajasthan.gov.in",
+    "jodhpur": "jodhpur.rajasthan.gov.in",
+    "kota": "kota.rajasthan.gov.in",
+    "bikaner": "bikaner.rajasthan.gov.in",
+    "udaipur": "udaipur.rajasthan.gov.in",
+    "bhilwara": "bhilwara.rajasthan.gov.in",
+    "sikar": "sikar.rajasthan.gov.in",
+    "sriganganagar": "sriganganagar.rajasthan.gov.in",
+    "pali": "pali.rajasthan.gov.in",
+    "hanumangarh": "hanumangarh.rajasthan.gov.in",
+    "tonk": "tonk.rajasthan.gov.in",
+    "baran": "baran.rajasthan.gov.in",
+    "bundi": "bundi.rajasthan.gov.in",
+    "churu": "churu.rajasthan.gov.in",
+    "dholpur": "dholpur.rajasthan.gov.in",
+    "jaisalmer": "jaisalmer.rajasthan.gov.in",
+    "jalore": "jalore.rajasthan.gov.in",
+    "jhalawar": "jhalawar.rajasthan.gov.in",
+    "jhunjhunu": "jhunjhunu.rajasthan.gov.in",
+    "karauli": "karauli.rajasthan.gov.in",
+    "nagaur": "nagaur.rajasthan.gov.in",
+    "rajsamand": "rajsamand.rajasthan.gov.in",
+    "sawaimadhopur": "sawaimadhopur.rajasthan.gov.in",
+    "sirohi": "sirohi.rajasthan.gov.in",
+    
+    # State/Spelling/HQ variations
+    "agar-malwa": "agarmalwa.nic.in",
+    "ahwa": "dangs.nic.in",
+    "arrah": "bhojpur.nic.in",
+    "batala": "gurdaspur.nic.in",
+    "bengaluru": "bengaluruurban.nic.in",
+    "bhimavaram": "westgodavari.ap.gov.in",
+    "bolangir": "balangir.odisha.gov.in",
+    "bulandshahr": "bulandshahar.nic.in",
+    "chamarajanagar": "chamarajanagar.nic.in",
+    "chhapra": "saran.nic.in",
+    "chikmagalur": "chikkamagaluru.nic.in",
+    "chumuoukedima": "chumoukedima.nic.in",
+    "deogarh": "deogarh.odisha.gov.in",
+    "eluru": "eluru.ap.gov.in",
+    "anantapur": "ananthapuramu.ap.gov.in",
+    "asansol": "paschimbardhaman.gov.in",
+    "durgapur": "paschimbardhaman.gov.in",
+    "adoni": "kurnool.ap.gov.in",
+    "amalapuram": "eastgodavari.ap.gov.in",
+    "alipurduar": "alipurduar.gov.in",
+    "gajapati": "gajapati.odisha.gov.in",
+    "gandhidham": "kutch.gov.in",
+    "gangtok": "gangtok.nic.in",
+    "ganjam": "ganjam.nic.in",
+    "godhra": "panchmahal.nic.in",
+    "guntakal": "ananthapuramu.ap.gov.in",
+    "gurugram": "gurugram.gov.in",
+    "boudh": "boudh.odisha.gov.in",
+    "kapurthala": "kapurthala.gov.in",
+    "lowerdibangvalley": "roing.nic.in",
+    "khawzawl": "dckhawzawl.mizoram.gov.in",
+    "kraadaadi": "kradaadi.nic.in",
+    "leparada": "arunachalpradesh.gov.in",
+    "lowersiang": "arunachalpradesh.gov.in",
+    "hajipur": "vaishali.nic.in",
+    "himatnagar": "sabarkantha.nic.in",
+    "hindupur": "srisathyasai.ap.gov.in",
+    "hnahthial": "hnahthial.mizoram.gov.in",
+    "hoshangabad": "narmadapuram.nic.in",
+    "hospet": "vijayanagara.nic.in",
+    "hubballi": "dharwad.nic.in",
+    "itarsi": "narmadapuram.nic.in",
+
+    # Newly Resolved Districts
+    "angul": "angul.odisha.gov.in",
+    "aurangabad": "aurangabad.gov.in",
+    "baghpat": "bagpat.nic.in",
+    "bahadurgarh": "jhajjar.nic.in",
+    "balasore": "balasore.odisha.gov.in",
+    "bandipora": "bandipore.nic.in",
+    "bankura": "bankura.gov.in",
+    "bargarh": "bargarh.odisha.gov.in",
+    "barnala": "barnala.gov.in",
+    "bettiah": "westchamparan.nic.in",
+    "bhadrak": "bhadrak.odisha.gov.in",
+    "bhupalpally": "bhoopalapally.telangana.gov.in",
+    "chandrapur": "chandrapur.gov.in",
+    "cuttack": "cuttack.odisha.gov.in",
+    "dhenkanal": "dhenkanal.odisha.gov.in",
+    "eastgarohills": "eastgarohills.gov.in",
+    "firozpur": "ferozepur.nic.in"
+}
 
 def generate_domains():
     """
     Generates a registry of 2,300+ target domains with official domain mappings
     and fallback strategies to guarantee near-100% DNS resolution.
     """
+    # Department overrides for non-standard routing
+    dept_overrides = {
+        "dl_education": "http://www.edudel.nic.in",
+        "up_rural": "https://ruraldevp.up.gov.in/"
+    }
+
     domains = {}
 
     # 1. State level portals (PSC, SSB, Police, Gov)
@@ -821,7 +921,9 @@ def generate_domains():
             key = f"{code}_{dept}"
             base_domain = STATE_DOMAINS[code]
             subdomain = f"{dept}.{base_domain}"
-            if subdomain in WORKING_DEPTS:
+            if key in dept_overrides:
+                url = dept_overrides[key]
+            elif subdomain in WORKING_DEPTS:
                 url = f"https://{subdomain}"
             else:
                 # Fallback to resolvable official base state domain
@@ -834,9 +936,13 @@ def generate_domains():
     # 3. Districts (NIC Portals)
     for dist in _DISTRICTS:
         key = f"dist_{dist}"
+        if dist in DISTRICT_OVERRIDES:
+            url = f"https://{DISTRICT_OVERRIDES[dist]}"
+        else:
+            url = f"https://{dist}.nic.in"
         domains[key] = {
             "name": f"{dist.title()} District Portal",
-            "url": f"https://{dist}.nic.in"
+            "url": url
         }
 
     # 4. Municipal Corporations
@@ -850,10 +956,12 @@ def generate_domains():
 
     # 5. PSUs
     for dom in _PSU_DOMAINS:
-        key = dom.split(".")[0]
+        key = dom.replace("www.", "").split(".")[0]
+        if key == "hslvizag":
+            key = "hsl"
         domains[key] = {
             "name": f"{key.upper()} (Central PSU)",
-            "url": f"https://www.{dom}"
+            "url": f"https://{dom}"
         }
 
     # 6. State PSUs (rtc, transco, genco)
@@ -878,10 +986,10 @@ def generate_domains():
 
     # 7. Banks
     for dom in _BANK_DOMAINS:
-        key = dom.split(".")[0]
+        key = dom.replace("www.", "").split(".")[0]
         domains[f"bank_{key}"] = {
             "name": f"{key.upper()} (Public Sector Banking/Insurance)",
-            "url": f"https://www.{dom}"
+            "url": f"https://{dom}"
         }
 
     # 8. Academic
@@ -894,10 +1002,10 @@ def generate_domains():
 
     # 9. Ministries & Labs
     for dom in _MINISTRIES_LABS:
-        key = dom.split(".")[0]
+        key = dom.replace("www.", "").split(".")[0]
         domains[f"lab_{key}"] = {
             "name": f"{key.upper()} (Ministry/Research Lab)",
-            "url": f"https://www.{dom}"
+            "url": f"https://{dom}"
         }
 
     return domains
@@ -911,7 +1019,7 @@ _CAREER_LINKS_RE = re.compile(
 def resolve_career_url(homepage_url, session=None):
     """
     Fetches the domain homepage and dynamically resolves its career page URL.
-    Returns the resolved URL, falling back to homepage if none found.
+    Returns the resolved URL, falling back to homepage if none found or if dead.
     """
     if session is None:
         session = requests.Session()
@@ -923,7 +1031,14 @@ def resolve_career_url(homepage_url, session=None):
     except Exception:
         # Fall back to HTTP if HTTPS fails or DNS error
         if homepage_url.startswith("https://"):
-            return resolve_career_url(homepage_url.replace("https://", "http://"), session)
+            http_url = homepage_url.replace("https://", "http://")
+            try:
+                # Only use HTTP if we can successfully establish a connection to it
+                r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=5, verify=False)
+                if r_http.status_code == 200:
+                    return resolve_career_url(http_url, session)
+            except Exception:
+                pass
         return homepage_url
 
     soup = BeautifulSoup(r.text, "html.parser")
@@ -951,4 +1066,21 @@ def resolve_career_url(homepage_url, session=None):
             best_url = urljoin(homepage_url, href)
 
     # Dedup slash
-    return best_url.rstrip("/")
+    resolved_url = best_url.rstrip("/")
+
+    # Verification: If we resolved a different URL than the homepage,
+    # verify it is alive (returns HTTP 2xx or 3xx). If not, fallback to homepage.
+    if resolved_url != homepage_url:
+        try:
+            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=5, verify=False)
+            status = head_r.status_code
+            if status >= 400:
+                # Some servers return 405 Method Not Allowed or 403 on HEAD, check with GET
+                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=5, verify=False, stream=True)
+                status = get_r.status_code
+            if status >= 400:
+                return homepage_url
+        except Exception:
+            return homepage_url
+
+    return resolved_url
