@@ -959,6 +959,36 @@ def generate_domains():
         key = dom.replace("www.", "").split(".")[0]
         if key == "hslvizag":
             key = "hsl"
+        elif key == "coalindia":
+            key = "coal_india"
+        elif key == "oil-india":
+            key = "oil"
+        elif key == "nalcoindia":
+            key = "nalco"
+        elif key == "mazagondock":
+            key = "mdl"
+        elif key == "powergrid":
+            key = "pgcil"
+        elif key == "bharatpetroleum":
+            key = "bpcl"
+        elif key == "pfcindia":
+            key = "pfc"
+        elif key == "recl":
+            key = "rec"
+        elif key == "itiltd":
+            key = "iti"
+        elif key == "celindia":
+            key = "cel"
+        elif key == "nhpcindia":
+            key = "nhpc"
+        elif key == "grid-india":
+            key = "grid_india"
+        elif key == "hindustanpetroleum":
+            key = "hpcl"
+        elif key == "concorindia":
+            key = "concor"
+        elif key == "engineersindia":
+            key = "eil"
         domains[key] = {
             "name": f"{key.upper()} (Central PSU)",
             "url": f"https://{dom}"
@@ -987,7 +1017,11 @@ def generate_domains():
     # 7. Banks
     for dom in _BANK_DOMAINS:
         key = dom.replace("www.", "").split(".")[0]
-        domains[f"bank_{key}"] = {
+        if key in ("sbi", "nabard", "nhb", "ibps", "sebi", "sidbi", "rbi"):
+            final_key = key
+        else:
+            final_key = f"bank_{key}"
+        domains[final_key] = {
             "name": f"{key.upper()} (Public Sector Banking/Insurance)",
             "url": f"https://{dom}"
         }
@@ -1003,7 +1037,11 @@ def generate_domains():
     # 9. Ministries & Labs
     for dom in _MINISTRIES_LABS:
         key = dom.replace("www.", "").split(".")[0]
-        domains[f"lab_{key}"] = {
+        if key in ("isro", "drdo", "barc"):
+            final_key = key
+        else:
+            final_key = f"lab_{key}"
+        domains[final_key] = {
             "name": f"{key.upper()} (Ministry/Research Lab)",
             "url": f"https://{dom}"
         }
@@ -1024,30 +1062,56 @@ def resolve_career_url(homepage_url, session=None):
     if session is None:
         session = requests.Session()
 
-    try:
-        r = session.get(homepage_url, headers=DEFAULT_HEADERS, timeout=10, verify=False)
-        if r.status_code != 200:
-            return homepage_url
-    except Exception:
-        # Fall back to HTTP if HTTPS fails or DNS error
-        if homepage_url.startswith("https://"):
-            http_url = homepage_url.replace("https://", "http://")
-            try:
-                # Only use HTTP if we can successfully establish a connection to it
-                r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=5, verify=False)
-                if r_http.status_code == 200:
-                    return resolve_career_url(http_url, session)
-            except Exception:
-                pass
-        return homepage_url
+    parsed = urlparse(homepage_url)
+    host = parsed.netloc
+    
+    # Dynamic DNS probing for district portals that might have migrated
+    candidates = [homepage_url]
+    if host.endswith(".nic.in") and not host.startswith("www."):
+        dist = host.split(".")[0]
+        candidates.append(f"{parsed.scheme}://www.{host}")
+        candidates.append(f"{parsed.scheme}://{dist}.gov.in")
+        candidates.append(f"{parsed.scheme}://www.{dist}.gov.in")
+        # Try state-specific subdomains
+        for state in ("odisha", "ap", "telangana", "rajasthan", "maharashtra", "mp", "up", "punjab", "gujarat", "bihar", "westbengal", "wb", "kerala", "haryana", "karnataka"):
+            candidates.append(f"{parsed.scheme}://{dist}.{state}.gov.in")
+            candidates.append(f"{parsed.scheme}://{dist}.{state}.nic.in")
 
-    soup = BeautifulSoup(r.text, "html.parser")
+    for url in candidates:
+        try:
+            r = session.get(url, headers=DEFAULT_HEADERS, timeout=4, verify=False)
+            if r.status_code == 200:
+                resolved = _extract_career_link(url, r.text, session)
+                if resolved:
+                    return resolved
+        except Exception:
+            if url.startswith("https://"):
+                http_url = url.replace("https://", "http://")
+                try:
+                    r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=3, verify=False)
+                    if r_http.status_code == 200:
+                        resolved = _extract_career_link(http_url, r_http.text, session)
+                        if resolved:
+                            return resolved
+                except Exception:
+                    pass
+
+    return homepage_url
+
+def _extract_career_link(homepage_url, html_text, session):
+    """Parses HTML to find the best career link, avoiding direct file links."""
+    soup = BeautifulSoup(html_text, "html.parser")
     best_url = homepage_url
     best_score = 0
 
     for a in soup.find_all("a", href=True):
         href = a["href"].strip()
-        if not href or href.startswith("javascript:") or href == "#":
+        if not href or href.startswith("javascript:") or href.startswith("mailto:") or href == "#":
+            continue
+
+        # Skip links pointing directly to PDF, doc, image or zip files
+        href_lower = href.lower()
+        if any(ext in href_lower for ext in [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".zip", ".png", ".jpg", ".jpeg"]):
             continue
 
         text = a.get_text().strip()
@@ -1069,18 +1133,23 @@ def resolve_career_url(homepage_url, session=None):
     resolved_url = best_url.rstrip("/")
 
     # Verification: If we resolved a different URL than the homepage,
-    # verify it is alive (returns HTTP 2xx or 3xx). If not, fallback to homepage.
+    # verify it is alive (returns HTTP 2xx or 3xx) and is an HTML document.
     if resolved_url != homepage_url:
         try:
-            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=5, verify=False)
+            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False)
             status = head_r.status_code
+            content_type = head_r.headers.get("Content-Type", "").lower()
             if status >= 400:
                 # Some servers return 405 Method Not Allowed or 403 on HEAD, check with GET
-                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=5, verify=False, stream=True)
+                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, stream=True)
                 status = get_r.status_code
-            if status >= 400:
+                content_type = get_r.headers.get("Content-Type", "").lower()
+            
+            # If the link doesn't exist or is not HTML (e.g. is a direct PDF download), reject it
+            if status >= 400 or ("html" not in content_type and content_type):
                 return homepage_url
         except Exception:
             return homepage_url
 
     return resolved_url
+

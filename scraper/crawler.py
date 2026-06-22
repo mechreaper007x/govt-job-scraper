@@ -373,15 +373,37 @@ class GovJobCrawler:
                 r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=15)
                 r.raise_for_status()
 
-                if key in ("barc", "nic"):
+                content_type = r.headers.get("Content-Type", "").lower()
+                
+                # Check for PDF response directly on the landing page URL
+                if "application/pdf" in content_type or url.lower().endswith(".pdf"):
+                    filename = url.split("/")[-1].split("?")[0] or "document.pdf"
+                    title = filename.replace("_", " ").replace("-", " ").replace(".pdf", "").title()
+                    if not title or len(title) < 5:
+                        title = f"{org_name} Job Notification"
+                    postings = [{"title": title, "link": url, "date": ""}]
+                # Check for other binary file types
+                elif any(ext in content_type or url.lower().endswith(ext) for ext in (".docx", ".doc", ".xls", ".xlsx", ".zip", ".png", ".jpg", ".jpeg")):
+                    filename = url.split("/")[-1].split("?")[0] or "document"
+                    title = filename.replace("_", " ").replace("-", " ").title()
+                    postings = [{"title": f"{org_name} Notification: {title}", "link": url, "date": ""}]
+                elif key in ("barc", "nic"):
                     content = r.content
                     postings = parser_fn(content)
                 else:
                     from scraper.adaptive_parser import parse_adaptive
-                    postings = parse_adaptive(r.text, base_url=url)
+                    try:
+                        postings = parse_adaptive(r.text, base_url=url)
+                    except Exception as e:
+                        self._log(f"WARNING: parse_adaptive failed on {url}: {e}")
+                        postings = []
+                        
                     # Fallback to legacy custom parser if adaptive found nothing
                     if not postings and parser_fn:
-                        postings = parser_fn(r.text)
+                        try:
+                            postings = parser_fn(r.text)
+                        except Exception as e:
+                            self._log(f"WARNING: parser_fn failed on {url}: {e}")
 
             # ── Filter by relevance (with per-org context + URL awareness) ─
             annotate(postings, org_key=key, session=self.session)
