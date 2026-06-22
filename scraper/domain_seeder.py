@@ -9,6 +9,8 @@ PSU, and banking domains, and provides dynamic resolution of career pages.
 import time
 import requests
 import re
+import socket
+import threading
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from scraper.config import DEFAULT_HEADERS
@@ -204,7 +206,7 @@ STATE_RTC_DOMAINS = {
     "gj": "gsrtc.in",
     "hr": "hartrans.gov.in",
     "hp": "hrtchp.com",
-    "jk": "jkrtc.co.in",
+    "jk": "jksrtc.co.in",
     "jh": "jharkhand.gov.in",
     "ka": "ksrtc.in",
     "kl": "keralartc.com",
@@ -288,7 +290,6 @@ WORKING_DEPTS = {
     "agriculture.mizoram.gov.in",
     "agriculture.nagaland.gov.in",
     "agriculture.rajasthan.gov.in",
-    "agriculture.sikkim.gov.in",
     "agriculture.telangana.gov.in",
     "agriculture.uk.gov.in",
     "agriculture.up.gov.in",
@@ -418,7 +419,6 @@ WORKING_DEPTS = {
     "health.odisha.gov.in",
     "health.punjab.gov.in",
     "health.rajasthan.gov.in",
-    "health.sikkim.gov.in",
     "health.telangana.gov.in",
     "health.tripura.gov.in",
     "health.uk.gov.in",
@@ -428,7 +428,6 @@ WORKING_DEPTS = {
     "highereducation.mizoram.gov.in",
     "highereducation.mp.gov.in",
     "highereducation.nagaland.gov.in",
-    "highereducation.sikkim.gov.in",
     "highereducation.tripura.gov.in",
     "home.assam.gov.in",
     "home.bihar.gov.in",
@@ -497,7 +496,6 @@ WORKING_DEPTS = {
     "law.telangana.gov.in",
     "law.tripura.gov.in",
     "law.wb.gov.in",
-    "planning.ap.gov.in",
     "planning.gujarat.gov.in",
     "planning.hp.gov.in",
     "planning.karnataka.gov.in",
@@ -621,95 +619,137 @@ WORKING_DEPTS = {
     "wrd.maharashtra.gov.in",
     "wrd.mizoram.gov.in",
     "wrd.mp.gov.in",
-    "wrd.nagaland.gov.in",
+"wrd.nagaland.gov.in",
     "wrd.punjab.gov.in",
     "wrd.tn.gov.in",
 }
 
-_DISTRICTS = [
-    # UP
-    "lucknow", "kanpur", "varanasi", "allahabad", "agra", "meerut", "ghaziabad", "bareilly", "aligarh", "moradabad", 
-    "saharanpur", "gorakhpur", "jhansi", "muzaffarnagar", "mathura", "ayodhya", "mirzapur", "firozabad", "raebareli", 
-    "sitapur", "hardoi", "lakhimpur", "barabanki", "unnao", "sultanpur", "amethi", "bahraich", "shravasti", "balrampur", 
-    "gonda", "basti", "amroha", "bijnor", "rampur", "sambhal", "pilibhit", "shahjahanpur", "kanpurdehat", "farrukhabad", 
-    "kannauj", "etawah", "auraiya", "jalaun", "hamirpur", "mahoba", "banda", "chitrakoot", "fatehpur", "pratapgarh", 
-    "kaushambi", "jaunpur", "ghazipur", "chandauli", "ballia", "mau", "deoria", "kushinagar", "maharajganj", "bhadohi", 
-    "sonbhadra", "lalitpur", "hapur", "shamli", "baghpat", "bulandshahr", "kasganj", "hathras", "etah", "mainpuri", "azamgarh",
-    # Maharashtra
-    "mumbai", "thane", "pune", "nagpur", "nashik", "aurangabad", "solapur", "amravati", "kolhapur", "sangli", "satara", 
-    "jalgaon", "dhule", "chandrapur", "latur", "akola", "parbhani", "buldhana", "yavatmal", "wardha", "bhandara", "gondia", 
-    "gadchiroli", "hingoli", "osmanabad", "beed", "nandurbar", "ratnagiri", "sindhudurg", "raigad", "palghar", "nanded", 
-    "jalna", "washim",
-    # Bihar
-    "patna", "gaya", "muzaffarpur", "bhagalpur", "darbhanga", "purnia", "arrah", "begusarai", "katihar", "munger", 
-    "chhapra", "saharsa", "sasaram", "hajipur", "siwan", "motihari", "bettiah", "jehanabad", "nawada", "nalanda", 
-    "buxar", "rohtas", "bhojpur", "vaishali", "saran", "samastipur", "madhubani", "sitamarhi", "sheohar", "araria", 
-    "kishanganj", "supaul", "madhepura", "khagaria", "jamui", "lakhisarai", "sheikhpura", "banka", "arwal",
-    # Gujarat
-    "ahmedabad", "surat", "vadodara", "rajkot", "bhavnagar", "jamnagar", "junagadh", "gandhinagar", "nadiad", "morbi", 
-    "surendranagar", "gandhidham", "veraval", "navsari", "bharuch", "anand", "porbandar", "godhra", "patan", "dahod", 
-    "amreli", "valsad", "vapi", "mehsana", "palanpur", "vyara", "ahwa", "himatnagar", "modasa", "chhotaudepur", "botad",
-    # Rajasthan
-    "jaipur", "jodhpur", "kota", "bikaner", "ajmer", "udaipur", "bhilwara", "alwar", "sikar", "sriganganagar", "pali", 
-    "hanumangarh", "tonk", "baran", "bundi", "churu", "dholpur", "jaisalmer", "jalore", "jhalawar", "jhunjhunu", "karauli", 
-    "nagaur", "pratapgarh", "rajsamand", "sawaimadhopur", "sirohi",
-    # MP
-    "bhopal", "indore", "jabalpur", "gwalior", "ujjain", "sagar", "dewas", "satna", "ratlam", "rewa", "murwara", "singrauli", 
-    "burhanpur", "khandwa", "bhind", "chhindwara", "guna", "shivpuri", "vidisha", "chhatarpur", "damoh", "mandsaur", 
-    "khargone", "neemuch", "hoshangabad", "itarsi", "sehore", "betul", "seoni", "balaghat", "mandla", "dindori", "shahdol", 
-    "anuppur", "umaria", "sidhi", "jhabua", "alirajpur", "dhar", "barwani", "shajapur", "agar-malwa", "rajgarh", "sheopur", 
-    "morena", "datia", "tikamgarh", "niwari", "panna", "katni", "narsinghpur", "harda", "raisen",
-    # Andhra
-    "visakhapatnam", "vijayawada", "guntur", "nellore", "kurnool", "kakinada", "kadapa", "tirupati", "anantapur", 
-    "eluru", "ongole", "nandyal", "machilipatnam", "adoni", "tenali", "proddatur", "chittoor", "hindupur", "bhimavaram", 
-    "madanapalle", "guntakal", "srikakulam", "vizianagaram", "amalapuram", "parvathipuram",
-    # Telangana
-    "hyderabad", "warangal", "nizamabad", "karimnagar", "khammam", "ramagundam", "mahabubnagar", "nalgonda", "adilabad", 
-    "suryapet", "miryalaguda", "jagtial", "mancherial", "kothagudem", "siricilla", "kamareddy", "siddipet", "wanaparthy", 
-    "gadwal", "narayanpet", "bhupalpally", "mulugu",
-    # Tamil Nadu
-    "chennai", "coimbatore", "madurai", "tiruchirappalli", "tiruppur", "salem", "erode", "vellore", "thoothukudi", 
-    "dindigul", "thanjavur", "ranipet", "sivakasi", "karur", "udagamandalam", "nagercoil", "kanchipuram", "tiruvannamalai", 
-    "cuddalore", "dharmapuri", "krishnagiri", "namakkal", "nilgiris", "perambalur", "pudukkottai", "ramanathapuram", 
-    "sivaganga", "theni", "thiruvallur", "thiruvarur", "tirunelveli", "tenkasi", "tirupathur", "villupuram", "virudhunagar",
-    # Karnataka
-    "bengaluru", "mysuru", "hubballi", "dharwad", "mangaluru", "belagavi", "kalaburagi", "davanagere", "ballari", 
-    "vijayapura", "shivamogga", "tumakuru", "raichur", "bidar", "hospet", "hassan", "gadag", "bagalkot", "kolar", 
-    "mandya", "chikmagalur", "chitradurga", "haveri", "yadgir", "ramanagara", "chamarajanagar", "udupi", "kodagu", 
-    "karwar", "koppal", "chikkaballapur",
-    # Kerala
-    "thiruvananthapuram", "kochi", "kozhikode", "kollam", "thrissur", "alappuzha", "palakkad", "kannur", "kottayam", 
-    "kasaragod", "pathanamthitta", "idukki", "wayanad", "malappuram",
-    # West Bengal
-    "kolkata", "howrah", "darjeeling", "kalimpong", "jalpaiguri", "alipurduar", "coochbehar", "malda", "murshidabad", 
-    "nadia", "purulia", "bankura", "birbhum", "hooghly", "midnapore", "kharagpur", "asansol", "durgapur", "siliguri", 
-    "bardhaman", "jhargram", "purvamedinipur", "paschimmedinipur",
-    # Punjab
-    "ludhiana", "amritsar", "jalandhar", "patiala", "bathinda", "mohali", "pathankot", "hoshiarpur", "batala", "moga", 
-    "phagwara", "firozpur", "muktsar", "barnala", "faridkot", "gurdaspur", "kapurthala", "mansa", "rupnagar", "sangrur", 
-    "tarntaran", "fazilka", "malerkotla",
-    # Haryana
-    "gurugram", "faridabad", "panipat", "ambala", "yamunanagar", "rohtak", "hisar", "karnal", "sonipat", "panchkula", 
-    "sirsa", "bhiwani", "bahadurgarh", "jind", "kaithal", "rewari", "palwal", "nuh", "fatehabad", "mahendragarh", 
-    "charkhidadri", "jhajjar",
-    # Odisha
-    "khordha", "cuttack", "ganjam", "bhadrak", "balasore", "mayurbhanj", "puri", "sambalpur", "rourkela", "sundargarh", 
-    "bolangir", "koraput", "rayagada", "kalahandi", "nawarangpur", "malkangiri", "kendrapada", "jajpur", "jagatsinghpur", 
-    "dhenkanal", "angul", "keonjhar", "nayagarh", "boudh", "subarnapur", "bargarh", "jharsuguda", "deogarh", "nuapada", "gajapati",
-    # J&K and North-East
-    "anantnag", "bandipora", "baramulla", "budgam", "doda", "ganderbal", "kathua", "kishtwar", "kulgam", "kupwara", 
-    "poonch", "pulwama", "ramban", "reasi", "samba", "shopian", "udhampur", "northgoa", "southgoa", "dhalai", "gomati", 
-    "khowai", "northtripura", "sepahijala", "southtripura", "unakoti", "westtripura", "bishnupur", "chandel", "churachandpur", 
-    "imphaleast", "imphalwest", "jiribam", "kakching", "kamjong", "kangpokpi", "noney", "pherzawl", "senapati", "tamenglong", 
-    "tengnoupal", "thoubal", "ukhrul", "eastgarohills", "eastjaintiahills", "eastkhasihills", "northgarohills", "ribhoi", 
-    "southgarohills", "southwestgarohills", "southwestkhasihills", "westgarohills", "westjaintiahills", "westkhasihills", 
-    "aizawl", "champhai", "kolasib", "lawngtlai", "lunglei", "mamit", "saiha", "serchhip", "hnahthial", "khawzawl", "saitual",
-    "chumuoukedima", "dimapur", "kiphire", "kohima", "longleng", "mokokchung", "mon", "niuland", "noklak", "peren", "phek", 
-    "shamator", "tseminyu", "tuensang", "wokha", "zunheboto", "gangtok", "gyalshing", "mangan", "namchi", "soreng", "pakyong",
-    "tawang", "westkameng", "eastkameng", "papumpare", "kurungkumey", "kraadaadi", "lowersubansiri", "uppersubansiri", 
-    "westsiang", "eastsiang", "siang", "uppersiang", "lowersiang", "lowerdibangvalley", "dibangvalley", "anjaw", "lohit", 
-    "namsai", "changlang", "tirap", "longding", "kamle", "leparada"
-]
+_DISTRICTS_BY_STATE = {
+    "up": [
+        "lucknow", "kanpur", "varanasi", "allahabad", "agra", "meerut", "ghaziabad", "bareilly", "aligarh", "moradabad", 
+        "saharanpur", "gorakhpur", "jhansi", "muzaffarnagar", "mathura", "ayodhya", "mirzapur", "firozabad", "raebareli", 
+        "sitapur", "hardoi", "lakhimpur", "barabanki", "unnao", "sultanpur", "amethi", "bahraich", "shravasti", "balrampur", 
+        "gonda", "basti", "amroha", "bijnor", "rampur", "sambhal", "pilibhit", "shahjahanpur", "kanpurdehat", "farrukhabad", 
+        "kannauj", "etawah", "auraiya", "jalaun", "hamirpur", "mahoba", "banda", "chitrakoot", "fatehpur", "pratapgarh", 
+        "kaushambi", "jaunpur", "ghazipur", "chandauli", "ballia", "mau", "deoria", "kushinagar", "maharajganj", "bhadohi", 
+        "sonbhadra", "lalitpur", "hapur", "shamli", "baghpat", "bulandshahr", "kasganj", "hathras", "etah", "mainpuri", "azamgarh"
+    ],
+    "mh": [
+        "mumbai", "thane", "pune", "nagpur", "nashik", "aurangabad", "solapur", "amravati", "kolhapur", "sangli", "satara", 
+        "jalgaon", "dhule", "chandrapur", "latur", "akola", "parbhani", "buldhana", "yavatmal", "wardha", "bhandara", "gondia", 
+        "gadchiroli", "hingoli", "osmanabad", "beed", "nandurbar", "ratnagiri", "sindhudurg", "raigad", "palghar", "nanded", 
+        "jalna", "washim"
+    ],
+    "br": [
+        "patna", "gaya", "muzaffarpur", "bhagalpur", "darbhanga", "purnia", "arrah", "begusarai", "katihar", "munger", 
+        "chhapra", "saharsa", "sasaram", "hajipur", "siwan", "motihari", "bettiah", "jehanabad", "nawada", "nalanda", 
+        "buxar", "rohtas", "bhojpur", "vaishali", "saran", "samastipur", "madhubani", "sitamarhi", "sheohar", "araria", 
+        "kishanganj", "supaul", "madhepura", "khagaria", "jamui", "lakhisarai", "sheikhpura", "banka", "arwal"
+    ],
+    "gj": [
+        "ahmedabad", "surat", "vadodara", "rajkot", "bhavnagar", "jamnagar", "junagadh", "gandhinagar", "nadiad", "morbi", 
+        "surendranagar", "gandhidham", "veraval", "navsari", "bharuch", "anand", "porbandar", "godhra", "patan", "dahod", 
+        "amreli", "valsad", "vapi", "mehsana", "palanpur", "vyara", "ahwa", "himatnagar", "modasa", "chhotaudepur", "botad"
+    ],
+    "rj": [
+        "jaipur", "jodhpur", "kota", "bikaner", "ajmer", "udaipur", "bhilwara", "alwar", "sikar", "sriganganagar", "pali", 
+        "hanumangarh", "tonk", "baran", "bundi", "churu", "dholpur", "jaisalmer", "jalore", "jhalawar", "jhunjhunu", "karauli", 
+        "nagaur", "pratapgarh", "rajsamand", "sawaimadhopur", "sirohi"
+    ],
+    "mp": [
+        "bhopal", "indore", "jabalpur", "gwalior", "ujjain", "sagar", "dewas", "satna", "ratlam", "rewa", "murwara", "singrauli", 
+        "burhanpur", "khandwa", "bhind", "chhindwara", "guna", "shivpuri", "vidisha", "chhatarpur", "damoh", "mandsaur", 
+        "khargone", "neemuch", "hoshangabad", "itarsi", "sehore", "betul", "seoni", "balaghat", "mandla", "dindori", "shahdol", 
+        "anuppur", "umaria", "sidhi", "jhabua", "alirajpur", "dhar", "barwani", "shajapur", "agar-malwa", "rajgarh", "sheopur", 
+        "morena", "datia", "tikamgarh", "niwari", "panna", "katni", "narsinghpur", "harda", "raisen"
+    ],
+    "ap": [
+        "visakhapatnam", "vijayawada", "guntur", "nellore", "kurnool", "kakinada", "kadapa", "tirupati", "anantapur", 
+        "eluru", "ongole", "nandyal", "machilipatnam", "adoni", "tenali", "proddatur", "chittoor", "hindupur", "bhimavaram", 
+        "madanapalle", "guntakal", "srikakulam", "vizianagaram", "amalapuram", "parvathipuram"
+    ],
+    "tg": [
+        "hyderabad", "warangal", "nizamabad", "karimnagar", "khammam", "ramagundam", "mahabubnagar", "nalgonda", "adilabad", 
+        "suryapet", "miryalaguda", "jagtial", "mancherial", "kothagudem", "siricilla", "kamareddy", "siddipet", "wanaparthy", 
+        "gadwal", "narayanpet", "bhupalpally", "mulugu"
+    ],
+    "tn": [
+        "chennai", "coimbatore", "madurai", "tiruchirappalli", "tiruppur", "salem", "erode", "vellore", "thoothukudi", 
+        "dindigul", "thanjavur", "ranipet", "sivakasi", "karur", "udagamandalam", "nagercoil", "kanchipuram", "tiruvannamalai", 
+        "cuddalore", "dharmapuri", "krishnagiri", "namakkal", "nilgiris", "perambalur", "pudukkottai", "ramanathapuram", 
+        "sivaganga", "theni", "thiruvallur", "thiruvarur", "tirunelveli", "tenkasi", "tirupathur", "villupuram", "virudhunagar"
+    ],
+    "ka": [
+        "bengaluru", "mysuru", "hubballi", "dharwad", "mangaluru", "belagavi", "kalaburagi", "davanagere", "ballari", 
+        "vijayapura", "shivamogga", "tumakuru", "raichur", "bidar", "hospet", "hassan", "gadag", "bagalkot", "kolar", 
+        "mandya", "chikmagalur", "chitradurga", "haveri", "yadgir", "ramanagara", "chamarajanagar", "udupi", "kodagu", 
+        "karwar", "koppal", "chikkaballapur"
+    ],
+    "kl": [
+        "thiruvananthapuram", "kochi", "kozhikode", "kollam", "thrissur", "alappuzha", "palakkad", "kannur", "kottayam", 
+        "kasaragod", "pathanamthitta", "idukki", "wayanad", "malappuram"
+    ],
+    "wb": [
+        "kolkata", "howrah", "darjeeling", "kalimpong", "jalpaiguri", "alipurduar", "coochbehar", "malda", "murshidabad", 
+        "nadia", "purulia", "bankura", "birbhum", "hooghly", "midnapore", "kharagpur", "asansol", "durgapur", "siliguri", 
+        "bardhaman", "jhargram", "purvamedinipur", "paschimmedinipur"
+    ],
+    "pb": [
+        "ludhiana", "amritsar", "jalandhar", "patiala", "bathinda", "mohali", "pathankot", "hoshiarpur", "batala", "moga", 
+        "phagwara", "firozpur", "muktsar", "barnala", "faridkot", "gurdaspur", "kapurthala", "mansa", "rupnagar", "sangrur", 
+        "tarntaran", "fazilka", "malerkotla"
+    ],
+    "hr": [
+        "gurugram", "faridabad", "panipat", "ambala", "yamunanagar", "rohtak", "hisar", "karnal", "sonipat", "panchkula", 
+        "sirsa", "bhiwani", "bahadurgarh", "jind", "kaithal", "rewari", "palwal", "nuh", "fatehabad", "mahendragarh", 
+        "charkhidadri", "jhajjar"
+    ],
+    "od": [
+        "khordha", "cuttack", "ganjam", "bhadrak", "balasore", "mayurbhanj", "puri", "sambalpur", "rourkela", "sundargarh", 
+        "bolangir", "koraput", "rayagada", "kalahandi", "nawarangpur", "malkangiri", "kendrapada", "jajpur", "jagatsinghpur", 
+        "dhenkanal", "angul", "keonjhar", "nayagarh", "boudh", "subarnapur", "bargarh", "jharsuguda", "deogarh", "nuapada", "gajapati"
+    ],
+    "jk": [
+        "anantnag", "bandipora", "baramulla", "budgam", "doda", "ganderbal", "kathua", "kishtwar", "kulgam", "kupwara", 
+        "poonch", "pulwama", "ramban", "reasi", "samba", "shopian", "udhampur"
+    ],
+    "ga": [
+        "northgoa", "southgoa"
+    ],
+    "tr": [
+        "dhalai", "gomati", "khowai", "northtripura", "sepahijala", "southtripura", "unakoti", "westtripura"
+    ],
+    "mn": [
+        "bishnupur", "chandel", "churachandpur", "imphaleast", "imphalwest", "jiribam", "kakching", "kamjong", "kangpokpi", 
+        "noney", "pherzawl", "senapati", "tamenglong", "tengnoupal", "thoubal", "ukhrul"
+    ],
+    "ml": [
+        "eastgarohills", "eastjaintiahills", "eastkhasihills", "northgarohills", "ribhoi", "southgarohills", 
+        "southwestgarohills", "southwestkhasihills", "westgarohills", "westjaintiahills", "westkhasihills"
+    ],
+    "mz": [
+        "aizawl", "champhai", "kolasib", "lawngtlai", "lunglei", "mamit", "saiha", "serchhip", "hnahthial", "khawzawl", "saitual"
+    ],
+    "nl": [
+        "chumuoukedima", "dimapur", "kiphire", "kohima", "longleng", "mokokchung", "mon", "niuland", "noklak", "peren", "phek", 
+        "shamator", "tseminyu", "tuensang", "wokha", "zunheboto"
+    ],
+    "sk": [
+        "gangtok", "gyalshing", "mangan", "namchi", "soreng", "pakyong"
+    ],
+    "ar": [
+        "tawang", "westkameng", "eastkameng", "papumpare", "kurungkumey", "kraadaadi", "lowersubansiri", "uppersubansiri", 
+        "westsiang", "eastsiang", "siang", "uppersiang", "lowersiang", "lowerdibangvalley", "dibangvalley", "anjaw", "lohit", 
+        "namsai", "changlang", "tirap", "longding", "kamle", "leparada"
+    ]
+}
+
+_DISTRICTS = []
+DISTRICT_TO_STATE = {}
+for state_code, dists in _DISTRICTS_BY_STATE.items():
+    for d in dists:
+        _DISTRICTS.append(d)
+        DISTRICT_TO_STATE[d] = state_code
 
 _MUNICIPALITIES = [
     "mcgm", "pmc", "nmmc", "kdmc", "mbmc", "vvcmc", "ulhasnagar", "bnmc", "smc_gj", "amc_gj", 
@@ -744,7 +784,7 @@ _BANK_DOMAINS = [
     "apgb.bank.in", "apgvbank.in", "agb.co.in", "aryavartbank-rrb.com", "bgvb.in", "brkgb.com",
     "cgbank.in", "karnatakagraminbank.com", "karnatakagrameenabank.com", "kgb.bank.in",
     "mpgb.bank.in", "meghalayaruralbank.bank.in", "mrb.bank.in", "www.nrb.bank.in",
-    "ogb.co.in", "pgb.org.in", "sgbrrb.org", "ubgb.in", "wbgb.bank.in",
+    "ogb.co.in", "pgb.org.in", "ggb.bank.in", "ubgb.in", "wbgb.bank.in",
     "prathamaupbank.com"
 ]
 
@@ -826,7 +866,7 @@ DISTRICT_OVERRIDES = {
     "bhimavaram": "westgodavari.ap.gov.in",
     "bolangir": "balangir.odisha.gov.in",
     "bulandshahr": "bulandshahar.nic.in",
-    "chamarajanagar": "chamarajanagar.nic.in",
+    "chamarajanagar": "chamrajnagar.nic.in",
     "chhapra": "saran.nic.in",
     "chikmagalur": "chikkamagaluru.nic.in",
     "chumuoukedima": "chumoukedima.nic.in",
@@ -839,8 +879,8 @@ DISTRICT_OVERRIDES = {
     "amalapuram": "eastgodavari.ap.gov.in",
     "alipurduar": "alipurduar.gov.in",
     "gajapati": "gajapati.odisha.gov.in",
-    "gandhidham": "kutch.gov.in",
-    "gangtok": "gangtok.nic.in",
+    "gandhidham": "kachchh.nic.in",
+    "gangtok": "gangtokdistrict.nic.in",
     "ganjam": "ganjam.nic.in",
     "godhra": "panchmahal.nic.in",
     "guntakal": "ananthapuramu.ap.gov.in",
@@ -878,7 +918,25 @@ DISTRICT_OVERRIDES = {
     "cuttack": "cuttack.odisha.gov.in",
     "dhenkanal": "dhenkanal.odisha.gov.in",
     "eastgarohills": "eastgarohills.gov.in",
-    "firozpur": "ferozepur.nic.in"
+    "firozpur": "ferozepur.nic.in",
+    "kolkata": "wb.gov.in",
+    "kendrapada": "kendrapara.odisha.gov.in",
+    "keonjhar": "kendujhar.odisha.gov.in",
+    "kanchipuram": "kancheepuram.nic.in",
+    "karwar": "uttarakannada.nic.in",
+    "kasaragod": "kasargod.nic.in",
+    "kochi": "ernakulam.nic.in",
+    "bardhaman": "purbabardhaman.nic.in",
+    "kharagpur": "paschimmedinipur.gov.in",
+    "midnapore": "paschimmedinipur.gov.in",
+    "purvamedinipur": "purbamedinipur.gov.in",
+    "siliguri": "darjeeling.gov.in",
+    "siricilla": "rajannasircilla.telangana.gov.in",
+    "sivakasi": "virudhunagar.nic.in",
+    "tenali": "guntur.ap.gov.in",
+    "thiruvallur": "tiruvallur.nic.in",
+    "thiruvananthapuram": "trivandrum.nic.in",
+    "thiruvarur": "tiruvarur.nic.in"
 }
 
 def generate_domains():
@@ -889,7 +947,15 @@ def generate_domains():
     # Department overrides for non-standard routing
     dept_overrides = {
         "dl_education": "http://www.edudel.nic.in",
-        "up_rural": "https://ruraldevp.up.gov.in/"
+        "up_rural": "https://ruraldevp.up.gov.in/",
+        "ap_health": "https://hmfw.ap.gov.in/",
+        "ap_planning": "https://ap.gov.in/",
+        "as_home": "https://homeandpolitical.assam.gov.in/",
+        "tg_agriculture": "https://agri.telangana.gov.in/",
+        "tn_rural": "https://www.tnrd.tn.gov.in/",
+        "uk_disaster": "https://usdma.uk.gov.in/",
+        "up_energy": "https://www.uppcl.org/",
+        "up_revenue": "https://bor.up.nic.in/"
     }
 
     domains = {}
@@ -1054,6 +1120,37 @@ _CAREER_LINKS_RE = re.compile(
     re.IGNORECASE
 )
 
+STATE_DISTRICT_SUFFIXES = {
+    "od": ["odisha.gov.in", "odisha.nic.in"],
+    "ap": ["ap.gov.in", "ap.nic.in"],
+    "tg": ["telangana.gov.in", "telangana.nic.in"],
+    "rj": ["rajasthan.gov.in", "rajasthan.nic.in"],
+    "mh": ["maharashtra.gov.in", "maharashtra.nic.in"],
+    "mp": ["mp.gov.in", "mp.nic.in"],
+    "up": ["up.gov.in", "up.nic.in"],
+    "pb": ["punjab.gov.in", "punjab.nic.in"],
+    "gj": ["gujarat.gov.in", "gujarat.nic.in"],
+    "br": ["bihar.gov.in", "bihar.nic.in"],
+    "wb": ["wb.gov.in", "westbengal.gov.in", "wb.nic.in"],
+    "kl": ["kerala.gov.in", "kerala.nic.in"],
+    "hr": ["haryana.gov.in", "haryana.nic.in"],
+    "ka": ["karnataka.gov.in", "karnataka.nic.in"],
+}
+
+def _dns_resolves(url):
+    """Perform a fast local DNS check for the given URL's domain name."""
+    try:
+        parsed = urlparse(url)
+        host = parsed.netloc
+        if not host:
+            return False
+        if ":" in host:
+            host = host.split(":")[0]
+        socket.gethostbyname(host)
+        return True
+    except Exception:
+        return False
+
 def resolve_career_url(homepage_url, session=None):
     """
     Fetches the domain homepage and dynamically resolves its career page URL.
@@ -1061,6 +1158,16 @@ def resolve_career_url(homepage_url, session=None):
     """
     if session is None:
         session = requests.Session()
+
+    # Initialize thread-safe career URL cache on session if not present
+    if not hasattr(session, "_career_url_cache"):
+        session._career_url_cache = {}
+    if not hasattr(session, "_cache_lock"):
+        session._cache_lock = threading.Lock()
+
+    with session._cache_lock:
+        if homepage_url in session._career_url_cache:
+            return session._career_url_cache[homepage_url]
 
     parsed = urlparse(homepage_url)
     host = parsed.netloc
@@ -1072,31 +1179,51 @@ def resolve_career_url(homepage_url, session=None):
         candidates.append(f"{parsed.scheme}://www.{host}")
         candidates.append(f"{parsed.scheme}://{dist}.gov.in")
         candidates.append(f"{parsed.scheme}://www.{dist}.gov.in")
-        # Try state-specific subdomains
-        for state in ("odisha", "ap", "telangana", "rajasthan", "maharashtra", "mp", "up", "punjab", "gujarat", "bihar", "westbengal", "wb", "kerala", "haryana", "karnataka"):
-            candidates.append(f"{parsed.scheme}://{dist}.{state}.gov.in")
-            candidates.append(f"{parsed.scheme}://{dist}.{state}.nic.in")
+        
+        # State-aware candidate suffixes
+        state_code = DISTRICT_TO_STATE.get(dist)
+        if state_code:
+            suffixes = STATE_DISTRICT_SUFFIXES.get(state_code, [])
+            if not suffixes:
+                base_dom = STATE_DOMAINS.get(state_code)
+                suffixes = [base_dom] if base_dom else []
+                suffixes.extend([f"{state_code}.gov.in", f"{state_code}.nic.in"])
+            
+            for state in suffixes:
+                candidates.append(f"{parsed.scheme}://{dist}.{state}")
+                candidates.append(f"{parsed.scheme}://www.{dist}.{state}")
 
+    resolved_url = homepage_url
     for url in candidates:
+        # Fast DNS check to skip dead domains instantly
+        if not _dns_resolves(url):
+            continue
+
         try:
             r = session.get(url, headers=DEFAULT_HEADERS, timeout=4, verify=False)
             if r.status_code == 200:
                 resolved = _extract_career_link(url, r.text, session)
                 if resolved:
-                    return resolved
+                    resolved_url = resolved
+                    break
         except Exception:
             if url.startswith("https://"):
                 http_url = url.replace("https://", "http://")
-                try:
-                    r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=3, verify=False)
-                    if r_http.status_code == 200:
-                        resolved = _extract_career_link(http_url, r_http.text, session)
-                        if resolved:
-                            return resolved
-                except Exception:
-                    pass
+                if _dns_resolves(http_url):
+                    try:
+                        r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=3, verify=False)
+                        if r_http.status_code == 200:
+                            resolved = _extract_career_link(http_url, r_http.text, session)
+                            if resolved:
+                                resolved_url = resolved
+                                break
+                    except Exception:
+                        pass
 
-    return homepage_url
+    with session._cache_lock:
+        session._career_url_cache[homepage_url] = resolved_url
+
+    return resolved_url
 
 def _extract_career_link(homepage_url, html_text, session):
     """Parses HTML to find the best career link, avoiding direct file links."""
@@ -1136,12 +1263,12 @@ def _extract_career_link(homepage_url, html_text, session):
     # verify it is alive (returns HTTP 2xx or 3xx) and is an HTML document.
     if resolved_url != homepage_url:
         try:
-            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False)
+            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, allow_redirects=True)
             status = head_r.status_code
             content_type = head_r.headers.get("Content-Type", "").lower()
             if status >= 400:
                 # Some servers return 405 Method Not Allowed or 403 on HEAD, check with GET
-                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, stream=True)
+                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, stream=True, allow_redirects=True)
                 status = get_r.status_code
                 content_type = get_r.headers.get("Content-Type", "").lower()
             

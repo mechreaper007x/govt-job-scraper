@@ -383,6 +383,41 @@ ORGS_CONFIG = {
     "hssc": {
         "name": "HSSC (Haryana Staff Selection Commission)",
         "url": "https://www.hssc.gov.in/"
+    },
+    "bank_bankofindia": {
+        "name": "Bank of India",
+        "url": "https://www.bankofindia.co.in/Careers",
+        "special": "playwright"
+    },
+    "bank_pgb": {
+        "name": "Paschim Banga Gramin Bank",
+        "url": "https://www.pgb.org.in/recruitment.php",
+        "special": "playwright"
+    },
+    "iitgn": {
+        "name": "IIT Gandhinagar",
+        "url": "https://iitgn.ac.in/careers/staff",
+        "special": "playwright"
+    },
+    "jh_education": {
+        "name": "JH Education Department",
+        "url": "https://education.jharkhand.gov.in/",
+        "special": "playwright"
+    },
+    "tn_police": {
+        "name": "TN Police Department",
+        "url": "https://police.tn.gov.in/",
+        "special": "playwright"
+    },
+    "police_tn": {
+        "name": "TN Police Recruitment Portal",
+        "url": "https://www.tnusrb.tn.gov.in/",
+        "special": "playwright"
+    },
+    "vtu": {
+        "name": "VTU (Visvesvaraya Technological University)",
+        "url": "https://vtu.ac.in/en/category/administration-careers/",
+        "special": "playwright"
     }
 }
 

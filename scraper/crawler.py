@@ -212,14 +212,35 @@ class GovJobCrawler:
     @staticmethod
     def _create_session():
         """
-        Create a pre-configured requests.Session with the RobustGovAdapter.
-
-        Extension point: When curl_cffi or httpx-with-fingerprint is added,
-        this method can return a duck-typed session-like object that supports
-        .get(), .post(), .mount(), and .close().
+        Create a pre-configured requests.Session with the RobustGovAdapter
+        and attach a thread-safe caching layer for HTML GET responses.
         """
         session = requests.Session()
         session.mount("https://", RobustGovAdapter())
+        
+        # Thread-safe caching layer on the requests session
+        session._html_cache = {}
+        session._cache_lock = threading.Lock()
+        
+        orig_get = session.get
+        
+        def cached_get(url, *args, **kwargs):
+            is_cacheable = kwargs.get("stream") is not True
+            if not is_cacheable:
+                return orig_get(url, *args, **kwargs)
+                
+            with session._cache_lock:
+                if url in session._html_cache:
+                    return session._html_cache[url]
+                    
+            resp = orig_get(url, *args, **kwargs)
+            
+            if resp.status_code == 200:
+                with session._cache_lock:
+                    session._html_cache[url] = resp
+            return resp
+            
+        session.get = cached_get
         return session
 
     # ── Discovery phase ─────────────────────────────────────────────────────
