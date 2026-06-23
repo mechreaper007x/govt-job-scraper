@@ -44,10 +44,16 @@ scraper/diff.py
 
 # Other
 state.json
+*.json
+!coverage_report.json
 *.txt
 !requirements.txt
 *.html
-coverage_report.json
+*.pdf
 
 # Windows artifact (created by stdout redirection)
 nul
+_nul
+
+# IDE / Assistants
+.claude/
