@@ -28,8 +28,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Install Playwright browsers (Chromium)
-RUN playwright install chromium
+# Install Playwright dependencies as root
 RUN playwright install-deps
 
 # Hugging Face Spaces requires running as a non-root user
@@ -41,6 +40,9 @@ ENV HOME=/home/user \
 # Change working directory to the user's home and copy the app
 WORKDIR $HOME/app
 COPY --chown=user . $HOME/app
+
+# Install Playwright browsers (Chromium) as user so it installs to the user's home directory
+RUN playwright install chromium
 
 # Hugging Face Spaces exposes port 7860
 EXPOSE 7860
