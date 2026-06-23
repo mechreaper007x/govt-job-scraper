@@ -24,9 +24,10 @@ from datetime import datetime
 # Playwright is an optional dependency — only imported when SPA scraping is used.
 # This avoids forcing all users to install Playwright + Chromium.
 
-_playwright = None
-_browser = None
-_init_lock = threading.Lock()
+_thread_local = threading.local()
+_all_instances = []
+_instances_lock = threading.Lock()
+_atexit_registered = False
 
 # Compiled regex for blocking unnecessary resources (images, fonts)
 _BLOCKED_RESOURCES = re.compile(r"\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$")
@@ -34,58 +35,73 @@ _BLOCKED_RESOURCES = re.compile(r"\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$")
 # Compiled regex for RRB card/container detection
 _RRB_CARD_RE = re.compile(r'card|cen|notification|recruit|job|listing', re.I)
 
-# Stealth instance (reused across pages to avoid re-instantiation)
-_stealth = None
+# Stealth configuration is instantiated on the fly to remain thread-safe
 
 
 def _ensure_playwright():
-    """Lazy-import and initialize Playwright if not already done.
+    """Lazy-import and initialize Playwright per-thread if not already done.
 
-    Thread-safe: uses a double-checked locking pattern so concurrent
-    threads in ThreadPoolExecutor don't race on initialization.
+    Thread-safe storage ensures each concurrent thread gets its own Playwright
+    and browser instances, avoiding greenlet cross-thread switching errors.
     """
-    global _playwright, _browser
-    if _playwright is not None:
-        return _browser
-    with _init_lock:
-        if _playwright is not None:  # double-check after acquiring lock
-            return _browser
+    global _atexit_registered
+
+    # Check if this thread already has a browser and it is still connected
+    browser = getattr(_thread_local, "browser", None)
+    if browser is not None:
         try:
-            from playwright.sync_api import sync_playwright
-            _playwright = sync_playwright().start()
-            _browser = _playwright.chromium.launch(
-                headless=True,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--no-sandbox",
-                    "--disable-dev-shm-usage",
-                ],
-            )
-            atexit.register(close_playwright)
-        except ImportError:
-            raise ImportError(
-                "Playwright is required for SPA scraping. Install with:\n"
-                "  pip install playwright\n"
-                "  playwright install chromium"
-            )
-    return _browser
+            if browser.is_connected:
+                return browser
+        except Exception:
+            pass
+
+    # Initialize Playwright and Browser for the current thread
+    try:
+        from playwright.sync_api import sync_playwright
+        pw = sync_playwright().start()
+        browser = pw.chromium.launch(
+            headless=True,
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+            ],
+        )
+        _thread_local.playwright = pw
+        _thread_local.browser = browser
+
+        with _instances_lock:
+            _all_instances.append((pw, browser))
+            if not _atexit_registered:
+                atexit.register(close_playwright)
+                _atexit_registered = True
+
+        return browser
+    except ImportError:
+        raise ImportError(
+            "Playwright is required for SPA scraping. Install with:\n"
+            "  pip install playwright\n"
+            "  playwright install chromium"
+        )
 
 
 def close_playwright():
-    """Shut down Playwright and release resources. Call at program exit."""
-    global _playwright, _browser
-    if _browser:
-        try:
-            _browser.close()
-        except Exception:
-            pass
-        _browser = None
-    if _playwright:
-        try:
-            _playwright.stop()
-        except Exception:
-            pass
-        _playwright = None
+    """Shut down all Playwright and browser instances across all threads.
+
+    Call at program exit.
+    """
+    global _all_instances
+    with _instances_lock:
+        for pw, browser in _all_instances:
+            try:
+                browser.close()
+            except Exception:
+                pass
+            try:
+                pw.stop()
+            except Exception:
+                pass
+        _all_instances.clear()
 
 
 # ─── SPA Page Fetcher ────────────────────────────────────────────────────────
@@ -124,12 +140,8 @@ def fetch_spa_page(url, wait_selector=None, timeout_ms=30000, scroll=True):
         # Apply stealth patches to hide automation fingerprints
         try:
             from playwright_stealth import Stealth
-            global _stealth
-            if _stealth is None:
-                with _init_lock:
-                    if _stealth is None:
-                        _stealth = Stealth()
-            _stealth.apply_stealth_sync(page)
+            stealth = Stealth()
+            stealth.apply_stealth_sync(page)
         except Exception:
             pass  # stealth is optional — degrade gracefully if not installed
 
