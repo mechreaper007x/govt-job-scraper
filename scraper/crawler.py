@@ -50,6 +50,7 @@ from scraper.filters import annotate
 from scraper.diff import diff_and_update_state
 from scraper.notify_discord import send_discord_notifications
 from scraper.notify_email import send_email_notifications
+from scraper.export import save_jobs_json
 
 
 # ─── SSL Adapter (shared across all HTTP requests) ───────────────────────────
@@ -295,7 +296,7 @@ class GovJobCrawler:
 
     # ── Scrape phase ────────────────────────────────────────────────────────
 
-    def run_scrape(self, orgs=None, max_workers=4):
+    def run_scrape(self, orgs=None, max_workers=4, export_json="scraped_jobs.json"):
         """
         Phase 2: Fetch and parse job listings from all configured org URLs.
 
@@ -306,6 +307,9 @@ class GovJobCrawler:
         Args:
             orgs: List of org keys. Defaults to MAIN_ORGS.
             max_workers: Max concurrent scrape threads (default 4).
+            export_json: File path for the auto-generated JSON export.
+                         Defaults to 'scraped_jobs.json' in the working directory.
+                         Set to None to disable export.
 
         Returns:
             dict: org_key -> list of filtered posting dicts (or None on failure).
@@ -339,6 +343,10 @@ class GovJobCrawler:
             for future in as_completed(futures):
                 # Wait for completion — data already stored in scraped_data
                 future.result()
+
+        # ── Auto JSON export — always runs after every scrape ─────────────────
+        if export_json:
+            save_jobs_json(scraped_data, filepath=export_json)
 
         return scraped_data
 

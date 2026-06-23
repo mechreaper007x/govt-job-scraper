@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Govt Job Scraper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Job Scraper Control Panel</h1>
+            <p>Automated Government Job Data Collection</p>
+        </header>
+        
+        <main>
+            <section class="card">
+                <h2>Core Scraper (83 Orgs)</h2>
+                <div class="form-group">
+                    <label for="org-target">Target Organization (Optional)</label>
+                    <input type="text" id="org-target" placeholder="e.g., cdac">
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="watch-mode">
+                    <label for="watch-mode">Enable Watch Mode</label>
+                </div>
+                <div class="form-group" id="interval-group" style="display:none;">
+                    <label for="watch-interval">Polling Interval (seconds)</label>
+                    <input type="number" id="watch-interval" value="30">
+                </div>
+                <button class="btn primary-btn" id="run-core-btn">Run Core Scraper</button>
+            </section>
+
+            <section class="card">
+                <h2>Scale Scraper (2,300+ Orgs)</h2>
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="scale-limit">Limit</label>
+                        <input type="number" id="scale-limit" value="20" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="scale-offset">Offset</label>
+                        <input type="number" id="scale-offset" value="0" min="0">
+                    </div>
+                </div>
+                <button class="btn secondary-btn" id="run-scale-btn">Run Scale Scraper</button>
+            </section>
+
+            <section class="card" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <h2>Export Data</h2>
+                <p style="margin-bottom: 1rem; color: var(--color-text-dark);">Download the scraped job listings as a formatted PDF with clickable links.</p>
+                <button class="btn primary-btn" id="download-pdf-btn" style="max-width: 300px; background-color: var(--color-accent); color: var(--color-primary);">Download PDF Report</button>
+            </section>
+        </main>
+        
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span>Console Output</span>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="icon-btn" id="copy-console" title="Copy Console">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                    <button class="icon-btn" id="clear-console" title="Clear Console">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="terminal" id="terminal-output">
+                <div class="log-entry system">System initialized. Ready to execute commands.</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
