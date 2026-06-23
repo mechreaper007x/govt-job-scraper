@@ -62,7 +62,7 @@ def run_scraper_process(cmd: list):
 @app.post("/api/run_core")
 def run_core(req: CoreScraperRequest, background_tasks: BackgroundTasks):
     import sys
-    cmd = [sys.executable, "-m", "scraper.main"]
+    cmd = [sys.executable, "-u", "-m", "scraper.main"]
     if req.org:
         cmd.extend(["--org", req.org])
     if req.watch_mode:
@@ -74,7 +74,7 @@ def run_core(req: CoreScraperRequest, background_tasks: BackgroundTasks):
 @app.post("/api/run_scale")
 def run_scale(req: ScaleScraperRequest, background_tasks: BackgroundTasks):
     import sys
-    cmd = [sys.executable, "run_all_orgs.py", "--limit", str(req.limit), "--offset", str(req.offset)]
+    cmd = [sys.executable, "-u", "run_all_orgs.py", "--limit", str(req.limit), "--offset", str(req.offset)]
     
     background_tasks.add_task(run_scraper_process, cmd)
     return {"message": "Scale scraper started", "command": " ".join(cmd)}
