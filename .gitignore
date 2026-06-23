@@ -45,7 +45,6 @@ scraper/diff.py
 # Other
 state.json
 *.json
-!coverage_report.json
 *.txt
 !requirements.txt
 *.html
