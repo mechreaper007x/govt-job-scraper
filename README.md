@@ -1,5 +1,13 @@
-# Indian Government & PSU Job Notification Tracker
+---
+title: Govt Job Scraper
+emoji: 🏃
+colorFrom: green
+colorTo: pink
+sdk: docker
+app_port: 7860
+---
 
+# Indian Government & PSU Job Notification Tracker
 A highly resilient, concurrent, and adaptive monitoring system designed to crawl and track recruitment notifications across **83 core Indian public sector, banking, and government portals**, with built-in scalability to support **2,370+ municipal, state, and academic domains** in batches.
 
 The system filters out noise and prioritizes **Computer Science & Engineering (CSE) and IT positions**, sending instant, aggregated alerts via Discord Webhooks and Email notifications when new listings are detected.
