@@ -40,7 +40,6 @@ scraper/test_*.py
 scraper/probe_*.py
 scraper/list_*.py
 scraper/search_*.py
-scraper/diff.py
 
 # Other
 state.json
