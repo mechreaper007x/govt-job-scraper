@@ -26,6 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          playwright install chromium
 
       - name: Run main job scrapers
         env:
@@ -35,6 +36,18 @@ jobs:
           NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
           SCRAPER_PDF_SCAN: '1'
         run: python -m scraper.main --main
+
+      - name: Generate PDF Report
+        run: python generate_pdf.py
+
+      - name: Upload PDF Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-jobs-report
+          path: |
+            jobs_report.pdf
+            scraped_jobs.json
+          retention-days: 7
 
       - name: Commit and push state changes
         run: |
