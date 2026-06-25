@@ -792,7 +792,7 @@ _BANK_DOMAINS = [
 _ACADEMIC_SEEDS = [
     # IITs
     "iitb.ac.in", "iitd.ac.in", "iitkgp.ac.in", "iitm.ac.in", "iitk.ac.in", "iitr.ac.in",
-    "iitg.ac.in", "iith.ac.in", "iitbhu.ac.in", "iitism.ac.in", "iitindore.ac.in",
+    "iitg.ac.in", "iith.ac.in", "iitbhu.ac.in", "iitism.ac.in", "iiti.ac.in",
     "iitmandi.ac.in", "iitrpr.ac.in", "iitgn.ac.in", "iitp.ac.in", "iitj.ac.in",
     "iitbbs.ac.in", "iitpkd.ac.in", "iittp.ac.in", "iitjammu.ac.in", "iitdh.ac.in",
     "iitgoa.ac.in", "iitbhilai.ac.in",
@@ -805,12 +805,13 @@ _ACADEMIC_SEEDS = [
     # IIITs
     "iiitd.ac.in", "iiitb.ac.in", "iiitm.ac.in", "iiitg.ac.in", "iiith.ac.in", "iiitk.ac.in",
     "iiitl.ac.in", "iiitp.ac.in", "iiits.ac.in", "iiitvadodara.ac.in", "iiitkottayam.ac.in",
-    "iiitdharwad.ac.in", "iiitkalyani.ac.in", "iiituna.ac.in", "iiitranchi.ac.in",
-    "iiitnagpur.ac.in", "iiitbhagalpur.ac.in", "iiitbhopal.ac.in", "iiitsurat.ac.in",
+    "iiitdwd.ac.in", "iiitkalyani.ac.in", "iiitu.ac.in", "iiitranchi.ac.in",
+    "iiitnagpur.ac.in", "iiitbh.ac.in", "iiitbhopal.ac.in", "iiitsurat.ac.in",
     # Universities
     "du.ac.in", "jnu.ac.in", "bhu.ac.in", "uohyd.ac.in", "amu.ac.in", "jmi.ac.in",
     "curaj.ac.in", "tezu.ernet.in", "iisc.ac.in", "tifr.res.in", "csir.res.in",
-    "manipal.edu", "bits-pilani.ac.in", "annauniv.edu", "vtu.ac.in", "jntu.ac.in",
+    "manipal.edu", "bits-pilani.ac.in", "annauniv.edu", "vtu.ac.in",
+    "jntuh.ac.in", "jntua.ac.in", "jntuk.edu.in",
     "caluniv.ac.in", "mu.ac.in", "unom.ac.in", "unipune.ac.in"
 ]
 

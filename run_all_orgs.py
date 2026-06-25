@@ -1,4 +1,5 @@
 # run_all_orgs.py
+import scraper.dns_resolver
 import argparse
 import sys
 import os

@@ -7,6 +7,7 @@
 #   python -m scraper.main --org cdac       # single org scrape
 #   python -m scraper.main --discover --org cdac  # single org discovery
 
+import scraper.dns_resolver
 import sys
 import argparse
 
