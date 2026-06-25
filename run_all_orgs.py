@@ -29,7 +29,7 @@ def main():
             v["resolve_career"] = True
             ORGS_CONFIG[k] = v
 
-    keys = sorted(list(seeded.keys()))
+    keys = sorted([k for k, v in seeded.items() if "duplicate_of" not in v])
     start = args.offset
     end = (start + args.limit) if args.limit is not None else len(keys)
     target_keys = keys[start:end]

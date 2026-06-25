@@ -8,7 +8,7 @@ app_port: 7860
 ---
 
 # Indian Government & PSU Job Notification Tracker
-A highly resilient, concurrent, and adaptive monitoring system designed to crawl and track recruitment notifications across **83 core Indian public sector, banking, and government portals**, with built-in scalability to support **2,370+ municipal, state, and academic domains** in batches.
+A highly resilient, concurrent, and adaptive monitoring system designed to crawl and track recruitment notifications across **83 core Indian public sector, banking, and government portals**, with built-in scalability to support **1,237 unique target domains** (representing 2,370+ municipal, state, and academic departments after URL-level deduplication) in batches.
 
 The system filters out noise and prioritizes **Computer Science & Engineering (CSE) and IT positions**, sending instant, aggregated alerts via Discord Webhooks and Email notifications when new listings are detected.
 
@@ -30,7 +30,7 @@ The system filters out noise and prioritizes **Computer Science & Engineering (C
 
 ### 3. Scaling & Career Path Seeder
 * **Seeder Engine:** [domain_seeder.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/scraper/domain_seeder.py)
-* **Expanded Targets:** Generates a registry of **2,372 unique target domains** (including 589 district NIC portals, 30+ state departments for all 36 states/UTs, state PSUs, municipal corporations, and regional rural banks).
+* **Expanded Targets:** Generates a registry of **1,237 unique target domains** representing **2,370+ municipal, state, and academic organizations** after URL-level deduplication (including district NIC portals, state departments for all 36 states/UTs, state PSUs, municipal corporations, and regional rural banks).
 * **Self-Healing Career Resolver:** Probes homepages dynamically to discover updated career links.
 * **Batch Execution:** Supports batching parameters (`--limit`, `--offset`) to run large-scale crawls safely without triggering server blocks.
 
@@ -44,7 +44,7 @@ job-scraper/
 │   └── daily-check.yml       # Automated daily check runner
 ├── scraper/
 │   ├── adaptive_parser.py    # Layout-invariant link-scoring parser
-│   ├── domain_seeder.py      # Expanded seed registry of 2,370+ domains
+│   ├── domain_seeder.py      # Expanded seed registry of 1,237 unique domains
 │   ├── config.py             # Core config and 83 main portal metadata
 │   ├── crawler.py            # Concurrent crawl controller and strategy router
 │   ├── parsers.py            # API-specific and legacy parser fallbacks
@@ -55,7 +55,7 @@ job-scraper/
 │   ├── notify_email.py       # Gmail SMTP sender logic
 │   └── main.py               # Orchestrator CLI entry point
 ├── state.json                # Persisted content hashes (updated by action)
-├── seeded_organizations.md   # Searchable markdown database of all 2,370+ seeds
+├── seeded_organizations.md   # Searchable markdown database of all 1,237 unique domains
 ├── relevancy_analysis.md     # Updated signal-to-noise relevancy report
 ├── all_relevant_jobs.md      # Auto-generated markdown list of active CS/IT jobs
 ├── requirements.txt          # Python dependencies

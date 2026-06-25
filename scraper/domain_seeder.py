@@ -974,6 +974,17 @@ DISTRICT_OVERRIDES = {
     "vyara": "tapi.nic.in"
 }
 
+def _normalize_url(url):
+    """Normalize a URL to prevent duplicate crawling of identical targets."""
+    u = url.strip().lower().rstrip("/")
+    if u.startswith("https://"):
+        u = u[8:]
+    elif u.startswith("http://"):
+        u = u[7:]
+    if u.startswith("www."):
+        u = u[4:]
+    return u
+
 def generate_domains():
     """
     Generates a registry of 2,300+ target domains with official domain mappings
@@ -1146,6 +1157,18 @@ def generate_domains():
             "name": f"{key.upper()} (Ministry/Research Lab)",
             "url": f"https://{dom}"
         }
+
+    # Normalize URLs and identify duplicates to mark them with "duplicate_of"
+    seen_urls = {}
+    for key, cfg in list(domains.items()):
+        url = cfg.get("url")
+        if not url:
+            continue
+        norm_url = _normalize_url(url)
+        if norm_url in seen_urls:
+            cfg["duplicate_of"] = seen_urls[norm_url]
+        else:
+            seen_urls[norm_url] = key
 
     return domains
 
