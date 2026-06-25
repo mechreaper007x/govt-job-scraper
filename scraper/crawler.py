@@ -53,8 +53,14 @@ from scraper.notify_email import send_email_notifications
 from scraper.export import save_jobs_json
 
 
-# ─── SSL Adapter (shared across all HTTP requests) ───────────────────────────
+# ─── Network-failure sentinel ────────────────────────────────────────────────
+# Returned by fetch_org when the failure is a transient network issue
+# (timeout, connection reset, circuit breaker, DNS failure).
+# Distinct from None (code error) so run_all_orgs.py can omit it from the
+# failure count while still preserving previous state in diff.
+SERVER_DOWN = object()
 
+# ─── SSL Adapter (shared across all HTTP requests) ───────────────────────────
 
 class RobustGovAdapter(HTTPAdapter):
     """
@@ -78,7 +84,8 @@ class RobustGovAdapter(HTTPAdapter):
             block=block,
             ssl_context=ctx,
             cert_reqs=ssl.CERT_NONE,
-            assert_hostname=False,
+            # Note: assert_hostname removed — urllib3 v2 dropped this kwarg;
+            # hostname checking is already disabled via ctx.check_hostname=False
         )
 
     def cert_verify(self, conn, url, verify, cert):
@@ -217,7 +224,8 @@ class GovJobCrawler:
         and attach a thread-safe caching layer for HTML GET responses.
         """
         session = requests.Session()
-        session.mount("https://", RobustGovAdapter())
+        session.mount("https://", RobustGovAdapter(pool_connections=200, pool_maxsize=20))
+        session.mount("http://", RobustGovAdapter(pool_connections=200, pool_maxsize=20))
         
         # Thread-safe caching layer and SLD locks on the requests session
         session._html_cache = {}
@@ -225,13 +233,24 @@ class GovJobCrawler:
         session._sld_locks = {}
         session._sld_lock_lock = threading.Lock()
         session._sld_last_request_time = {}
-        
+        # Circuit breaker: maps SLD -> True when any timeout is recorded.
+        # All future requests to any host under that SLD raise immediately.
+        session._sld_down = {}
+        session._sld_down_lock = threading.Lock()
+        # Canary coordination: maps SLD -> threading.Event.
+        # The FIRST thread per SLD becomes the canary and makes the real request.
+        # All other threads for the same SLD block on the Event until the canary
+        # completes.  If the canary times out and trips the breaker, waiters see
+        # the breaker instantly rather than each burning their own 5 s timeout.
+        session._sld_canary = {}          # sld -> threading.Event (once set = done)
+        session._sld_canary_lock = threading.Lock()
+
         orig_get = session.get
-        
+
         def cached_get(url, *args, **kwargs):
             from urllib.parse import urlparse
             import time
-            
+
             # Extract SLD (Second-Level Domain) for rate limiting
             try:
                 parsed = urlparse(url)
@@ -247,36 +266,112 @@ class GovJobCrawler:
                     sld = host
             except Exception:
                 sld = url
-                
-            # Acquire per-SLD lock to serialize requests to the same second-level domain
+
+            is_scale = os.environ.get("SCALE_CRAWL") == "1"
+            # Always lock at SLD level — different subdomains of the same SLD
+            # (e.g. fisheries.nagaland.gov.in / forest.nagaland.gov.in) share the
+            # same physical server. Per-host locking let workers hammer all
+            # subdomains simultaneously → overload → timeouts. SLD-level
+            # locking serialises requests within one government server cluster.
+            lock_key = sld
+
+            # ── Scale-mode circuit breaker + canary coordination ──────────────
+            is_canary = False
+            canary_evt = None
+            if is_scale:
+                # Fast path: SLD already known to be down
+                with session._sld_down_lock:
+                    if sld in session._sld_down:
+                        from requests.exceptions import ConnectTimeout
+                        raise ConnectTimeout(
+                            f"Circuit breaker: {sld} marked down after prior ConnectTimeout"
+                        )
+
+                # Canary election: first thread per SLD wins; others wait
+                with session._sld_canary_lock:
+                    existing_evt = session._sld_canary.get(sld)
+                    if existing_evt is None:
+                        canary_evt = threading.Event()
+                        session._sld_canary[sld] = canary_evt
+                        is_canary = True
+                    else:
+                        canary_evt = existing_evt
+                        is_canary = False
+
+                if not is_canary:
+                    # Wait for the canary to finish (up to 30 s),
+                    # then re-check the circuit breaker.
+                    canary_evt.wait(timeout=30)
+                    with session._sld_down_lock:
+                        if sld in session._sld_down:
+                            from requests.exceptions import ConnectTimeout
+                            raise ConnectTimeout(
+                                f"Circuit breaker: {sld} marked down after prior ConnectTimeout"
+                            )
+
+            # ── Per-host lock (rate limiting + HTML cache) ────────────────────
             with session._sld_lock_lock:
-                if sld not in session._sld_locks:
-                    session._sld_locks[sld] = threading.Lock()
-                sld_lock = session._sld_locks[sld]
-                
-            with sld_lock:
-                # Add a small delay for subdomains of the same state portal to prevent rate-limiting/firewall timeout
-                # Apply 0.8s sleep for government/nic domains, 0.1s safety delay for others
-                last_time = session._sld_last_request_time.get(sld, 0)
+                if lock_key not in session._sld_locks:
+                    session._sld_locks[lock_key] = threading.Lock()
+                lock = session._sld_locks[lock_key]
+
+            with lock:
+                last_time = session._sld_last_request_time.get(lock_key, 0)
                 now = time.time()
                 elapsed = now - last_time
-                delay = 0.8 if ("gov.in" in sld or "nic.in" in sld) else 0.1
-                
+
+                if is_scale:
+                    delay = 0.1
+                else:
+                    delay = 0.8 if ("gov.in" in sld or "nic.in" in sld) else 0.1
+
                 if elapsed < delay:
                     time.sleep(delay - elapsed)
-                    
-                session._sld_last_request_time[sld] = time.time()
-                
+
+                session._sld_last_request_time[lock_key] = time.time()
+
                 is_cacheable = kwargs.get("stream") is not True
                 if not is_cacheable:
-                    return orig_get(url, *args, **kwargs)
-                    
+                    try:
+                        return orig_get(url, *args, **kwargs)
+                    finally:
+                        if is_scale and is_canary and canary_evt is not None:
+                            canary_evt.set()
+
                 with session._cache_lock:
                     if url in session._html_cache:
+                        if is_scale and is_canary and canary_evt is not None:
+                            canary_evt.set()
                         return session._html_cache[url]
-                        
-                resp = orig_get(url, *args, **kwargs)
-                
+
+                try:
+                    resp = orig_get(url, *args, **kwargs)
+                except Exception as exc:
+                    # Trip the circuit breaker for any timeout (connect OR read).
+                    # ConnectTimeout: server unreachable (karnataka.gov.in).
+                    # ReadTimeout:    server hangs on response (assam.gov.in).
+                    if is_scale:
+                        err_str = str(exc)
+                        exc_type = type(exc).__name__
+                        is_timeout = (
+                            "ConnectTimeoutError" in err_str
+                            or "connect timeout" in err_str.lower()
+                            or "Read timed out" in err_str
+                            or "ReadTimeout" in exc_type
+                            or "read timeout" in err_str.lower()
+                        )
+                        if is_timeout:
+                            with session._sld_down_lock:
+                                session._sld_down[sld] = True
+                        # Always signal canary done (even on non-timeout errors)
+                        if is_canary and canary_evt is not None:
+                            canary_evt.set()
+                    raise
+
+                # Success path: signal canary done before returning
+                if is_scale and is_canary and canary_evt is not None:
+                    canary_evt.set()
+
                 if resp.status_code == 200:
                     with session._cache_lock:
                         session._html_cache[url] = resp
@@ -441,12 +536,46 @@ class GovJobCrawler:
             else:
                 # ── Standard HTTP fetch ──────────────────────────────────
                 is_scale = os.environ.get("SCALE_CRAWL") == "1"
-                timeout = 5 if is_scale else 15
-                r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+                timeout = 15 if is_scale else 15
+                try:
+                    r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+                except ConnectionError as ce:
+                    # ConnectionResetError 10054 = Cloudflare/WAF bot detection.
+                    # Retry with curl_cffi which impersonates Chrome's exact TLS
+                    # fingerprint (JA3/JA4) that requests/OpenSSL cannot replicate.
+                    if "ConnectionResetError" in str(ce) or "10054" in str(ce) or "Connection aborted" in str(ce):
+                        self._log(f"[bot-reset, retrying with curl_cffi]", end=" ")
+                        try:
+                            from curl_cffi import requests as cffi_requests
+                            cr = cffi_requests.get(
+                                url,
+                                impersonate="chrome120",
+                                headers={
+                                    "Accept": DEFAULT_HEADERS["Accept"],
+                                    "Accept-Language": DEFAULT_HEADERS["Accept-Language"],
+                                },
+                                timeout=timeout,
+                                verify=False,
+                            )
+                            # Wrap in a simple namespace so downstream code sees .text / .headers
+                            class _Resp:
+                                def __init__(self, r):
+                                    self.text = r.text
+                                    self.content = r.content
+                                    self.status_code = r.status_code
+                                    self.headers = r.headers
+                                def raise_for_status(self):
+                                    if self.status_code >= 400:
+                                        raise Exception(f"HTTP {self.status_code}")
+                            r = _Resp(cr)
+                        except Exception as cffi_exc:
+                            raise ce from cffi_exc
+                    else:
+                        raise
                 r.raise_for_status()
 
                 content_type = r.headers.get("Content-Type", "").lower()
-                
+
                 # Check for PDF response directly on the landing page URL
                 if "application/pdf" in content_type or url.lower().endswith(".pdf"):
                     filename = url.split("/")[-1].split("?")[0] or "document.pdf"
@@ -469,7 +598,7 @@ class GovJobCrawler:
                     except Exception as e:
                         self._log(f"WARNING: parse_adaptive failed on {url}: {e}")
                         postings = []
-                        
+
                     # Fallback to legacy custom parser if adaptive found nothing
                     if not postings and parser_fn:
                         try:
@@ -484,8 +613,35 @@ class GovJobCrawler:
             return filtered
 
         except Exception as exc:
+            err_str = str(exc)
+            # Network-level failures: timeout, reset, DNS, circuit breaker.
+            # Return SERVER_DOWN so the caller can distinguish these from real
+            # code/parsing errors and not count them in the failure total.
+            # Use BOTH isinstance (reliable) and string matching (catches wrapped exceptions).
+            import requests.exceptions as _rex
+            _is_network_type = isinstance(exc, (
+                _rex.Timeout,          # ReadTimeout, ConnectTimeout
+                _rex.ConnectionError,  # all connection-level errors
+            ))
+            _NETWORK_STRINGS = (
+                "connecttimeouterror", "readtimeout", "read timed out",
+                "connect timeout", "connecttimeout",
+                "connectionreseterror", "connection aborted",
+                "remotedisconnected", "nameresolutionerror",
+                "getaddrinfo failed", "circuit breaker",
+                "newconnectionerror", "max retries exceeded",
+                # Transient HTTP server errors (5xx)
+                "503 server error", "502 server error", "504 server error",
+                "service temporarily unavailable", "bad gateway",
+            )
+            _is_network_str = any(sig in err_str.lower() for sig in _NETWORK_STRINGS)
+            is_network = _is_network_type or _is_network_str
             self._log(f"ERROR: {exc}")
-            return None  # None = failed, preserves state in diff
+            if is_network:
+                return SERVER_DOWN  # transient network issue — preserve state
+            return None  # code/parsing error — also preserves state
+
+
 
     # Static fallback URL for RRB when SPA returns no useful content
     _RRB_STATIC_URL = "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554"
@@ -496,7 +652,7 @@ class GovJobCrawler:
             self._log(f"{reason}, falling back to static page...", end=" ")
         try:
             is_scale = os.environ.get("SCALE_CRAWL") == "1"
-            timeout = 5 if is_scale else 15
+            timeout = 15 if is_scale else 15
             r = self.session.get(
                 self._RRB_STATIC_URL,
                 headers=DEFAULT_HEADERS, timeout=timeout,

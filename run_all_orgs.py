@@ -7,8 +7,8 @@ import io
 import contextlib
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from scraper.domain_seeder import generate_domains
-from scraper.crawler import GovJobCrawler
+from scraper.domain_seeder import generate_domains, flush_career_url_cache
+from scraper.crawler import GovJobCrawler, SERVER_DOWN
 from scraper.config import ORGS_CONFIG
 
 def main():
@@ -51,12 +51,14 @@ def main():
     
     success_count = 0
     fail_count = 0
+    server_down_count = 0
     total_postings = 0
     total_relevant = 0
     failures = []
+    server_down_list = []
 
     def scrape_worker(index, key):
-        nonlocal success_count, fail_count, total_postings, total_relevant
+        nonlocal success_count, fail_count, server_down_count, total_postings, total_relevant
         name = ORGS_CONFIG[key]["name"]
         
         # Truncate name for printing
@@ -65,8 +67,20 @@ def main():
         try:
             worker_logs = []
             postings = crawler._scrape_org(key, log_list=worker_logs)
-                
-            if postings is None:
+
+            if postings is SERVER_DOWN:
+                # Transient network failure: server unreachable/slow right now.
+                # Preserve previous state (don't update diff), don't count as failure.
+                status = "Server Down"
+                cnt = 0
+                rel_cnt = 0
+                with lock:
+                    server_down_count += 1
+                err_msg = "".join(worker_logs).strip() or "Network unreachable"
+                with failures_lock:
+                    server_down_list.append((name, key, err_msg))
+            elif postings is None:
+                # Code/parsing error — genuine failure worth investigating.
                 status = "Fetch Error"
                 cnt = 0
                 rel_cnt = 0
@@ -103,23 +117,37 @@ def main():
         for future in as_completed(futures):
             pass
 
+    # Persist career URL cache once after all workers finish (avoids per-URL I/O contention)
+    flush_career_url_cache(crawler.session)
+
     print("-" * 105, file=sys.__stdout__)
     print("=" * 105, file=sys.__stdout__)
     print(" CRAWL SUMMARY", file=sys.__stdout__)
     print("=" * 105, file=sys.__stdout__)
     print(f" Successful Orgs: {success_count}", file=sys.__stdout__)
-    print(f" Failed Orgs:     {fail_count}", file=sys.__stdout__)
+    print(f" Server Down:     {server_down_count}  (transient — retry later)", file=sys.__stdout__)
+    print(f" Fetch Errors:    {fail_count}  (code/parse errors, needs fixing)", file=sys.__stdout__)
     print(f" Total Postings:  {total_postings}", file=sys.__stdout__)
     print(f" CS/IT Relevant:  {total_relevant}", file=sys.__stdout__)
     print("=" * 105, file=sys.__stdout__)
 
     if failures:
         print("\n" + "=" * 105, file=sys.__stdout__)
-        print(" DETAILED FAILURE REPORT", file=sys.__stdout__)
+        print(" FETCH ERROR REPORT  (code/parsing failures — these need fixing)", file=sys.__stdout__)
         print("=" * 105, file=sys.__stdout__)
         for name, key, err in sorted(failures):
             clean_err = err.replace("\n", " | ")
             print(f"- {name} ({key}): {clean_err}", file=sys.__stdout__)
+        print("=" * 105, file=sys.__stdout__)
+
+    if server_down_list:
+        print("\n" + "=" * 105, file=sys.__stdout__)
+        print(" SERVER DOWN REPORT  (transient network failures — will retry on next run)", file=sys.__stdout__)
+        print("=" * 105, file=sys.__stdout__)
+        for name, key, err in sorted(server_down_list):
+            # Only show first line of error to keep report compact
+            first_line = err.split("|")[0].strip()[:100]
+            print(f"- {name} ({key}): {first_line}", file=sys.__stdout__)
         print("=" * 105, file=sys.__stdout__)
 
 if __name__ == "__main__":

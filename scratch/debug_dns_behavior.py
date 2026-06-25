@@ -99,12 +99,12 @@ def test_dynamic_sld_rate_limiting():
     print(f"Request 2 to domain2.gov.in (different domain) took: {t2 - t0:.4f}s")
     assert t2 - t0 < 0.1, f"Second distinct domain request slept! Took {t2 - t0}s"
     
-    # Request domain1.gov.in (same domain again) - should sleep to satisfy 0.8s rate limit!
+    # Request domain1.gov.in (same domain again) - should sleep to satisfy 0.1s rate limit!
     t0 = time.time()
     session.get("http://domain1.gov.in/jobs")
     t3 = time.time()
     print(f"Request 3 to domain1.gov.in (same domain again) took: {t3 - t0:.4f}s")
-    assert t3 - t0 >= 0.7, f"Sequential request to same domain did not sleep! Took {t3 - t0}s"
+    assert t3 - t0 >= 0.08, f"Sequential request to same domain did not sleep! Took {t3 - t0}s"
     
     print("✓ Dynamic SLD Rate Limiting test passed!")
 

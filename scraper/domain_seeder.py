@@ -931,6 +931,7 @@ DISTRICT_OVERRIDES = {
     "midnapore": "paschimmedinipur.gov.in",
     "purvamedinipur": "purbamedinipur.gov.in",
     "siliguri": "darjeeling.gov.in",
+    "kalimpong": "darjeeling.gov.in",   # kalimpong.nic.in doesn't exist; new district shares darjeeling.gov.in portal
     "siricilla": "rajannasircilla.telangana.gov.in",
     "sivakasi": "virudhunagar.nic.in",
     "tenali": "guntur.ap.gov.in",
@@ -1197,6 +1198,15 @@ def resolve_career_url(homepage_url, session=None):
     # Initialize thread-safe career URL cache on session if not present
     if not hasattr(session, "_career_url_cache"):
         session._career_url_cache = {}
+        import json
+        import os
+        cache_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "career_url_cache.json")
+        if os.path.exists(cache_path):
+            try:
+                with open(cache_path, "r", encoding="utf-8") as f:
+                    session._career_url_cache = json.load(f)
+            except Exception:
+                pass
     if not hasattr(session, "_cache_lock"):
         session._cache_lock = threading.Lock()
 
@@ -1238,6 +1248,10 @@ def resolve_career_url(homepage_url, session=None):
                 candidates.append(f"{parsed.scheme}://{dist}.{state}")
                 candidates.append(f"{parsed.scheme}://www.{dist}.{state}")
 
+    import os
+    _is_scale = os.environ.get("SCALE_CRAWL") == "1"
+    _resolve_timeout = 8 if _is_scale else 12
+    
     resolved_url = homepage_url
     for url in candidates:
         # Fast DNS check to skip dead domains instantly
@@ -1245,7 +1259,7 @@ def resolve_career_url(homepage_url, session=None):
             continue
 
         try:
-            r = session.get(url, headers=DEFAULT_HEADERS, timeout=4, verify=False)
+            r = session.get(url, headers=DEFAULT_HEADERS, timeout=_resolve_timeout, verify=False)
             if r.status_code == 200:
                 resolved = _extract_career_link(url, r.text, session)
                 if resolved:
@@ -1256,7 +1270,7 @@ def resolve_career_url(homepage_url, session=None):
                 http_url = url.replace("https://", "http://")
                 if _dns_resolves(http_url):
                     try:
-                        r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=3, verify=False)
+                        r_http = session.get(http_url, headers=DEFAULT_HEADERS, timeout=_resolve_timeout, verify=False)
                         if r_http.status_code == 200:
                             resolved = _extract_career_link(http_url, r_http.text, session)
                             if resolved:
@@ -1269,6 +1283,28 @@ def resolve_career_url(homepage_url, session=None):
         session._career_url_cache[homepage_url] = resolved_url
 
     return resolved_url
+
+
+def flush_career_url_cache(session):
+    """
+    Persist the in-memory career URL cache to disk.
+    Call once after a full crawl run — NOT on every URL resolution — to
+    avoid per-URL file I/O contention in multi-threaded scale runs.
+    """
+    cache = getattr(session, "_career_url_cache", None)
+    if not cache:
+        return
+    try:
+        import json
+        import os
+        cache_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "career_url_cache.json"
+        )
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2)
+    except Exception:
+        pass
 
 def _extract_career_link(homepage_url, html_text, session):
     """Parses HTML to find the best career link, avoiding direct file links."""
@@ -1308,12 +1344,14 @@ def _extract_career_link(homepage_url, html_text, session):
     # verify it is alive (returns HTTP 2xx or 3xx) and is an HTML document.
     if resolved_url != homepage_url:
         try:
-            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, allow_redirects=True)
+            import os
+            _verify_timeout = 8 if os.environ.get("SCALE_CRAWL") == "1" else 12
+            head_r = session.head(resolved_url, headers=DEFAULT_HEADERS, timeout=_verify_timeout, verify=False, allow_redirects=True)
             status = head_r.status_code
             content_type = head_r.headers.get("Content-Type", "").lower()
             if status >= 400:
                 # Some servers return 405 Method Not Allowed or 403 on HEAD, check with GET
-                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=4, verify=False, stream=True, allow_redirects=True)
+                get_r = session.get(resolved_url, headers=DEFAULT_HEADERS, timeout=_verify_timeout, verify=False, stream=True, allow_redirects=True)
                 status = get_r.status_code
                 content_type = get_r.headers.get("Content-Type", "").lower()
             

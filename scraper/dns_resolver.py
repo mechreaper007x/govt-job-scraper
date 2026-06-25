@@ -87,11 +87,12 @@ def custom_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
     except socket.gaierror as e:
         # 4. Fallback to DNS-over-HTTPS (DoH)
         import os
-        is_scale = os.environ.get("SCALE_CRAWL") == "1"
         disable_doh = os.environ.get("SCRAPER_DISABLE_DOH") == "1"
-        
+
         ip = None
-        if not (is_scale or disable_doh):
+        if not disable_doh:
+            # Always try DoH on failure — especially in scale mode where local DNS
+            # gets throttled under 20 concurrent threads hitting it simultaneously.
             ip = doh_resolve(host)
             
         if ip:
