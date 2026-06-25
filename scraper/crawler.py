@@ -219,27 +219,68 @@ class GovJobCrawler:
         session = requests.Session()
         session.mount("https://", RobustGovAdapter())
         
-        # Thread-safe caching layer on the requests session
+        # Thread-safe caching layer and SLD locks on the requests session
         session._html_cache = {}
         session._cache_lock = threading.Lock()
+        session._sld_locks = {}
+        session._sld_lock_lock = threading.Lock()
+        session._sld_last_request_time = {}
         
         orig_get = session.get
         
         def cached_get(url, *args, **kwargs):
-            is_cacheable = kwargs.get("stream") is not True
-            if not is_cacheable:
-                return orig_get(url, *args, **kwargs)
-                
-            with session._cache_lock:
-                if url in session._html_cache:
-                    return session._html_cache[url]
-                    
-            resp = orig_get(url, *args, **kwargs)
+            from urllib.parse import urlparse
+            import time
             
-            if resp.status_code == 200:
+            # Extract SLD (Second-Level Domain) for rate limiting
+            try:
+                parsed = urlparse(url)
+                host = parsed.netloc.lower()
+                if host.startswith("www."):
+                    host = host[4:]
+                parts = host.split(".")
+                if len(parts) >= 3 and parts[-2] in ("gov", "nic", "res", "ac", "co", "org", "edu"):
+                    sld = ".".join(parts[-3:])
+                elif len(parts) >= 2:
+                    sld = ".".join(parts[-2:])
+                else:
+                    sld = host
+            except Exception:
+                sld = url
+                
+            # Acquire per-SLD lock to serialize requests to the same second-level domain
+            with session._sld_lock_lock:
+                if sld not in session._sld_locks:
+                    session._sld_locks[sld] = threading.Lock()
+                sld_lock = session._sld_locks[sld]
+                
+            with sld_lock:
+                # Add a small delay for subdomains of the same state portal to prevent rate-limiting/firewall timeout
+                # Apply 0.8s sleep for government/nic domains, 0.1s safety delay for others
+                last_time = session._sld_last_request_time.get(sld, 0)
+                now = time.time()
+                elapsed = now - last_time
+                delay = 0.8 if ("gov.in" in sld or "nic.in" in sld) else 0.1
+                
+                if elapsed < delay:
+                    time.sleep(delay - elapsed)
+                    
+                session._sld_last_request_time[sld] = time.time()
+                
+                is_cacheable = kwargs.get("stream") is not True
+                if not is_cacheable:
+                    return orig_get(url, *args, **kwargs)
+                    
                 with session._cache_lock:
-                    session._html_cache[url] = resp
-            return resp
+                    if url in session._html_cache:
+                        return session._html_cache[url]
+                        
+                resp = orig_get(url, *args, **kwargs)
+                
+                if resp.status_code == 200:
+                    with session._cache_lock:
+                        session._html_cache[url] = resp
+                return resp
             
         session.get = cached_get
         return session
@@ -399,7 +440,9 @@ class GovJobCrawler:
                 postings = self._fetch_spa(key, url)
             else:
                 # ── Standard HTTP fetch ──────────────────────────────────
-                r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=15)
+                is_scale = os.environ.get("SCALE_CRAWL") == "1"
+                timeout = 5 if is_scale else 15
+                r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
                 r.raise_for_status()
 
                 content_type = r.headers.get("Content-Type", "").lower()
@@ -452,9 +495,11 @@ class GovJobCrawler:
         if reason:
             self._log(f"{reason}, falling back to static page...", end=" ")
         try:
+            is_scale = os.environ.get("SCALE_CRAWL") == "1"
+            timeout = 5 if is_scale else 15
             r = self.session.get(
                 self._RRB_STATIC_URL,
-                headers=DEFAULT_HEADERS, timeout=15,
+                headers=DEFAULT_HEADERS, timeout=timeout,
             )
             r.raise_for_status()
             postings = parsers.parse_rrb(r.text)
@@ -526,7 +571,9 @@ class GovJobCrawler:
             "Origin": "https://hal-india.co.in",
             "Accept-Language": "en-US,en;q=0.9",
         }
-        r = self.session.post(url, headers=hal_headers, json={}, timeout=30)
+        is_scale = os.environ.get("SCALE_CRAWL") == "1"
+        timeout = 10 if is_scale else 30
+        r = self.session.post(url, headers=hal_headers, json={}, timeout=timeout)
         r.raise_for_status()
         return parsers.parse_hal(r.text)
 

@@ -167,7 +167,10 @@ def _crawl_homepage(homepage_url, patterns, session, visited):
     candidates = []
 
     try:
-        r = session.get(homepage_url, headers=DEFAULT_HEADERS, timeout=15)
+        import os
+        is_scale = os.environ.get("SCALE_CRAWL") == "1"
+        timeout = 5 if is_scale else 15
+        r = session.get(homepage_url, headers=DEFAULT_HEADERS, timeout=timeout)
         r.raise_for_status()
         if not _is_html(r):
             return candidates
@@ -240,7 +243,10 @@ def discover_org(key, session, visited=None):
     for hp in homepages:
         sitemap_url = urljoin(hp, "/sitemap.xml")
         try:
-            r = session.get(sitemap_url, headers=DEFAULT_HEADERS, timeout=10)
+            import os
+            is_scale = os.environ.get("SCALE_CRAWL") == "1"
+            timeout = 5 if is_scale else 10
+            r = session.get(sitemap_url, headers=DEFAULT_HEADERS, timeout=timeout)
             if r.status_code == 200 and "xml" in (r.headers.get("Content-Type", "") or "").lower():
                 sitemap_candidates = _parse_sitemap(r.text, patterns)
                 for c in sitemap_candidates:

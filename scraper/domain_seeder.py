@@ -91,7 +91,7 @@ STATE_PSC_DOMAINS = {
     "mn": "mpscmanipur.gov.in",
     "ml": "mpsc.nic.in",
     "mz": "mpsc.mizoram.gov.in",
-    "nl": "npsc.co.in",
+    "nl": "npsc.nagaland.gov.in",
     "od": "opsc.gov.in",
     "pb": "ppsc.gov.in",
     "rj": "rpsc.rajasthan.gov.in",
@@ -131,7 +131,7 @@ STATE_SSB_DOMAINS = {
     "mn": "manipur.gov.in",
     "ml": "meghalaya.gov.in",
     "mz": "mssc.mizoram.gov.in",
-    "nl": "npsc.co.in",
+    "nl": "nssb.nagaland.gov.in",
     "od": "ossc.gov.in",
     "pb": "sssb.punjab.gov.in",
     "rj": "rsmssb.rajasthan.gov.in",
@@ -159,7 +159,7 @@ STATE_POLICE_DOMAINS = {
     "br": "state.bihar.gov.in",
     "cg": "cgpolice.gov.in",
     "ga": "goa.gov.in",
-    "gj": "gujarat.gov.in",
+    "gj": "gprb.gujarat.gov.in",
     "hr": "haryana.gov.in",
     "hp": "citizenportal.hppolice.gov.in/citizen",
     "jk": "jkpolice.gov.in",
@@ -219,8 +219,8 @@ STATE_RTC_DOMAINS = {
     "nl": "nst.nagaland.gov.in",
     "od": "osrtc.in",
     "py": "prtc.in",
-    "pb": "punjabroadways.gov.in",
-    "rj": "rsrtc.rajasthan.gov.in",
+    "pb": "punbusonline.com",
+    "rj": "rsrtconline.rajasthan.gov.in",
     "sk": "sikkim.gov.in",
     "tn": "tnstc.in",
     "tg": "tsrtc.telangana.gov.in",
@@ -257,11 +257,11 @@ MUNI_DOMAINS = {
     "cmda": "cmdachennai.gov.in",
     "ghmc": "ghmc.gov.in",
     "gvmc": "gvmc.ap.gov.in",
-    "vuda": "vuda.gov.in",
-    "vada": "vada.gov.in",
+    "vuda": "vmrda.gov.in",
+    "vada": "vuda.co.in",
     "kda": "kdaindia.co.in",
     "jda": "jda.rajasthan.gov.in",
-    "uda": "udajodhpur.org",
+    "uda": "uitudaipur.org",
     "ada": "adaamritsar.gov.in",
     "gda": "gdaghaziabad.in",
     "udaipurmc": "udaipurmc.org",
@@ -270,16 +270,16 @@ MUNI_DOMAINS = {
     "ajmermc": "ajmermc.org",
     "bhilwaramc": "bhilwara.rajasthan.gov.in",
     "alwarmc": "alwar.rajasthan.gov.in",
-    "sikarmc": "sikarmc.org",
+    "sikarmc": "sikar.rajasthan.gov.in",
     "pnbmc": "punjab.gov.in",
     "dharmc": "dhar.nic.in",
     "gwalior-mc": "gwalior.nic.in",
     "bhopal-mc": "bhopalmunicipal.com",
     "indore-mc": "imcindore.org",
     "jabalpur-mc": "jabalpur.nic.in",
-    "sagar-mc": "sagarmunicipal.com",
-    "satna-mc": "satnamunicipal.com",
-    "rewa-mc": "rewamunicipal.com"
+    "sagar-mc": "sagar.nic.in",
+    "satna-mc": "satna.nic.in",
+    "rewa-mc": "rewa.nic.in"
 }
 WORKING_DEPTS = {
     "agriculture.ap.gov.in",
@@ -344,7 +344,6 @@ WORKING_DEPTS = {
     "excise.rajasthan.gov.in",
     "excise.sikkim.gov.in",
     "excise.telangana.gov.in",
-    "excise.tripura.gov.in",
     "excise.uk.gov.in",
     "excise.up.gov.in",
     "excise.wb.gov.in",
@@ -883,7 +882,7 @@ DISTRICT_OVERRIDES = {
     "gandhidham": "kachchh.nic.in",
     "gangtok": "gangtokdistrict.nic.in",
     "ganjam": "ganjam.nic.in",
-    "godhra": "panchmahal.nic.in",
+    "godhra": "panchmahals.nic.in",
     "guntakal": "ananthapuramu.ap.gov.in",
     "gurugram": "gurugram.gov.in",
     "boudh": "boudh.odisha.gov.in",
@@ -937,7 +936,41 @@ DISTRICT_OVERRIDES = {
     "tenali": "guntur.ap.gov.in",
     "thiruvallur": "tiruvallur.nic.in",
     "thiruvananthapuram": "trivandrum.nic.in",
-    "thiruvarur": "tiruvarur.nic.in"
+    "thiruvarur": "tiruvarur.nic.in",
+    
+    # Overrides for failing/migrated portals
+    "kanpur": "kanpurnagar.nic.in",
+    "machilipatnam": "krishna.ap.gov.in",
+    "madanapalle": "annamayya.ap.gov.in",
+    "mangaluru": "dk.nic.in",
+    "miryalaguda": "nalgonda.telangana.gov.in",
+    "modasa": "arvalli.nic.in",
+    "mohali": "sasnagar.nic.in",
+    "motihari": "eastchamparan.nic.in",
+    "mumbai": "mumbaisuburban.gov.in",
+    "murwara": "katni.nic.in",
+    "nadiad": "kheda.nic.in",
+    "nagercoil": "kanniyakumari.nic.in",
+    "nawarangpur": "nabarangpur.odisha.gov.in",
+    "nellore": "spsnellore.ap.gov.in",
+    "ongole": "prakasam.ap.gov.in",
+    "pakyong": "pakyongdistrict.nic.in",
+    "palanpur": "banaskantha.nic.in",
+    "parvathipuram": "parvathipurammanyam.ap.gov.in",
+    "peren": "peren-district.nic.in",
+    "phagwara": "kapurthala.gov.in",
+    "proddatur": "ysrkadapa.ap.gov.in",
+    "purnia": "purnea.nic.in",
+    "ramagundam": "peddapalli.telangana.gov.in",
+    "rourkela": "sundargarh.odisha.gov.in",
+    "sasaram": "rohtas.nic.in",
+    "tumakuru": "tumkur.nic.in",
+    "udagamandalam": "nilgiris.nic.in",
+    "vapi": "valsad.nic.in",
+    "veraval": "girsomnath.nic.in",
+    "vijayawada": "ntr.ap.gov.in",
+    "villupuram": "viluppuram.nic.in",
+    "vyara": "tapi.nic.in"
 }
 
 def generate_domains():
@@ -1147,7 +1180,8 @@ def _dns_resolves(url):
             return False
         if ":" in host:
             host = host.split(":")[0]
-        socket.gethostbyname(host)
+        # Use getaddrinfo to utilize the patched caching DNS resolver
+        socket.getaddrinfo(host, None)
         return True
     except Exception:
         return False
@@ -1173,11 +1207,21 @@ def resolve_career_url(homepage_url, session=None):
     parsed = urlparse(homepage_url)
     host = parsed.netloc
     
-    # Dynamic DNS probing for district portals that might have migrated
+    # Generic www. vs non-www. fallback candidates
     candidates = [homepage_url]
+    if host.startswith("www."):
+        no_www_host = host[4:]
+        candidates.append(f"{parsed.scheme}://{no_www_host}")
+    else:
+        www_host = f"www.{host}"
+        candidates.append(f"{parsed.scheme}://{www_host}")
+
+    # Dynamic DNS probing for district portals that might have migrated
     if host.endswith(".nic.in") and not host.startswith("www."):
         dist = host.split(".")[0]
-        candidates.append(f"{parsed.scheme}://www.{host}")
+        # Skip adding www.{host} if already added by generic check above
+        if f"{parsed.scheme}://www.{host}" not in candidates:
+            candidates.append(f"{parsed.scheme}://www.{host}")
         candidates.append(f"{parsed.scheme}://{dist}.gov.in")
         candidates.append(f"{parsed.scheme}://www.{dist}.gov.in")
         

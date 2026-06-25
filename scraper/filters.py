@@ -144,6 +144,71 @@ GENERIC_TECH_RE = _build_boundary_regex(GENERIC_TECH_KEYWORDS)
 EXCLUDE_RE = _build_boundary_regex(EXCLUDE_KEYWORDS)
 
 
+# ─── Dual TF-IDF Title Similarity Classifier ────────────────────────────────
+class TFIDFSimilarityClassifier:
+    """
+    Lightweight, zero-dependency TF-IDF Cosine Similarity engine.
+    Compares job titles against CS/IT reference profiles and exclusion profiles.
+    """
+    def __init__(self):
+        # CS/IT Vocabulary Profile
+        self.cse_vocab = {
+            "computer", "science", "information", "technology", "software",
+            "developer", "programmer", "web", "php", "laravel", "python",
+            "java", "database", "cloud", "devops", "cyber", "security",
+            "data", "analytics", "mca", "cse", "it", "systems", "network"
+        }
+        # Exclusion Vocabulary Profile (Other fields, support roles)
+        self.exclude_vocab = {
+            "civil", "mechanical", "electrical", "chemical", "nurse",
+            "medical", "doctor", "pharmacist", "driver", "clerk", "typist",
+            "stenographer", "accountant", "accounts", "audit", "legal",
+            "law", "hr", "admin", "helper", "cook", "apprentice",
+            "surgeon", "physician", "radiologist", "hospital", "medic",
+            "medics", "dentist", "geology", "geophysicist", "geophysics",
+            "chemistry", "physics", "forester", "forestry"
+        }
+        
+    def _tokenize(self, text):
+        return [w.strip() for w in re.split(r"[^a-zA-Z]", text.lower()) if len(w.strip()) > 1]
+
+    def _compute_tf(self, tokens):
+        tf = {}
+        for token in tokens:
+            tf[token] = tf.get(token, 0) + 1
+        return tf
+
+    def calculate_similarity(self, title, profile_vocab):
+        tokens = self._tokenize(title)
+        if not tokens:
+            return 0.0
+            
+        tf = self._compute_tf(tokens)
+        
+        # Calculate term overlap and simple dot product
+        dot_product = 0.0
+        for token, freq in tf.items():
+            if token in profile_vocab:
+                # Give higher weight to rare/selective terms if matched
+                dot_product += freq * 1.0
+                
+        # Normalize against the query vector length only (avoiding dilution by vocabulary profile size)
+        vec_len = sum(val ** 2 for val in tf.values()) ** 0.5
+        
+        if vec_len == 0:
+            return 0.0
+            
+        return dot_product / vec_len
+
+    def classify_title(self, title):
+        cse_sim = self.calculate_similarity(title, self.cse_vocab)
+        excl_sim = self.calculate_similarity(title, self.exclude_vocab)
+        return cse_sim, excl_sim
+
+# Instantiate the similarity classifier
+title_similarity_classifier = TFIDFSimilarityClassifier()
+
+
 # ─── Layer 2: Per-org context rules ─────────────────────────────────────────
 #
 # These orgs are *primarily* CS/IT organizations.
@@ -347,14 +412,24 @@ def _extract_pdf_text(url, session, max_chars=5000):
 
 def _classify_by_pdf(url, session):
     """
-    Download and scan a linked PDF for discipline keywords.
+    Download and scan a linked PDF for discipline keywords using proximity scoring
+    and keyword checks to determine CS/IT eligibility.
     Returns 'relevant', 'excluded', or None (if inconclusive).
     """
     if not url or not session:
         return None
 
-    # Only scan PDFs
-    if not (url.lower().endswith(".pdf") or "pdf" in url.lower()):
+    # Scan PDFs or URLs that are likely to stream/return PDFs
+    url_lower = url.lower()
+    is_pdf_like = (
+        url_lower.endswith(".pdf") or 
+        "pdf" in url_lower or 
+        "fileviewer" in url_lower or 
+        "document" in url_lower or 
+        "download" in url_lower or
+        "viewer" in url_lower
+    )
+    if not is_pdf_like:
         return None
 
     text = _extract_pdf_text(url, session)
@@ -363,15 +438,45 @@ def _classify_by_pdf(url, session):
 
     text_lower = text.lower()
 
-    cs_score = sum(1 for kw in PDF_CS_KEYWORDS if kw in text_lower)
-    non_cs_score = sum(1 for kw in PDF_NON_CS_KEYWORDS if kw in text_lower)
+    # Extra CS/IT keywords to check
+    extra_cs_kws = ["mca", "b.tech cs", "b.tech it", "b.e. cs", "b.e. it", "copa"]
+    all_cs_kws = PDF_CS_KEYWORDS + extra_cs_kws
 
-    if cs_score >= 2 and cs_score > non_cs_score:
-        return "relevant"
-    elif non_cs_score >= 2 and non_cs_score > cs_score:
+    # 1. Broad keyword count
+    cs_hits = [kw for kw in all_cs_kws if kw in text_lower]
+    non_cs_hits = [kw for kw in PDF_NON_CS_KEYWORDS if kw in text_lower]
+
+    # If CS/IT keywords are completely absent, we can safely exclude
+    if not cs_hits:
         return "excluded"
 
-    return None
+    # 2. Extract sections of text surrounding qualification keywords (proximity check)
+    qual_patterns = [r"\bqualification\b", r"\beligibility\b", r"\beducation\b", r"\bdiscipline\b", r"\bdegree\b"]
+    qual_sections = []
+    for pattern in qual_patterns:
+        for m in re.finditer(pattern, text_lower):
+            start = max(0, m.start() - 250)
+            end = min(len(text_lower), m.end() + 250)
+            qual_sections.append(text_lower[start:end])
+
+    # Count keywords inside the qualification context blocks (with extra weight)
+    qual_cs_score = 0
+    qual_non_cs_score = 0
+    if qual_sections:
+        combined_quals = " ".join(qual_sections)
+        qual_cs_score = sum(2 for kw in all_cs_kws if kw in combined_quals)
+        qual_non_cs_score = sum(2 for kw in PDF_NON_CS_KEYWORDS if kw in combined_quals)
+
+    # 3. Combine scores
+    total_cs_score = len(cs_hits) + qual_cs_score
+    total_non_cs_score = len(non_cs_hits) + qual_non_cs_score
+
+    if total_cs_score == 0:
+        return "excluded"
+    elif total_cs_score > total_non_cs_score:
+        return "relevant"
+    else:
+        return "excluded"
 
 
 # ─── Main classify function ─────────────────────────────────────────────────
@@ -402,8 +507,19 @@ def classify(title, link="", org_key="", session=None):
     if re.search(r'\b\d+(\.\d+)?\s*(mb|kb)\b', t):
         return "excluded"
         
-    # Exclude common single-word menu items
-    if clean_title.lower() in ("careers", "vacancies", "internship", "downloads", "home", "archive", "about us", "contact us"):
+    # Exclude common single-word menu items and organizational navigation links
+    if clean_title.lower() in (
+        "careers", "vacancies", "internship", "downloads", "home", "archive", 
+        "about us", "contact us", "life at ongc", "employee welfare", 
+        "employee engagement", "skill development", "mentoring", 
+        "mount everest expedition", "live your passion", "recruitment methodology", 
+        "high growth curve", "intern with us", "forms", "recruitment notices", 
+        "results", "audio-visuals", "audiovisuals", "work with us", "why join", "about", 
+        "employee corner", "sitemap", "disclaimer", "terms of use", 
+        "privacy policy", "help", "faq", "faqs", "gallery", "feedback", 
+        "last →", "first ←", "next →", "previous ←", "apprenticeship opportunities",
+        "last", "first", "next", "previous"
+    ):
         return "excluded"
 
     # ── Filter out past years (e.g. 2025 and older) to remove expired historical archives ──
@@ -431,6 +547,13 @@ def classify(title, link="", org_key="", session=None):
     # 3. Other CS wins next
     if OTHER_CS_RE.search(title_clean):
         return "relevant"
+
+    # ── Layer 1.5: TF-IDF Cosine Similarity for synonyms ──
+    cse_sim, excl_sim = title_similarity_classifier.classify_title(title_clean)
+    if cse_sim >= 0.25 and cse_sim > excl_sim:
+        return "relevant"
+    elif excl_sim >= 0.25 and excl_sim > cse_sim:
+        return "excluded"
 
     # 4. Generic tech keywords next
     has_generic = bool(GENERIC_TECH_RE.search(title_clean))
@@ -461,7 +584,8 @@ def classify(title, link="", org_key="", session=None):
         if non_cs_url_hits >= 2:
             return "excluded"
 
-    # ── Layer 3: PDF content extraction (optional) ─────────────────────────
+    # ── Layer 3: PDF content extraction ────────────────────────────────────
+    # Scan PDF only if SCRAPER_PDF_SCAN is explicitly set to "1" (disabled by default to keep scaling runs fast)
     if session and link and os.environ.get("SCRAPER_PDF_SCAN") == "1":
         pdf_result = _classify_by_pdf(link, session)
         if pdf_result:

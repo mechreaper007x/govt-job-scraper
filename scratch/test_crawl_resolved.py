@@ -17,10 +17,15 @@ def main():
 
     crawler = GovJobCrawler()
     
-    test_keys = ["iiitbh", "iiitdwd", "iiitu", "iiti", "jntuh", "jntua", "jntuk"]
+    test_keys = [
+        "iitbbs", "iitm", "nits", "tezu", "muni_uda", 
+        "dist_udagamandalam", "muni_vada", "muni_vuda", "dist_vapi", 
+        "dist_veraval", "dist_vijayawada", "dist_villupuram", "dist_vyara",
+        "csir", "iiith", "tifr"
+    ]
     
-    print(f"{'Key':<15} | {'Organization Name':<45} | {'Result':<10} | {'Count':<5}")
-    print("-" * 85)
+    print(f"{'Key':<18} | {'Organization Name':<38} | {'Result':<10} | {'Count':<5}")
+    print("-" * 80)
     
     for key in test_keys:
         if key in ORGS_CONFIG:
@@ -29,11 +34,11 @@ def main():
                 res = crawler._scrape_org(key)
                 status = "Success" if res is not None else "Failed"
                 count = len(res) if res is not None else 0
-                print(f"{key:<15} | {name[:45]:<45} | {status:<10} | {count:<5}")
+                print(f"{key:<18} | {name[:38]:<38} | {status:<10} | {count:<5}")
             except Exception as e:
-                print(f"{key:<15} | {name[:45]:<45} | Error      | {str(e)[:25]}")
+                print(f"{key:<18} | {name[:38]:<38} | Error      | {str(e)[:25]}")
         else:
-            print(f"{key:<15} | NOT IN CONFIG                                 | -          | -")
+            print(f"{key:<18} | NOT IN CONFIG                           | -          | -")
 
 if __name__ == "__main__":
     main()

@@ -12,6 +12,9 @@ from scraper.crawler import GovJobCrawler
 from scraper.config import ORGS_CONFIG
 
 def main():
+    import os
+    os.environ["SCALE_CRAWL"] = "1"
+    
     parser = argparse.ArgumentParser(description="Run scraper for all 2,300+ organizations and display results in tabular form")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of organizations to crawl")
     parser.add_argument("--offset", type=int, default=0, help="Offset for starting crawl")

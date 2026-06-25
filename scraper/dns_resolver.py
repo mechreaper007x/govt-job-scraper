@@ -65,12 +65,15 @@ def custom_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
     if not host or host in ("localhost", "127.0.0.1", "::1") or _IP_RE.match(host):
         return _original_getaddrinfo(host, port, family, type, proto, flags)
 
+    # Composite key for positive cache to separate different lookup parameters (like ports 80 and 443)
+    cache_key = (host, port, family, type, proto, flags)
+
     # 1. Check positive DNS cache
     with _dns_cache_lock:
-        if host in _dns_cache:
-            return _dns_cache[host]
+        if cache_key in _dns_cache:
+            return _dns_cache[cache_key]
 
-    # 2. Check negative DNS cache
+    # 2. Check negative DNS cache (host-based, as dead domains don't resolve on any parameters)
     with _failed_cache_lock:
         if host in _failed_dns_cache:
             raise socket.gaierror(-2, f"Name or service not known (cached negative lookup for {host})")
@@ -79,17 +82,24 @@ def custom_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
     try:
         res = _original_getaddrinfo(host, port, family, type, proto, flags)
         with _dns_cache_lock:
-            _dns_cache[host] = res
+            _dns_cache[cache_key] = res
         return res
     except socket.gaierror as e:
         # 4. Fallback to DNS-over-HTTPS (DoH)
-        ip = doh_resolve(host)
+        import os
+        is_scale = os.environ.get("SCALE_CRAWL") == "1"
+        disable_doh = os.environ.get("SCRAPER_DISABLE_DOH") == "1"
+        
+        ip = None
+        if not (is_scale or disable_doh):
+            ip = doh_resolve(host)
+            
         if ip:
             try:
                 # Use original getaddrinfo to construct correct socket structures for the IP
                 res = _original_getaddrinfo(ip, port, family, type, proto, flags)
                 with _dns_cache_lock:
-                    _dns_cache[host] = res
+                    _dns_cache[cache_key] = res
                 print(f"[DNS] Local resolve failed for {host}. Fallback resolved to {ip} via DoH.", file=sys.stderr)
                 return res
             except Exception:
