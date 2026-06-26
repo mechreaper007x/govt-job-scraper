@@ -14,6 +14,7 @@ import threading
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from scraper.config import DEFAULT_HEADERS
+from scraper.learned_vocab import get_vocab, domain_family as _domain_family
 
 # 28 States and 8 Union Territory codes in India
 _STATE_CODES = [
@@ -1173,6 +1174,8 @@ def generate_domains():
     return domains
 
 # Keywords to identify career pages on homepages
+# _CAREER_LINKS_RE kept as a lightweight fallback for non-HTML contexts.
+# Primary link scoring is now done via CareerURLVocabulary (learned_vocab).
 _CAREER_LINKS_RE = re.compile(
     r"career|recruit|vacancy|opening|advertisement|advt|job|work.?with",
     re.IGNORECASE
@@ -1330,31 +1333,36 @@ def flush_career_url_cache(session):
         pass
 
 def _extract_career_link(homepage_url, html_text, session):
-    """Parses HTML to find the best career link, avoiding direct file links."""
+    """
+    Parses HTML to find the best career link using the learned vocabulary
+    scorer (CareerURLVocabulary.score_link). Falls back to the regex
+    heuristic if the vocab scorer returns zero for all links.
+    """
+    from urllib.parse import urlparse
     soup = BeautifulSoup(html_text, "html.parser")
     best_url = homepage_url
-    best_score = 0
+    best_score = 0.0
+    base_host = urlparse(homepage_url).netloc
+    vocab = get_vocab()
 
     for a in soup.find_all("a", href=True):
         href = a["href"].strip()
         if not href or href.startswith("javascript:") or href.startswith("mailto:") or href == "#":
             continue
 
-        # Skip links pointing directly to PDF, doc, image or zip files
+        # Skip links pointing directly to binary files
         href_lower = href.lower()
-        if any(ext in href_lower for ext in [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".zip", ".png", ".jpg", ".jpeg"]):
+        if any(ext in href_lower for ext in [".doc", ".docx", ".xls", ".xlsx", ".zip", ".png", ".jpg", ".jpeg"]):
             continue
 
         text = a.get_text().strip()
-        score = 0
 
-        # Score matching links
-        if _CAREER_LINKS_RE.search(href):
-            score += 40
-        if _CAREER_LINKS_RE.search(text):
-            score += 50
-        if "pdf" in href.lower():
-            score -= 10  # prefer landing page over direct PDF
+        # ── Dynamic scoring via learned vocabulary ──────────────────────────
+        score = vocab.score_link(href, text, base_host)
+
+        # PDF links are kept as candidates (direct job notifications)
+        if href_lower.endswith(".pdf") and score > 0:
+            score *= 0.8  # slight penalty vs landing pages
 
         if score > best_score:
             best_score = score
