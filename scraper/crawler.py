@@ -29,6 +29,8 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from scraper.config import ORGS_CONFIG, DEFAULT_HEADERS, MAIN_ORGS
+from scraper.page_classifier import score_page as _page_score
+from scraper.learned_vocab import get_vocab as _get_vocab
 
 # ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -607,7 +609,20 @@ class GovJobCrawler:
                         except Exception as e:
                             self._log(f"WARNING: parser_fn failed on {url}: {e}")
 
-            # ── Filter by relevance (with per-org context + URL awareness) ─
+                    # ── Self-thinking: sub-page exploration ──────────────────────
+                    # If the main page yielded nothing but shows some job-page
+                    # signal (page_score > 0.20), explore the top-scored links
+                    # on the page autonomously (1 hop deeper, max 3 links).
+                    if not postings and _pg_score >= 0.20:
+                        subpage_postings = self._explore_subpages(
+                            r.text, base_url=url, org_key=key
+                        )
+                        if subpage_postings:
+                            postings = subpage_postings
+                            self._log(f"[sub-page exploration found {len(postings)} listings]")
+
+            # ── Filter by relevance (with per-org context + URL awareness) ──
+
             annotate(postings, org_key=key, session=self.session)
             filtered = [p for p in postings if p.get("relevance") != "excluded"]
             self._log(f"{len(filtered)} listings (from {len(postings)})")
@@ -643,6 +658,82 @@ class GovJobCrawler:
             return None  # code/parsing error — also preserves state
 
 
+    def _explore_subpages(self, html, base_url, org_key, max_links=3, timeout=10):
+        """
+        Self-thinking sub-page exploration.
+
+        When the main page yields no postings, this method:
+          1. Extracts all internal links from the page
+          2. Scores each link via CareerURLVocabulary (no LLM)
+          3. Fetches the top `max_links` candidates
+          4. Parses each with parse_adaptive
+          5. Records successful patterns back into the vocabulary
+
+        Returns combined postings list (may be empty).
+        """
+        from urllib.parse import urlparse, urljoin
+        from bs4 import BeautifulSoup
+        from scraper.adaptive_parser import parse_adaptive
+
+        try:
+            soup = BeautifulSoup(html, "html.parser")
+            base_host = urlparse(base_url).netloc
+            vocab = _get_vocab()
+
+            # Score all internal links
+            candidates = []
+            for a in soup.find_all("a", href=True):
+                href = a["href"].strip()
+                if not href or href.startswith(("javascript:", "mailto:", "#", "tel:")):
+                    continue
+                abs_href = urljoin(base_url, href)
+                # Stay on the same host
+                if urlparse(abs_href).netloc != base_host:
+                    continue
+                text = a.get_text().strip()
+                score = vocab.score_link(abs_href, text, base_host)
+                if score > 0:
+                    candidates.append((score, abs_href, text))
+
+            # Sort by score descending, take top N unique URLs
+            candidates.sort(key=lambda x: -x[0])
+            seen = set()
+            top_candidates = []
+            for score, url, text in candidates:
+                if url not in seen:
+                    seen.add(url)
+                    top_candidates.append((score, url))
+                    if len(top_candidates) >= max_links:
+                        break
+
+            if not top_candidates:
+                return []
+
+            self._log(f"[exploring {len(top_candidates)} sub-pages: {[u for _, u in top_candidates]}]")
+
+            # Fetch and parse top candidates
+            all_postings = []
+            for score, sub_url in top_candidates:
+                try:
+                    sub_r = self.session.get(sub_url, headers=DEFAULT_HEADERS,
+                                             timeout=timeout, verify=False)
+                    if sub_r.status_code != 200:
+                        continue
+                    sub_score = _page_score(sub_r.text)
+                    if sub_score < 0.15:
+                        continue  # page classifier says it's not a jobs page
+                    sub_postings = parse_adaptive(sub_r.text, base_url=sub_url)
+                    if sub_postings:
+                        all_postings.extend(sub_postings)
+                        # Reinforce this URL pattern in the vocabulary
+                        vocab.record_success(base_url, sub_url)
+                except Exception:
+                    continue
+
+            return all_postings
+
+        except Exception:
+            return []
 
     # Static fallback URL for RRB when SPA returns no useful content
     _RRB_STATIC_URL = "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,554"

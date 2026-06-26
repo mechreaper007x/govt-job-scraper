@@ -1305,10 +1305,36 @@ def resolve_career_url(homepage_url, session=None):
                     except Exception:
                         pass
 
+    # ── Learned vocabulary fallback ───────────────────────────────────────────
+    # If the homepage link-scan found nothing new (resolved_url == homepage),
+    # try the top-ranked candidate URLs generated from the learned vocabulary.
+    # This catches sites whose homepages don't link to their career page
+    # but host it at a known path like /notice_category/recruitment.
+    if resolved_url == homepage_url:
+        vocab = get_vocab()
+        vocab_candidates = vocab.generate_candidates(homepage_url, n=12)
+        for cand_url, cand_score in vocab_candidates:
+            if not _dns_resolves(cand_url):
+                continue
+            try:
+                cr = session.get(cand_url, headers=DEFAULT_HEADERS,
+                                 timeout=_resolve_timeout, verify=False)
+                if cr.status_code == 200 and "html" in cr.headers.get("Content-Type", "").lower():
+                    # Only accept if the page actually looks like a jobs page
+                    from scraper.page_classifier import score_page as _page_score
+                    if _page_score(cr.text) >= 0.25:
+                        resolved_url = cand_url
+                        # Reinforce this pattern in the vocabulary
+                        vocab.record_success(homepage_url, cand_url)
+                        break
+            except Exception:
+                continue
+
     with session._cache_lock:
         session._career_url_cache[homepage_url] = resolved_url
 
     return resolved_url
+
 
 
 def flush_career_url_cache(session):
