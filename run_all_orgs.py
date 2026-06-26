@@ -56,6 +56,7 @@ def main():
     total_relevant = 0
     failures = []
     server_down_list = []
+    scraped_data = {}
 
     def scrape_worker(index, key):
         nonlocal success_count, fail_count, server_down_count, total_postings, total_relevant
@@ -76,6 +77,7 @@ def main():
                 rel_cnt = 0
                 with lock:
                     server_down_count += 1
+                    scraped_data[key] = postings
                 err_msg = "".join(worker_logs).strip() or "Network unreachable"
                 with failures_lock:
                     server_down_list.append((name, key, err_msg))
@@ -86,6 +88,7 @@ def main():
                 rel_cnt = 0
                 with lock:
                     fail_count += 1
+                    scraped_data[key] = None
                 err_msg = "".join(worker_logs).strip() or "Unknown Fetch Error"
                 with failures_lock:
                     failures.append((name, key, err_msg))
@@ -97,12 +100,14 @@ def main():
                     success_count += 1
                     total_postings += cnt
                     total_relevant += rel_cnt
+                    scraped_data[key] = postings
         except Exception as e:
             status = f"Error"
             cnt = 0
             rel_cnt = 0
             with lock:
                 fail_count += 1
+                scraped_data[key] = None
             with failures_lock:
                 failures.append((name, key, f"Crashed: {e}"))
                 
@@ -130,6 +135,37 @@ def main():
     print(f" Total Postings:  {total_postings}", file=sys.__stdout__)
     print(f" CS/IT Relevant:  {total_relevant}", file=sys.__stdout__)
     print("=" * 105, file=sys.__stdout__)
+
+    # Save scraped jobs to json
+    from scraper.export import save_jobs_json
+    save_jobs_json(scraped_data, filepath="scraped_jobs.json")
+
+    # Generate all_relevant_jobs.md
+    relevant_jobs = []
+    for org_key, postings in scraped_data.items():
+        if postings and isinstance(postings, list):
+            org_name = ORGS_CONFIG.get(org_key, {}).get("name", org_key.upper())
+            for post in postings:
+                if post.get("relevance") == "relevant":
+                    relevant_jobs.append({
+                        "org": org_name,
+                        "title": post.get("title", ""),
+                        "date": post.get("date", "") or "-",
+                        "url": post.get("link", "")
+                    })
+    # Sort relevant_jobs by org name to make it look organized
+    relevant_jobs.sort(key=lambda x: (x["org"].lower(), x["title"].lower()))
+    
+    md_path = "all_relevant_jobs.md"
+    with open(md_path, "w", encoding="utf-8") as f:
+        f.write("# All Relevant CS/IT Government Job Postings\n\n")
+        f.write(f"**Total Relevant Postings:** {len(relevant_jobs)}\n\n")
+        f.write("| # | Organization | Title | Date | Link |\n")
+        f.write("| --- | --- | --- | --- | --- |\n")
+        
+        for idx, j in enumerate(relevant_jobs, 1):
+            f.write(f"| {idx} | {j['org']} | {j['title']} | {j['date']} | [Link]({j['url']}) |\n")
+    print(f"Updated all_relevant_jobs.md with {len(relevant_jobs)} relevant CS/IT jobs.", file=sys.__stdout__)
 
     if failures:
         print("\n" + "=" * 105, file=sys.__stdout__)

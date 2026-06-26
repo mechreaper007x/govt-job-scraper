@@ -93,13 +93,14 @@ EXCLUDE_KEYWORDS = [
     "telecommunication", "telecom", "instrumentation", "chemical", "metallurgy",
     "geology", "geophysics", "agriculture", "physical sciences",
     "life sciences", "ordnance", "ammunition", "architecture",
-    "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology",
+    "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology", "geothermal",
+    "materials science", "manufacturing",
     # non-engineering / support roles & trades
     "driver", "havildar", "fireman", "cook", "catering", "canteen",
     "nurse", "nursing", "pharmacist", "medical", "radiographer", "radiography",
     "pathology", "doctor", "doctors", "physiotherapy", "physiotherapist",
     "lab technician", "stenographer", "draughtsman", "draftsman", "library",
-    "dental", "prosthodontics",
+    "dental", "prosthodontics", "surveyor",
     "security officer", "office attendant", "peon",
     "multi tasking", "mts", "trade apprentice", "iti apprentice",
     "technician b", "technician-b", "technician a", "technician-a",
@@ -109,7 +110,11 @@ EXCLUDE_KEYWORDS = [
     "administrative officer", "admin officer", "human resource", "hr",
     "personal assistant", "private secretary", "administration", "administrative",
     "assistant", "pa/ps", "pa / ps", "cfo", "registrar", "purchase", "store",
-    "stores", "materials management", "section officer", "child development",
+    "stores", "materials management", "section officer", "child development", "land acquisition", 
+    "forest clearance", "public information officer", "tourist information officer", "information officer",
+    "private developer", "land developer", "housing developer", "real estate developer",
+    # physical security
+    "internal security", "national security", "homeland security", "security guard", "security agency", "security force",
     # management / executive roles (not CSE-specific)
     "chairman", "controller", "managing director", "director", "cvo", "vigilance",
     "grievance", "gst", "nodal",
@@ -117,6 +122,11 @@ EXCLUDE_KEYWORDS = [
     "guest faculty", "teacher", "professor", "principal", "lecturer",
     # language / translation
     "translator", "translation", "hindi", "rajbhasha",
+    # Tenders / Tenders junk (non-active postings)
+    "tender", "bid", "procurement", "auction", "lease", "patta", "deed", "expression of interest", 
+    "eoi", "rfp", "quotation", "quotations", "roadmap", "study", "policy", "strategy", "guidelines", 
+    "conference", "workshop", "symposium", "seminar", "concludes", "brochure", "tips", "awareness", 
+    "how to", "instruction", "instructions", "banner", "logo",
     # Exam / Results junk (non-active postings)
     "syllabus", "corrigendum", "result", "selection list", "select list",
     "marks", "answer key", "admit card", "screening status", "exam date",
@@ -156,10 +166,8 @@ class TFIDFSimilarityClassifier:
     def __init__(self):
         # CS/IT Vocabulary Profile
         self.cse_vocab = {
-            "computer", "science", "information", "technology", "software",
-            "developer", "programmer", "web", "php", "laravel", "python",
-            "java", "database", "cloud", "devops", "cyber", "security",
-            "data", "analytics", "mca", "cse", "it", "systems", "network"
+            "computer", "software", "developer", "programmer", "php", "laravel",
+            "python", "java", "database", "cyber", "security", "devops", "mca", "cse"
         }
         # Exclusion Vocabulary Profile (Other fields, support roles)
         self.exclude_vocab = {
@@ -316,7 +324,9 @@ CS_URL_KEYWORDS = [
 NON_CS_URL_KEYWORDS = [
     "civil", "mechanical", "electrical", "chemical",
     "medical", "dentist", "nursing", "dental",
-    "trade", "helper", "labour",
+    "trade", "helper", "labour", "biotechnology", "biotech",
+    "biology", "chemistry", "physics", "agriculture", "forest",
+    "geology", "animalhusbandry", "veterinary",
 ]
 
 
@@ -585,7 +595,7 @@ def classify(title, link="", org_key="", session=None):
 
         if cs_url_hits >= 2:
             return "relevant"
-        if non_cs_url_hits >= 2:
+        if non_cs_url_hits >= 1 and not CORE_CS_RE.search(title_clean):
             return "excluded"
 
     # ── Layer 3: PDF content extraction ────────────────────────────────────

@@ -233,17 +233,17 @@ class GovJobCrawler:
         session._sld_locks = {}
         session._sld_lock_lock = threading.Lock()
         session._sld_last_request_time = {}
-        # Circuit breaker: maps SLD -> True when any timeout is recorded.
-        # All future requests to any host under that SLD raise immediately.
-        session._sld_down = {}
-        session._sld_down_lock = threading.Lock()
-        # Canary coordination: maps SLD -> threading.Event.
-        # The FIRST thread per SLD becomes the canary and makes the real request.
-        # All other threads for the same SLD block on the Event until the canary
+        # Circuit breaker: maps Host -> True when any timeout is recorded.
+        # All future requests to the same host raise immediately.
+        session._host_down = {}
+        session._host_down_lock = threading.Lock()
+        # Canary coordination: maps Host -> threading.Event.
+        # The FIRST thread per host becomes the canary and makes the real request.
+        # All other threads for the same host block on the Event until the canary
         # completes.  If the canary times out and trips the breaker, waiters see
         # the breaker instantly rather than each burning their own 5 s timeout.
-        session._sld_canary = {}          # sld -> threading.Event (once set = done)
-        session._sld_canary_lock = threading.Lock()
+        session._host_canary = {}          # host -> threading.Event (once set = done)
+        session._host_canary_lock = threading.Lock()
 
         orig_get = session.get
 
@@ -265,6 +265,7 @@ class GovJobCrawler:
                 else:
                     sld = host
             except Exception:
+                host = url
                 sld = url
 
             is_scale = os.environ.get("SCALE_CRAWL") == "1"
@@ -279,20 +280,20 @@ class GovJobCrawler:
             is_canary = False
             canary_evt = None
             if is_scale:
-                # Fast path: SLD already known to be down
-                with session._sld_down_lock:
-                    if sld in session._sld_down:
+                # Fast path: Host already known to be down
+                with session._host_down_lock:
+                    if host in session._host_down:
                         from requests.exceptions import ConnectTimeout
                         raise ConnectTimeout(
-                            f"Circuit breaker: {sld} marked down after prior ConnectTimeout"
+                            f"Circuit breaker: {host} marked down after prior ConnectTimeout"
                         )
 
-                # Canary election: first thread per SLD wins; others wait
-                with session._sld_canary_lock:
-                    existing_evt = session._sld_canary.get(sld)
+                # Canary election: first thread per host wins; others wait
+                with session._host_canary_lock:
+                    existing_evt = session._host_canary.get(host)
                     if existing_evt is None:
                         canary_evt = threading.Event()
-                        session._sld_canary[sld] = canary_evt
+                        session._host_canary[host] = canary_evt
                         is_canary = True
                     else:
                         canary_evt = existing_evt
@@ -302,11 +303,11 @@ class GovJobCrawler:
                     # Wait for the canary to finish (up to 30 s),
                     # then re-check the circuit breaker.
                     canary_evt.wait(timeout=30)
-                    with session._sld_down_lock:
-                        if sld in session._sld_down:
+                    with session._host_down_lock:
+                        if host in session._host_down:
                             from requests.exceptions import ConnectTimeout
                             raise ConnectTimeout(
-                                f"Circuit breaker: {sld} marked down after prior ConnectTimeout"
+                                f"Circuit breaker: {host} marked down after prior ConnectTimeout"
                             )
 
             # ── Per-host lock (rate limiting + HTML cache) ────────────────────
@@ -361,8 +362,8 @@ class GovJobCrawler:
                             or "read timeout" in err_str.lower()
                         )
                         if is_timeout:
-                            with session._sld_down_lock:
-                                session._sld_down[sld] = True
+                            with session._host_down_lock:
+                                session._host_down[host] = True
                         # Always signal canary done (even on non-timeout errors)
                         if is_canary and canary_evt is not None:
                             canary_evt.set()
@@ -753,7 +754,7 @@ class GovJobCrawler:
             postings = scraped_data.get(key)
             name = ORGS_CONFIG.get(key, {}).get("name", key)
 
-            if postings is None:
+            if postings is None or postings is SERVER_DOWN:
                 report["orgs"][key] = {"name": name, "status": "error", "total": 0, "relevant": 0, "uncertain": 0, "relevant_pct": 0.0, "signal_quality": "N/A"}
                 continue
 

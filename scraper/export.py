@@ -63,7 +63,7 @@ def build_jobs_payload(scraped_data):
         name = cfg.get("name", org_key.upper())
         url  = cfg.get("url", "")
 
-        if postings is None:
+        if postings is None or not isinstance(postings, list):
             # Org scrape failed — include so the consumer knows it was attempted
             orgs_out[org_key] = {
                 "name":   name,
