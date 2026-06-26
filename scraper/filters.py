@@ -94,7 +94,7 @@ EXCLUDE_KEYWORDS = [
     "geology", "geophysics", "agriculture", "physical sciences",
     "life sciences", "ordnance", "ammunition", "architecture",
     "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology", "geothermal",
-    "materials science", "manufacturing",
+    "materials science", "manufacturing", "mathematics", "maths", "cfd", "fluid dynamics", "coal", "gasification", "beneficiation",
     # non-engineering / support roles & trades
     "driver", "havildar", "fireman", "cook", "catering", "canteen",
     "nurse", "nursing", "pharmacist", "medical", "radiographer", "radiography",
@@ -113,6 +113,7 @@ EXCLUDE_KEYWORDS = [
     "stores", "materials management", "section officer", "child development", "land acquisition", 
     "forest clearance", "public information officer", "tourist information officer", "information officer",
     "private developer", "land developer", "housing developer", "real estate developer",
+    "corporate relations", "recruitment data",
     # physical security
     "internal security", "national security", "homeland security", "security guard", "security agency", "security force",
     # management / executive roles (not CSE-specific)
@@ -219,6 +220,62 @@ class TFIDFSimilarityClassifier:
 
 # Instantiate the similarity classifier
 title_similarity_classifier = TFIDFSimilarityClassifier()
+
+
+# ─── Zero-Dependency Naive Bayes Classifier ─────────────────────────────────
+class NaiveBayesClassifier:
+    """
+    Zero-dependency Multinomial Naive Bayes classifier for job titles.
+    Loads pre-trained prior and likelihood parameters from a JSON weights file.
+    """
+    def __init__(self, weights_path=None):
+        self.priors = {}
+        self.oov = {}
+        self.weights = {}
+        self.loaded = False
+        
+        if weights_path is None:
+            weights_path = os.path.join(os.path.dirname(__file__), "model_weights.json")
+            
+        if os.path.exists(weights_path):
+            try:
+                with open(weights_path, "r", encoding="utf-8") as f:
+                    model = json.load(f)
+                self.priors = model["priors"]
+                self.oov = model["oov"]
+                self.weights = model["weights"]
+                self.loaded = True
+            except Exception:
+                pass
+
+    def _tokenize(self, text):
+        words = [w.strip() for w in re.split(r"[^a-zA-Z0-9]", text.lower()) if len(w.strip()) > 1]
+        features = list(words)
+        for i in range(len(words) - 1):
+            features.append(f"{words[i]}_{words[i+1]}")
+        return features
+
+    def predict(self, title):
+        if not self.loaded:
+            return None, None
+            
+        features = self._tokenize(title)
+        
+        score_relevant = self.priors["relevant"]
+        score_excluded = self.priors["excluded"]
+        
+        for feat in features:
+            if feat in self.weights:
+                score_relevant += self.weights[feat]["relevant"]
+                score_excluded += self.weights[feat]["excluded"]
+            else:
+                score_relevant += self.oov["relevant"]
+                score_excluded += self.oov["excluded"]
+                
+        return score_relevant, score_excluded
+
+# Instantiate the Naive Bayes classifier
+naive_bayes_classifier = NaiveBayesClassifier()
 
 
 # ─── Layer 2: Per-org context rules ─────────────────────────────────────────
@@ -550,19 +607,29 @@ def classify(title, link="", org_key="", session=None):
     title_clean = re.sub(r'national\s+institute\s+of\s+electronics\s+(&|and)\s+information\s+technology', '', title_clean, flags=re.IGNORECASE)
 
     # ── Layer 1: Title keyword matching with regex ──
-    # 1. Core CS wins
-    if CORE_CS_RE.search(title_clean):
-        return "relevant"
-
-    # 2. Exclude wins over Other CS and Generic Tech
+    # 1. Exclude wins first (so result/marks notices are pruned even if they contain CS terms)
     if EXCLUDE_RE.search(title_clean):
         return "excluded"
+
+    # 2. Core CS wins next
+    if CORE_CS_RE.search(title_clean):
+        return "relevant"
 
     # 3. Other CS wins next
     if OTHER_CS_RE.search(title_clean):
         return "relevant"
 
-    # ── Layer 1.5: TF-IDF Cosine Similarity for synonyms ──
+    # ── Layer 1.5: Naive Bayes Machine Learning Classifier ──
+    if naive_bayes_classifier.loaded:
+        nb_rel, nb_excl = naive_bayes_classifier.predict(title_clean)
+        if nb_rel is not None and nb_excl is not None:
+            # 1.0 log-space margin (approx 2.7x more probable)
+            if nb_rel > nb_excl + 1.0:
+                return "relevant"
+            elif nb_excl > nb_rel + 1.0:
+                return "excluded"
+
+    # ── Layer 1.6: TF-IDF Cosine Similarity for synonyms ──
     cse_sim, excl_sim = title_similarity_classifier.classify_title(title_clean)
     if cse_sim >= 0.25 and cse_sim > excl_sim:
         return "relevant"
