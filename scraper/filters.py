@@ -28,6 +28,8 @@ import sys
 import os
 import io
 import hashlib
+import json
+import math
 
 # ─── Keyword lists & Regexes ────────────────────────────────────────────────
 
@@ -63,7 +65,7 @@ OTHER_CS_KEYWORDS = [
 ]
 
 GENERIC_TECH_KEYWORDS = [
-    "project engineer", "project manager", "project associate",
+    "project engineer", "project associate",
     "project scientist", "project staff", "project technician",
     "senior project", "project support",
     "project assistant", "project officer", "project consultant",
@@ -93,7 +95,7 @@ EXCLUDE_KEYWORDS = [
     "telecommunication", "telecom", "instrumentation", "chemical", "metallurgy",
     "geology", "geophysics", "agriculture", "physical sciences",
     "life sciences", "ordnance", "ammunition", "architecture",
-    "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology", "geothermal",
+    "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology", "geothermal", "environmental",
     "materials science", "manufacturing", "mathematics", "maths", "cfd", "fluid dynamics", "coal", "gasification", "beneficiation",
     # non-engineering / support roles & trades
     "driver", "havildar", "fireman", "cook", "catering", "canteen",
@@ -105,6 +107,8 @@ EXCLUDE_KEYWORDS = [
     "multi tasking", "mts", "trade apprentice", "iti apprentice",
     "technician b", "technician-b", "technician a", "technician-a",
     "clerk", "typist", "receptionist",
+    "fishery", "fisheries", "horticulture", "veterinary", "animal husbandry",
+    "agm (security)", "dgm (security)",
     # administrative, legal, hr, and financial roles
     "legal", "law", "finance", "accounts", "audit", "marketing",
     "administrative officer", "admin officer", "human resource", "hr",
@@ -119,6 +123,8 @@ EXCLUDE_KEYWORDS = [
     # management / executive roles (not CSE-specific)
     "chairman", "controller", "managing director", "director", "cvo", "vigilance",
     "grievance", "gst", "nodal",
+    # project management (non-CSE) - project engineer/scientist are kept in GENERIC_TECH above
+    "project manager",
     # teaching / academic non-research
     "guest faculty", "teacher", "professor", "principal", "lecturer",
     # language / translation
@@ -134,7 +140,12 @@ EXCLUDE_KEYWORDS = [
     "shortlisted", "careers", "vacancies", "internship", "annexure", "data entry",
     "circulars", "notifications", "committee", "complaints", "grievance", 
     "grievances", "nodal", "officer list", "officers list", "contact us", 
-    "about us", "feedback", "menu"
+    "about us", "feedback", "menu",
+    # Advisory / notification-style postings that are not job openings
+    "notification for engagement", "notification of engagement",
+    "engagement of advisor", "engagement of sr. advisor", "engagement of senior advisor",
+    "advisor (secretarial)", "advisor (survey)", "advisor (mining)",
+    "advisor (land", "advisor (personnel)", "advisor (security)"
 ]
 
 def _build_boundary_regex(keywords):
@@ -165,10 +176,10 @@ class TFIDFSimilarityClassifier:
     Compares job titles against CS/IT reference profiles and exclusion profiles.
     """
     def __init__(self):
-        # CS/IT Vocabulary Profile
+        # CS/IT Vocabulary Profile — deliberately narrow to avoid false positives
         self.cse_vocab = {
             "computer", "software", "developer", "programmer", "php", "laravel",
-            "python", "java", "database", "cyber", "security", "devops", "mca", "cse"
+            "python", "java", "database", "cyber", "devops", "mca", "cse"
         }
         # Exclusion Vocabulary Profile (Other fields, support roles)
         self.exclude_vocab = {
@@ -222,6 +233,114 @@ class TFIDFSimilarityClassifier:
 title_similarity_classifier = TFIDFSimilarityClassifier()
 
 
+# ─── Dual TF-IDF Weighted Word Embedding Cosine Similarity Classifier ───────
+class TFIDFEmbeddingClassifier:
+    """
+    Combines TF-IDF weights with Stanford GloVe 50d word embeddings.
+    Computes TF-IDF weighted average vectors for job titles and measures
+    cosine similarity against CS and Exclude class profiles.
+    """
+    def __init__(self, embeddings_path=None):
+        self.embeddings = {}
+        self.loaded = False
+        
+        if embeddings_path is None:
+            embeddings_path = os.path.join(os.path.dirname(__file__), "word_embeddings.json")
+            
+        if os.path.exists(embeddings_path):
+            try:
+                with open(embeddings_path, "r", encoding="utf-8") as f:
+                    self.embeddings = json.load(f)
+                self.loaded = True
+            except Exception:
+                pass
+                
+        # Vocabulary profiles (from TF-IDF vocab profiles)
+        self.cse_vocab = {
+            "computer", "software", "developer", "programmer", "php", "laravel",
+            "python", "java", "database", "cyber", "devops", "mca", "cse"
+        }
+        self.exclude_vocab = {
+            "civil", "mechanical", "electrical", "chemical", "nurse",
+            "medical", "doctor", "pharmacist", "driver", "clerk", "typist",
+            "stenographer", "accountant", "accounts", "audit", "legal",
+            "law", "hr", "admin", "helper", "cook", "apprentice",
+            "surgeon", "physician", "radiologist", "hospital", "medic",
+            "medics", "dentist", "geology", "geophysicist", "geophysics",
+            "chemistry", "physics", "forester", "forestry",
+            "biotechnology", "biotech", "biology", "toxicology", "draftsman"
+        }
+        
+        # Precompute target centroids (profile vectors)
+        self.cs_centroid = self._compute_profile_centroid(self.cse_vocab)
+        self.exclude_centroid = self._compute_profile_centroid(self.exclude_vocab)
+
+    def _tokenize(self, text):
+        return [w.strip() for w in re.split(r"[^a-zA-Z]", text.lower()) if len(w.strip()) > 1]
+
+    def _compute_profile_centroid(self, vocab_set):
+        if not self.loaded:
+            return None
+        centroid = [0.0] * 50
+        count = 0
+        for word in vocab_set:
+            if word in self.embeddings:
+                vec = self.embeddings[word]
+                for d in range(50):
+                    centroid[d] += vec[d]
+                count += 1
+        if count > 0:
+            centroid = [x / count for x in centroid]
+        return centroid
+
+    def _cosine_similarity(self, v1, v2):
+        if not v1 or not v2:
+            return 0.0
+        dot = sum(x*y for x, y in zip(v1, v2))
+        norm1 = math.sqrt(sum(x*x for x in v1))
+        norm2 = math.sqrt(sum(x*x for x in v2))
+        if norm1 == 0 or norm2 == 0:
+            return 0.0
+        return dot / (norm1 * norm2)
+
+    def classify_title(self, title):
+        if not self.loaded or not self.cs_centroid or not self.exclude_centroid:
+            return 0.0, 0.0
+            
+        tokens = self._tokenize(title)
+        if not tokens:
+            return 0.0, 0.0
+            
+        # Compute local TF (term frequency)
+        tf = {}
+        for token in tokens:
+            tf[token] = tf.get(token, 0) + 1
+            
+        # Compute TF-IDF weighted title vector
+        title_vec = [0.0] * 50
+        total_weight = 0.0
+        for token, freq in tf.items():
+            if token in self.embeddings:
+                vec = self.embeddings[token]
+                weight = freq * (2.0 if (token in self.cse_vocab or token in self.exclude_vocab) else 1.0)
+                for d in range(50):
+                    title_vec[d] += vec[d] * weight
+                total_weight += weight
+                
+        if total_weight == 0:
+            return 0.0, 0.0
+            
+        title_vec = [x / total_weight for x in title_vec]
+        
+        # Calculate similarity against profiles
+        cs_sim = self._cosine_similarity(title_vec, self.cs_centroid)
+        exclude_sim = self._cosine_similarity(title_vec, self.exclude_centroid)
+        return cs_sim, exclude_sim
+
+# Instantiate the embedding classifier
+tfidf_embedding_classifier = TFIDFEmbeddingClassifier()
+
+
 # ─── Zero-Dependency Naive Bayes Classifier ─────────────────────────────────
 class NaiveBayesClassifier:
     """
@@ -268,9 +387,6 @@ class NaiveBayesClassifier:
             if feat in self.weights:
                 score_relevant += self.weights[feat]["relevant"]
                 score_excluded += self.weights[feat]["excluded"]
-            else:
-                score_relevant += self.oov["relevant"]
-                score_excluded += self.oov["excluded"]
                 
         return score_relevant, score_excluded
 
@@ -552,7 +668,7 @@ def _classify_by_pdf(url, session):
 
 # ─── Main classify function ─────────────────────────────────────────────────
 
-def classify(title, link="", org_key="", session=None):
+def classify(title, link="", org_key="", session=None, use_ml=True):
     """
     Classify a posting title as 'relevant', 'excluded', or 'uncertain'
     using a 3-layer approach:
@@ -620,13 +736,14 @@ def classify(title, link="", org_key="", session=None):
         return "relevant"
 
     # ── Layer 1.5: Naive Bayes Machine Learning Classifier ──
-    if naive_bayes_classifier.loaded:
+    if use_ml and naive_bayes_classifier.loaded:
         nb_rel, nb_excl = naive_bayes_classifier.predict(title_clean)
         if nb_rel is not None and nb_excl is not None:
-            # 1.0 log-space margin (approx 2.7x more probable)
-            if nb_rel > nb_excl + 1.0:
+            # 2.0 log-space margin (approx 7.4x more probable) — deliberately strict
+            # to avoid false positives from generic management-adjacent terms
+            if nb_rel > nb_excl + 2.0:
                 return "relevant"
-            elif nb_excl > nb_rel + 1.0:
+            elif nb_excl > nb_rel + 2.0:
                 return "excluded"
 
     # ── Layer 1.6: TF-IDF Cosine Similarity for synonyms ──
@@ -636,11 +753,26 @@ def classify(title, link="", org_key="", session=None):
     elif excl_sim >= 0.25 and excl_sim > cse_sim:
         return "excluded"
 
-    # 4. Generic tech keywords next
+    # ── Pre-check: Generic tech keywords for CS-first orgs ──
+    # Do this BEFORE embedding layer so that ambiguous words like "engineer"
+    # in GloVe space (shared with civil/mech) don't wrongly exclude them.
     has_generic = bool(GENERIC_TECH_RE.search(title_clean))
-    if has_generic:
-        if org_key in CS_FIRST_ORGS:
+    if has_generic and org_key in CS_FIRST_ORGS:
+        return "relevant"
+
+    # ── Layer 1.7: TF-IDF Weighted Word Embedding Cosine Similarity ──
+    if use_ml and tfidf_embedding_classifier.loaded:
+        emb_cs_sim, emb_excl_sim = tfidf_embedding_classifier.classify_title(title_clean)
+        # Cosine similarity threshold of 0.55 and margin of 0.12.
+        # NOTE: Do NOT let embeddings exclude generic-tech titles (scientist, engineer, etc.)
+        # — those are intentionally ambiguous and must reach Layer 2 org-context rules.
+        if emb_cs_sim >= 0.55 and emb_cs_sim > emb_excl_sim + 0.12:
             return "relevant"
+        elif emb_excl_sim >= 0.55 and emb_excl_sim > emb_cs_sim + 0.12 and not has_generic:
+            return "excluded"
+
+    # 4. Generic tech keywords next (for non-CS-first orgs, fall through to Layer 2)
+    # (has_generic already computed above; used again in fallback below)
 
     # ── Layer 2a: Per-org context rules ────────────────────────────────────
     if org_key:

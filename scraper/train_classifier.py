@@ -41,12 +41,18 @@ def train():
             link = job.get("link", "")
             
             # Use current rule-based classify as our training labels
-            label = classify(title, link=link, org_key=org_key)
+            label = classify(title, link=link, org_key=org_key, use_ml=False)
             
             if label == "relevant":
                 pos_samples.append(title)
-            elif label == "excluded":
+            else:
                 neg_samples.append(title)
+
+    # Balance the classes by undersampling the negative class to 2x the positive class
+    import random
+    random.seed(42)
+    if len(neg_samples) > 2 * len(pos_samples):
+        neg_samples = random.sample(neg_samples, 2 * len(pos_samples))
 
     print(f"Total training samples - Relevant: {len(pos_samples)}, Excluded: {len(neg_samples)}")
 
