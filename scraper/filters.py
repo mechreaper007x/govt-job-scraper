@@ -38,7 +38,8 @@ CORE_CS_KEYWORDS = [
     "full stack", "fullstack", "web develop", "app develop",
     "web designer", "application developer",
     # data / AI
-    "data science", "data analytics", "data analyst",
+    "data science", "data analytics", "data analyst", "data engineer",
+    "data engineering", "data scientist", "data analytic",
     "artificial intelligence", "machine learning", "ai/ml",
     "deep learning", "nlp", "computer vision",
     # security / infra
@@ -92,11 +93,13 @@ EXCLUDE_KEYWORDS = [
     "telecommunication", "telecom", "instrumentation", "chemical", "metallurgy",
     "geology", "geophysics", "agriculture", "physical sciences",
     "life sciences", "ordnance", "ammunition", "architecture",
+    "biotechnology", "biotech", "biology", "chemistry", "physics", "toxicology",
     # non-engineering / support roles & trades
     "driver", "havildar", "fireman", "cook", "catering", "canteen",
     "nurse", "nursing", "pharmacist", "medical", "radiographer", "radiography",
     "pathology", "doctor", "doctors", "physiotherapy", "physiotherapist",
-    "lab technician", "stenographer", "draughtsman", "library",
+    "lab technician", "stenographer", "draughtsman", "draftsman", "library",
+    "dental", "prosthodontics",
     "security officer", "office attendant", "peon",
     "multi tasking", "mts", "trade apprentice", "iti apprentice",
     "technician b", "technician-b", "technician a", "technician-a",
@@ -106,7 +109,7 @@ EXCLUDE_KEYWORDS = [
     "administrative officer", "admin officer", "human resource", "hr",
     "personal assistant", "private secretary", "administration", "administrative",
     "assistant", "pa/ps", "pa / ps", "cfo", "registrar", "purchase", "store",
-    "stores", "materials management",
+    "stores", "materials management", "section officer", "child development",
     # management / executive roles (not CSE-specific)
     "chairman", "controller", "managing director", "director", "cvo", "vigilance",
     "grievance", "gst", "nodal",
@@ -166,7 +169,8 @@ class TFIDFSimilarityClassifier:
             "law", "hr", "admin", "helper", "cook", "apprentice",
             "surgeon", "physician", "radiologist", "hospital", "medic",
             "medics", "dentist", "geology", "geophysicist", "geophysics",
-            "chemistry", "physics", "forester", "forestry"
+            "chemistry", "physics", "forester", "forestry",
+            "biotechnology", "biotech", "biology", "toxicology", "draftsman"
         }
         
     def _tokenize(self, text):
