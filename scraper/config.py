@@ -392,6 +392,117 @@ ORGS_CONFIG = {
         "name": "HSSC (Haryana Staff Selection Commission)",
         "url": "https://www.hssc.gov.in/"
     },
+    # ── IITs (career/recruitment pages) ──────────────────────────────────────
+    "iith": {
+        "name": "IIT Hyderabad",
+        "url": "https://careers.iith.ac.in/",
+        "special": "playwright"
+    },
+    "iitm": {
+        "name": "IIT Madras",
+        "url": "https://recruit.iitm.ac.in/",
+        "special": "playwright"
+    },
+    "iitb": {
+        "name": "IIT Bombay",
+        "url": "https://rnd.iitb.ac.in/jobs",
+        "special": "playwright"
+    },
+    "iitd": {
+        "name": "IIT Delhi",
+        "url": "https://www.iitd.ac.in/jobs-iitd",
+        "special": "playwright"
+    },
+    "iitk": {
+        "name": "IIT Kanpur",
+        "url": "https://www.iitk.ac.in/recruitment",
+        "special": "playwright"
+    },
+    "iitkgp": {
+        "name": "IIT Kharagpur",
+        "url": "https://www.iitkgp.ac.in/navpage/jobs",
+        "special": "playwright"
+    },
+    "iitr": {
+        "name": "IIT Roorkee",
+        "url": "https://iitr.ac.in/Careers/",
+        "special": "playwright"
+    },
+    "iitg": {
+        "name": "IIT Guwahati",
+        "url": "https://www.iitg.ac.in/iitg_recruitment",
+        "special": "playwright"
+    },
+    "iitbhu": {
+        "name": "IIT BHU",
+        "url": "https://www.iitbhu.ac.in/positions",
+        "special": "playwright"
+    },
+    "iiti": {
+        "name": "IIT Indore",
+        "url": "https://www.iiti.ac.in/recruitments/non-teaching-recruitment",
+        "special": "playwright"
+    },
+    "iitj": {
+        "name": "IIT Jodhpur",
+        "url": "https://www.iitj.ac.in/main/en/recruitments",
+        "special": "playwright"
+    },
+    "iitp": {
+        "name": "IIT Patna",
+        "url": "https://www.iitp.ac.in/vacancies",
+        "special": "playwright"
+    },
+    "iitrpr": {
+        "name": "IIT Ropar",
+        "url": "https://www.iitrpr.ac.in/jobs",
+        "special": "playwright"
+    },
+    "iitmandi": {
+        "name": "IIT Mandi",
+        "url": "https://www.iitmandi.ac.in/recruitments",
+        "special": "playwright"
+    },
+    "iitpkd": {
+        "name": "IIT Palakkad",
+        "url": "https://joinus.iitpkd.ac.in/",
+        "special": "playwright"
+    },
+    "iittp": {
+        "name": "IIT Tirupati",
+        "url": "https://iittp.ac.in/recruitment/",
+        "special": "playwright"
+    },
+    "iitdh": {
+        "name": "IIT Dharwad",
+        "url": "https://www.iitdh.ac.in/recruitment",
+        "special": "playwright"
+    },
+    "iitbhilai": {
+        "name": "IIT Bhilai",
+        "url": "https://www.iitbhilai.ac.in/",
+        "special": "playwright"
+    },
+    "iitgoa": {
+        "name": "IIT Goa",
+        "url": "https://iitgoa.ac.in/careers/",
+        "special": "playwright"
+    },
+    "iitjammu": {
+        "name": "IIT Jammu",
+        "url": "https://iitjammu.ac.in/recruitment",
+        "special": "playwright"
+    },
+    "iitism": {
+        "name": "IITISM Dhanbad",
+        "url": "https://www.iitism.ac.in/recruitment",
+        "special": "playwright"
+    },
+    "iitbbs": {
+        "name": "IIT Bhubaneswar",
+        "url": "https://www.iitbbs.ac.in/recruitment",
+        "special": "playwright"
+    },
     "bank_bankofindia": {
         "name": "Bank of India",
         "url": "https://www.bankofindia.co.in/Careers",

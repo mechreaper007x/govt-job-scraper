@@ -30,6 +30,14 @@ import io
 import hashlib
 import json
 import math
+import logging
+
+# Suppress pypdf dictionary warning logs and requests dependency warnings
+import warnings
+warnings.filterwarnings("ignore", module="pypdf")
+warnings.filterwarnings("ignore", category=UserWarning, module="pypdf")
+warnings.filterwarnings("ignore", category=UserWarning, module="requests")
+logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 # ─── Keyword lists & Regexes ────────────────────────────────────────────────
 
@@ -61,7 +69,7 @@ OTHER_CS_KEYWORDS = [
     # IT professional roles
     "it officer", "information officer", "it resource", "it professional",
     "it support", "it manager", "it associate", "it consultant", "it specialist",
-    "it executive", "developer", "it", "ai", "data"
+    "it executive", "developer", "ai", "data"
 ]
 
 GENERIC_TECH_KEYWORDS = [
@@ -106,14 +114,17 @@ EXCLUDE_KEYWORDS = [
     "security officer", "office attendant", "peon",
     "multi tasking", "mts", "trade apprentice", "iti apprentice",
     "technician b", "technician-b", "technician a", "technician-a",
-    "clerk", "typist", "receptionist",
+    "clerk", "typist", "receptionist", "probationary officer", "probationary officers",
     "fishery", "fisheries", "horticulture", "veterinary", "animal husbandry",
     "agm (security)", "dgm (security)",
     # administrative, legal, hr, and financial roles
     "legal", "law", "finance", "accounts", "audit", "marketing",
     "administrative officer", "admin officer", "human resource", "hr",
     "personal assistant", "private secretary", "administration", "administrative",
-    "assistant", "pa/ps", "pa / ps", "cfo", "registrar", "purchase", "store",
+    "office assistant", "accounts assistant", "administrative assistant",
+    "admin assistant", "clerical assistant", "canteen assistant",
+    "nursing assistant", "dental assistant", "hostel assistant",
+    "care assistant", "shop assistant", "pa/ps", "pa / ps", "cfo", "registrar", "purchase", "store",
     "stores", "materials management", "section officer", "child development", "land acquisition", 
     "forest clearance", "public information officer", "tourist information officer", "information officer",
     "private developer", "land developer", "housing developer", "real estate developer",
@@ -141,6 +152,15 @@ EXCLUDE_KEYWORDS = [
     "circulars", "notifications", "committee", "complaints", "grievance", 
     "grievances", "nodal", "officer list", "officers list", "contact us", 
     "about us", "feedback", "menu",
+    # Results & Selection list additions
+    "provisionally selected", "selected candidates", "selected candidate", 
+    "allotment letter", "successful candidates", "joining status", "joining date",
+    "reporting date", "verification date", "list of candidates", "candidate list",
+    "marks list", "score card", "interview schedule", "interview dates",
+    "venue for interview", "shortlisted candidates", "final result", "written test",
+    # General navigation & introduction text exclusions
+    "welcome to", "ongoing recruitment", "ongoing recruitments", "ongoing exam",
+    "offer of admission", "admission list", "admission notice", "admission process",
     # Advisory / notification-style postings that are not job openings
     "notification for engagement", "notification of engagement",
     "engagement of advisor", "engagement of sr. advisor", "engagement of senior advisor",
@@ -403,8 +423,27 @@ naive_bayes_classifier = NaiveBayesClassifier()
 # Orgs where most non-excluded postings are CS-relevant by default.
 # Reasoning: CDAC = CS org, NIC = IT, CRIS = Railway IT, STPI = Software parks,
 # C-DOT = Telematics, CERT-In = Cybersecurity.
+# IITs, IIITs, NITs: premier tech institutes where most project/research
+# postings (JRF, SRF, RA, Project Associate) are CS-relevant by default.
 CS_FIRST_ORGS = {
+    # Core CS/IT organizations
     "cdac", "nic", "cris", "stpi", "cdot", "certin",
+    # IITs
+    "iitb", "iitbbs", "iitbhilai", "iitbhu", "iitd", "iitdh", "iitg",
+    "iitgn", "iitgoa", "iith", "iiti", "iitism", "iitj", "iitjammu",
+    "iitk", "iitkgp", "iitm", "iitmandi", "iitp", "iitpkd", "iitr",
+    "iitrpr", "iittp",
+    # IIITs
+    "iiitb", "iiitbh", "iiitbhopal", "iiitd", "iiitdwd", "iiitg",
+    "iiith", "iiitk", "iiitkalyani", "iiitkottayam", "iiitl", "iiitm",
+    "iiitnagpur", "iiitp", "iiitranchi", "iiits", "iiitsurat", "iiitu",
+    "iiitvadodara",
+    # NITs
+    "nitc", "nitdelhi", "nitdgp", "nitgoa", "nith", "nitj", "nitjsr",
+    "nitk", "nitkkr", "nitm", "nitmanipur", "nitmz", "nitnagaland",
+    "nitp", "nitpy", "nitrkl", "nitrr", "nits", "nitsikkim", "nitsri",
+    "nitt", "nituk", "nitw",
+
 }
 
 # Per-org title patterns that override the default classification.
@@ -478,6 +517,13 @@ ORG_OVERRIDES = {
         ("internship", "excluded"),
         ("apprentice", "excluded"),
     ],
+    "uppsc": [
+        # UPPSC archived/completed recruitments — exclude notices for concluded exams
+        ("notice regarding advt. no. a-4/e-1/2025", "excluded"),
+        ("notice regarding advt. no. d-2/e-1/2024", "excluded"),
+        ("fill online details for advt", "excluded"),
+        ("assistant architect", "excluded"),
+    ],
 }
 
 
@@ -500,7 +546,29 @@ NON_CS_URL_KEYWORDS = [
     "trade", "helper", "labour", "biotechnology", "biotech",
     "biology", "chemistry", "physics", "agriculture", "forest",
     "geology", "animalhusbandry", "veterinary",
+    "mech", "prod", "production",
 ]
+
+# Regex to match department/academic pages that look like CS/IT but aren't job postings.
+# E.g. "Computer Science & Engineering" (department page), "B.Tech. Computer Science"
+_DEPT_PAGE_RE = re.compile(
+    r'^\s*(?:department\s+of\s+)?computer\s+(?:science|engineering)(?:\s+(?:&|and)\s+(?:computer\s+)?engineering)?\s*$'
+    r'|^\s*b\.?tech\.?\s+computer\s+science\s+and\s+engineering\s*$'
+    r'|^\s*computer\s+science\s+(?:&|and)\s+eng(?:ineering|g)?\s*$',
+    re.IGNORECASE
+)
+
+# Regex for noisy portal/utility page titles
+_NOISE_TITLE_RE = re.compile(
+    r'^\s*(?:online\s+)?(?:recruitment\s+)?portal\s*$'
+    r'|^\s*(?:online\s+)?payment\s*$'
+    r'|^\s*application\s+(?:form|format)\s*$'
+    r'|^\s*search\s+application\s*$'
+    r'|^\s*new\s+application\s+form\s*$',
+    re.IGNORECASE
+)
+
+
 
 
 # ─── Layer 3: PDF content extraction ────────────────────────────────────────
@@ -689,6 +757,25 @@ def classify(title, link="", org_key="", session=None, use_ml=True):
     clean_title = re.sub(r'[^a-zA-Z0-9\s]', '', title).strip()
     if len(clean_title) < 4:
         return "excluded"
+
+    # Exclude department/academic page names that are not job postings
+    if _DEPT_PAGE_RE.match(clean_title):
+        return "excluded"
+
+
+
+    # Exclude noisy portal/utility page titles
+    if _NOISE_TITLE_RE.match(clean_title):
+        return "excluded"
+
+    # Exclude social media share links and generic portal content
+    if any(noise in t for noise in [
+        "speech given by honourable", "state profile", "learning in telangana",
+        "why work at ", "online recruitment portal",
+        "notice 3_application in draft", "notice 2_application in draft",
+        "notice 3_application count", "notice 2_application count",
+    ]):
+        return "excluded"
     
     # Exclude patterns like (1.23 MB) or 1.23 MB or KB notices
     if re.search(r'\b\d+(\.\d+)?\s*(mb|kb)\b', t):
@@ -705,22 +792,43 @@ def classify(title, link="", org_key="", session=None, use_ml=True):
         "employee corner", "sitemap", "disclaimer", "terms of use", 
         "privacy policy", "help", "faq", "faqs", "gallery", "feedback", 
         "last →", "first ←", "next →", "previous ←", "apprenticeship opportunities",
-        "last", "first", "next", "previous"
+        "last", "first", "next", "previous", "application"
+        # Exact-match generic links & actions
+        "apply online", "apply now", "click here", "read more", "view details", 
+        "download pdf", "view all", "ongoing recruitments", "welcome", "welcome to ibps",
+        "other ongoing recruitments", "other ongoing recruitments view all",
+        "career",
+        # Exact-match banking services and utilities
+        "net banking", "internet banking", "online banking", "retail banking", 
+        "corporate banking", "mobile banking", "personal banking", "business banking", 
+        "savings account", "online account", "account opening", "open account", 
+        "online account opening", "credit cards", "debit cards", "loans", "deposits",
+        "wealth management", "mutual funds", "insurance", "demat", "forex",
+        "remittance", "payments", "cards", "services", "products", "investor relations",
+        # Results & Selection list exact matches
+        "letter to successful candidates", "successful candidates", "allotment letter",
+        # Portal utility pages and generic navigation
+        "online payment", "preview application", "search application and transaction no",
+        "new application form", "nic user manual", "question paper",
+        # Department / academic pages (not job postings)
+        "b.tech. computer science and engineering",
+        # Generic department names without recruitment context
+        "application",
     ):
         return "excluded"
 
-    # ── Filter out past years (e.g. 2025 and older) to remove expired historical archives ──
-    # Current year is 2026.
-    years = [int(y) for y in re.findall(r"\b(20\d{2})\b", t)]
-    if link:
-        years += [int(y) for y in re.findall(r"\b(20\d{2})\b", link.lower())]
-    if years and max(years) < 2026:
-        if max(years) <= 2025:
-            return "excluded"
+
 
     # Clean the title of organization name noise to avoid matching CS terms in organization names
     title_clean = re.sub(r'\bnielit\b', '', title, flags=re.IGNORECASE)
     title_clean = re.sub(r'national\s+institute\s+of\s+electronics\s+(&|and)\s+information\s+technology', '', title_clean, flags=re.IGNORECASE)
+
+    # ── Layer 0: Per-org overrides (highest priority — org-specific rules win over generic keywords) ──
+    if org_key:
+        overrides = ORG_OVERRIDES.get(org_key, [])
+        for pattern, classification in overrides:
+            if pattern in t:
+                return classification
 
     # ── Layer 1: Title keyword matching with regex ──
     # 1. Exclude wins first (so result/marks notices are pruned even if they contain CS terms)
@@ -735,53 +843,66 @@ def classify(title, link="", org_key="", session=None, use_ml=True):
     if OTHER_CS_RE.search(title_clean):
         return "relevant"
 
+    # ── Layer 1.2: URL-based absolute exclusion ──
+    if link:
+        url_lower = link.lower()
+        non_cs_url_hits = sum(1 for kw in NON_CS_URL_KEYWORDS if kw in url_lower)
+        if non_cs_url_hits >= 1 and not CORE_CS_RE.search(title_clean):
+            return "excluded"
+
+    is_bank = org_key.startswith("bank_") or org_key in ("ibps", "sbi", "rbi", "nabard", "sebi", "sidbi", "nhb")
+
+    # Pre-calculate similarity scores (used by ML safeguards)
+    cse_sim, excl_sim = title_similarity_classifier.classify_title(title_clean)
+    has_generic = bool(GENERIC_TECH_RE.search(title_clean))
+    
+    emb_cs_sim, emb_excl_sim = 0.0, 0.0
+    if use_ml and tfidf_embedding_classifier.loaded:
+        emb_cs_sim, emb_excl_sim = tfidf_embedding_classifier.classify_title(title_clean)
+
     # ── Layer 1.5: Naive Bayes Machine Learning Classifier ──
     if use_ml and naive_bayes_classifier.loaded:
         nb_rel, nb_excl = naive_bayes_classifier.predict(title_clean)
         if nb_rel is not None and nb_excl is not None:
-            # 2.0 log-space margin (approx 7.4x more probable) — deliberately strict
-            # to avoid false positives from generic management-adjacent terms
             if nb_rel > nb_excl + 2.0:
-                return "relevant"
+                # Safeguard: Naive Bayes can only mark relevant if there's some CS signal
+                # either in TF-IDF vocab, strong embedding match with margin, or generic tech keyword
+                has_emb_match = (emb_cs_sim >= 0.55 and emb_cs_sim > emb_excl_sim + 0.12)
+                if cse_sim > 0.0 or has_emb_match or has_generic:
+                    return "relevant"
             elif nb_excl > nb_rel + 2.0:
-                return "excluded"
+                if not is_bank:
+                    return "excluded"
 
     # ── Layer 1.6: TF-IDF Cosine Similarity for synonyms ──
-    cse_sim, excl_sim = title_similarity_classifier.classify_title(title_clean)
     if cse_sim >= 0.25 and cse_sim > excl_sim:
         return "relevant"
     elif excl_sim >= 0.25 and excl_sim > cse_sim:
-        return "excluded"
+        if not is_bank:
+            return "excluded"
 
     # ── Pre-check: Generic tech keywords for CS-first orgs ──
     # Do this BEFORE embedding layer so that ambiguous words like "engineer"
     # in GloVe space (shared with civil/mech) don't wrongly exclude them.
-    has_generic = bool(GENERIC_TECH_RE.search(title_clean))
     if has_generic and org_key in CS_FIRST_ORGS:
         return "relevant"
 
     # ── Layer 1.7: TF-IDF Weighted Word Embedding Cosine Similarity ──
     if use_ml and tfidf_embedding_classifier.loaded:
-        emb_cs_sim, emb_excl_sim = tfidf_embedding_classifier.classify_title(title_clean)
         # Cosine similarity threshold of 0.55 and margin of 0.12.
         # NOTE: Do NOT let embeddings exclude generic-tech titles (scientist, engineer, etc.)
         # — those are intentionally ambiguous and must reach Layer 2 org-context rules.
         if emb_cs_sim >= 0.55 and emb_cs_sim > emb_excl_sim + 0.12:
             return "relevant"
         elif emb_excl_sim >= 0.55 and emb_excl_sim > emb_cs_sim + 0.12 and not has_generic:
-            return "excluded"
+            if not is_bank:
+                return "excluded"
 
     # 4. Generic tech keywords next (for non-CS-first orgs, fall through to Layer 2)
     # (has_generic already computed above; used again in fallback below)
 
     # ── Layer 2a: Per-org context rules ────────────────────────────────────
     if org_key:
-        # Check per-org override rules first
-        overrides = ORG_OVERRIDES.get(org_key, [])
-        for pattern, classification in overrides:
-            if pattern in t:
-                return classification
-
         # For CS-first orgs, non-excluded uncertain titles → relevant
         if org_key in CS_FIRST_ORGS:
             return "relevant"
@@ -798,11 +919,20 @@ def classify(title, link="", org_key="", session=None, use_ml=True):
             return "excluded"
 
     # ── Layer 3: PDF content extraction ────────────────────────────────────
-    # Scan PDF only if SCRAPER_PDF_SCAN is explicitly set to "1" (disabled by default to keep scaling runs fast)
-    if session and link and os.environ.get("SCRAPER_PDF_SCAN") == "1":
-        pdf_result = _classify_by_pdf(link, session)
-        if pdf_result:
-            return pdf_result
+    # Scan PDF if explicitly requested OR as a final fallback to resolve "uncertain" postings
+    if session and link:
+        is_pdf_like = (
+            link.lower().endswith(".pdf") or 
+            "pdf" in link.lower() or 
+            "download" in link.lower() or 
+            "file" in link.lower() or
+            "viewer" in link.lower()
+        )
+        is_force_scan = os.environ.get("SCRAPER_PDF_SCAN") == "1"
+        if is_force_scan or is_pdf_like:
+            pdf_result = _classify_by_pdf(link, session)
+            if pdf_result:
+                return pdf_result
 
     # Fallback: if it matched a generic keyword and didn't trigger any exclusion,
     # it is relevant by default.

@@ -80,20 +80,108 @@ class AdaptiveParser:
                 title = " ".join(a.stripped_strings)
             title = re.sub(r"\s+", " ", title).strip()
 
-            # If anchor text is very short/empty, check its image alt text or nearby heading
-            if len(title) < 4:
+            # Clean of trailing punctuation for checking info content
+            check_title = re.sub(r"[\s,\.\-\|]+$", "", title).strip()
+            
+            # Information content check: strip dates, sizes, numbers, and action/language words.
+            # If very little content remains, it is likely a generic link/date label.
+            temp_title = check_title.lower()
+            temp_title = _DATE_RE.sub(" ", temp_title)
+            temp_title = re.sub(r"\d+", " ", temp_title)
+            temp_title = re.sub(r"\b\d+(\.\d+)?\s*(mb|kb)\b", " ", temp_title)
+            temp_title = re.sub(r"\b(new|click|here|apply|download|pdf|link|view|more|details|read|to|from|advertisement|advt|detailed|notice|for|english|hindi|language|online)\b", " ", temp_title)
+            temp_title = re.sub(r"[^\w\s]", " ", temp_title)
+            temp_title = re.sub(r"\s+", " ", temp_title).strip()
+
+            is_generic = (
+                len(check_title) < 4 or 
+                check_title.lower() in (
+                    "view", "more", "view more", "details", "click here", "read more",
+                    "download", "pdf", "link", "apply", "apply online", "here", 
+                    "view details", "detailed advertisement", "advertisement", "advt",
+                    "english", "hindi"
+                ) or
+                len(temp_title) < 4
+            )
+
+            # Fallback: if link text is generic but href points to a PDF with a
+            # descriptive filename, use the cleaned filename as the title.
+            # E.g. href="uploads/Advt_Project_Assistant_CSE.pdf" -> "Project Assistant CSE"
+            if is_generic and href.lower().endswith(".pdf"):
+                filename = href.rsplit("/", 1)[-1].rsplit("?", 1)[0]
+                filename = filename.replace(".pdf", "").replace(".PDF", "")
+                # Clean filename: replace underscores/hyphens with spaces, title-case
+                cleaned_fn = re.sub(r"[\-_]+", " ", filename).strip()
+                cleaned_fn = re.sub(r"\s+", " ", cleaned_fn)
+                # Skip if filename is also generic or too short
+                if (len(cleaned_fn) >= 8 and
+                    cleaned_fn.lower() not in (
+                        "advertisement", "advt", "click here", "download",
+                        "benefits and incentives", "application form",
+                        "application format", "detailed advertisement",
+                    )):
+                    title = cleaned_fn.title()
+                    is_generic = False  # re-evaluate with the improved title
+            if is_generic:
                 img = a.find("img", alt=True)
                 if img:
                     title = img["alt"].strip()
                 else:
-                    # Climb up to 2 levels to find sibling or parent text
-                    parent = a.parent
-                    if parent:
-                        title = parent.get_text(separator=" ", strip=True)
-                        title = re.sub(r"\s+", " ", title).strip()
+                    # Climb up to 5 parent levels to search nearby siblings, accordions, and text
+                    curr = a.parent
+                    resolved_title = title
+                    for _ in range(5):
+                        if not curr:
+                            break
+                            
+                        # Look for accordion headers/toggles associated with this parent
+                        accordion_header = ""
+                        curr_id = curr.get("id")
+                        if curr_id:
+                            # 1. Preceding siblings
+                            prev = curr.previous_sibling
+                            while prev:
+                                if prev.name:
+                                    prev_text = prev.get_text(separator=" ", strip=True)
+                                    if len(prev_text) > 10:
+                                        accordion_header = prev_text
+                                        break
+                                prev = prev.previous_sibling
+                            
+                            # 2. Toggle elements linking to #id
+                            if not accordion_header:
+                                toggle = soup.find(attrs={"data-target": f"#{curr_id}"}) or soup.find(attrs={"href": f"#{curr_id}"}) or soup.find(attrs={"aria-controls": curr_id})
+                                if toggle:
+                                    accordion_header = toggle.get_text(separator=" ", strip=True)
+                        
+                        curr_text = curr.get_text(separator=" ", strip=True)
+                        if accordion_header:
+                            if accordion_header not in curr_text:
+                                resolved_title = accordion_header + " — " + curr_text
+                            else:
+                                resolved_title = curr_text
+                            break  # accordion toggle found; stop climbing
+                            
+                        # Evaluate text quality of current parent
+                        clean_curr = re.sub(r"\s*(view more|detailed advertisement|advertisement|details|click here|download|apply online|here|pdf|link|read more|view details|english|hindi)\s*", " ", curr_text, flags=re.I).strip()
+                        temp_curr = clean_curr.lower()
+                        temp_curr = _DATE_RE.sub(" ", temp_curr)
+                        temp_curr = re.sub(r"\d+", " ", temp_curr)
+                        temp_curr = re.sub(r"\b\d+(\.\d+)?\s*(mb|kb)\b", " ", temp_curr)
+                        temp_curr = re.sub(r"\b(new|click|here|apply|download|pdf|link|view|more|details|read|to|from|advertisement|advt|detailed|notice|for|english|hindi|language|online)\b", " ", temp_curr)
+                        temp_curr = re.sub(r"[^\w\s]", " ", temp_curr)
+                        temp_curr = re.sub(r"\s+", " ", temp_curr).strip()
+                        
+                        if len(temp_curr) >= 4:
+                            resolved_title = curr_text
+                            # keep climbing to check for accordion headers
+                            
+                        curr = curr.parent
+                    title = resolved_title
 
             title = re.sub(r"\s*(click here|download|apply online|apply now|here|pdf|link)\s*", " ", title, flags=re.I)
-            title = re.sub(r"[\s,\.\-\|\[\]\(\)]+$", "", title).strip()
+            title = re.sub(r"\(\s*\)|\[\s*\]|\{\s*\}", "", title)
+            title = re.sub(r"[\s,\.\-\|]+$", "", title).strip()
 
             title_lower = title.lower()
             if any(w in title_lower for w in ["skip to", "screen reader", "accessibility", "font size", "zoom in", "zoom out", "skip navigation"]):

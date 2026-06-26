@@ -540,44 +540,54 @@ class GovJobCrawler:
                 # ── Standard HTTP fetch ──────────────────────────────────
                 is_scale = os.environ.get("SCALE_CRAWL") == "1"
                 timeout = 15 if is_scale else 15
+                r = None
+                try_cffi = False
                 try:
                     r = self.session.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
-                except ConnectionError as ce:
-                    # ConnectionResetError 10054 = Cloudflare/WAF bot detection.
-                    # Retry with curl_cffi which impersonates Chrome's exact TLS
-                    # fingerprint (JA3/JA4) that requests/OpenSSL cannot replicate.
-                    if "ConnectionResetError" in str(ce) or "10054" in str(ce) or "Connection aborted" in str(ce):
-                        self._log(f"[bot-reset, retrying with curl_cffi]", end=" ")
-                        try:
-                            from curl_cffi import requests as cffi_requests
-                            cr = cffi_requests.get(
-                                url,
-                                impersonate="chrome120",
-                                headers={
-                                    "Accept": DEFAULT_HEADERS["Accept"],
-                                    "Accept-Language": DEFAULT_HEADERS["Accept-Language"],
-                                },
-                                timeout=timeout,
-                                verify=False,
-                            )
-                            # Wrap in a simple namespace so downstream code sees .text / .headers
-                            class _Resp:
-                                def __init__(self, r):
-                                    self.text = r.text
-                                    self.content = r.content
-                                    self.status_code = r.status_code
-                                    self.headers = r.headers
-                                def raise_for_status(self):
-                                    if self.status_code >= 400:
-                                        raise Exception(f"HTTP {self.status_code}")
-                            r = _Resp(cr)
-                        except Exception as cffi_exc:
-                            raise ce from cffi_exc
+                    if r.status_code in (403, 503, 429, 401, 502, 504):
+                        try_cffi = True
+                except Exception as exc:
+                    err_str = str(exc)
+                    if any(sig in err_str.lower() for sig in ("connectionreseterror", "10054", "connection aborted", "remotedisconnected", "timeout")):
+                        try_cffi = True
                     else:
                         raise
+
+                if try_cffi:
+                    self._log(f"[WAF/network reset, retrying with curl_cffi]", end=" ")
+                    try:
+                        from curl_cffi import requests as cffi_requests
+                        cr = cffi_requests.get(
+                            url,
+                            impersonate="chrome120",
+                            headers={
+                                "Accept": DEFAULT_HEADERS["Accept"],
+                                "Accept-Language": DEFAULT_HEADERS["Accept-Language"],
+                            },
+                            timeout=timeout,
+                            verify=False,
+                        )
+                        # Wrap in a simple namespace so downstream code sees .text / .headers
+                        class _Resp:
+                            def __init__(self, r):
+                                self.text = r.text
+                                self.content = r.content
+                                self.status_code = r.status_code
+                                self.headers = r.headers
+                            def raise_for_status(self):
+                                if self.status_code >= 400:
+                                    raise Exception(f"HTTP {self.status_code}")
+                        r = _Resp(cr)
+                    except Exception as cffi_exc:
+                        if r is None:
+                            raise cffi_exc
+                
+                if r is None:
+                    raise Exception("Failed to fetch page")
                 r.raise_for_status()
 
                 content_type = r.headers.get("Content-Type", "").lower()
+                _pg_score = 0.0  # default; computed for HTML pages below
 
                 # Check for PDF response directly on the landing page URL
                 if "application/pdf" in content_type or url.lower().endswith(".pdf"):
@@ -595,6 +605,7 @@ class GovJobCrawler:
                     content = r.content
                     postings = parser_fn(content)
                 else:
+                    _pg_score = _page_score(r.text)
                     from scraper.adaptive_parser import parse_adaptive
                     try:
                         postings = parse_adaptive(r.text, base_url=url)
@@ -641,14 +652,19 @@ class GovJobCrawler:
             ))
             _NETWORK_STRINGS = (
                 "connecttimeouterror", "readtimeout", "read timed out",
-                "connect timeout", "connecttimeout",
-                "connectionreseterror", "connection aborted",
-                "remotedisconnected", "nameresolutionerror",
+                "connect timeout", "connecttimeout", "connection timed out",
+                "timed out", "timeout", "time out", "operation timed out",
+                "connectionreseterror", "connection aborted", "connection was reset", "connection reset",
+                "remotedisconnected", "nameresolutionerror", "recv failure",
                 "getaddrinfo failed", "circuit breaker",
                 "newconnectionerror", "max retries exceeded",
-                # Transient HTTP server errors (5xx)
-                "503 server error", "502 server error", "504 server error",
-                "service temporarily unavailable", "bad gateway",
+                # Transient HTTP server errors (5xx, 429) & status codes
+                "503 server error", "502 server error", "504 server error", "500 server error",
+                "503", "502", "504", "500", "429", "403",
+                "http 503", "http 502", "http 504", "http 500", "http 429", "http 403",
+                "service temporarily unavailable", "bad gateway", "internal server error",
+                # curl_cffi and libcurl-specific codes (e.g. timeout = 28, connection reset = 35)
+                "curl: (28)", "curl: (35)", "curl: (7)", "curl: (52)", "curl: (56)",
             )
             _is_network_str = any(sig in err_str.lower() for sig in _NETWORK_STRINGS)
             is_network = _is_network_type or _is_network_str
@@ -717,8 +733,27 @@ class GovJobCrawler:
                 try:
                     sub_r = self.session.get(sub_url, headers=DEFAULT_HEADERS,
                                              timeout=timeout, verify=False)
-                    if sub_r.status_code != 200:
+                    # Check if sub_url is a direct PDF/binary file
+                    sub_content_type = sub_r.headers.get("Content-Type", "").lower()
+                    is_pdf = "application/pdf" in sub_content_type or sub_url.lower().endswith(".pdf")
+                    is_binary = any(ext in sub_content_type or sub_url.lower().endswith(ext) 
+                                    for ext in (".docx", ".doc", ".xls", ".xlsx", ".zip", ".png", ".jpg", ".jpeg"))
+                    
+                    if is_pdf:
+                        filename = sub_url.split("/")[-1].split("?")[0] or "document.pdf"
+                        title = filename.replace("_", " ").replace("-", " ").replace(".pdf", "").title()
+                        if not title or len(title) < 5:
+                            title = f"{ORGS_CONFIG.get(org_key, {}).get('name', org_key)} Job Notification"
+                        all_postings.append({"title": title, "link": sub_url, "date": ""})
+                        vocab.record_success(base_url, sub_url)
                         continue
+                    elif is_binary:
+                        filename = sub_url.split("/")[-1].split("?")[0] or "document"
+                        title = filename.replace("_", " ").replace("-", " ").title()
+                        all_postings.append({"title": f"{ORGS_CONFIG.get(org_key, {}).get('name', org_key)} Notification: {title}", "link": sub_url, "date": ""})
+                        vocab.record_success(base_url, sub_url)
+                        continue
+
                     sub_score = _page_score(sub_r.text)
                     if sub_score < 0.15:
                         continue  # page classifier says it's not a jobs page

@@ -9,6 +9,9 @@ Monkey-patches Python's socket.getaddrinfo to:
   3. Cache resolution failures (negative caching) to avoid spamming network requests for dead domains.
 """
 
+import warnings
+warnings.filterwarnings("ignore", message=".*urllib3.*")
+
 import socket
 import urllib.request
 import json
