@@ -73,6 +73,10 @@ def main():
         "--offset", type=int, default=0,
         help="Starting offset for domains processed in --scale-all mode"
     )
+    parser.add_argument(
+        "--all", action="store_true",
+        help="Run scraper for all curated organizations in ORGS_CONFIG"
+    )
 
     args = parser.parse_args()
 
@@ -84,6 +88,8 @@ def main():
         target_keys = [args.org]
     elif args.uppsc:
         target_keys = UPPSC_ORGS
+    elif args.all:
+        target_keys = sorted([k for k in ORGS_CONFIG.keys() if k != "drdo_spa"])
     elif args.scale_all:
         from scraper.domain_seeder import generate_domains
         seeded_domains = generate_domains()
@@ -133,7 +139,8 @@ def main():
         return  # watch runs indefinitely until Ctrl+C
 
     # ── Scrape pipeline (single run) ──────────────────────────────────────
-    scraped_data = crawler.run_scrape(orgs=target_keys)
+    max_workers = 15 if len(target_keys) > 10 else 4
+    scraped_data = crawler.run_scrape(orgs=target_keys, max_workers=max_workers)
 
     # ── Diff + Notify ─────────────────────────────────────────────────────
     from scraper.diff import diff_and_update_state

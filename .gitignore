@@ -44,10 +44,13 @@ scraper/search_*.py
 # Other
 state.json
 *.json
+!scraped_jobs.json
 *.txt
 !requirements.txt
 *.html
+!index.html
 *.pdf
+!jobs_report.pdf
 
 # Windows artifact (created by stdout redirection)
 nul

@@ -395,8 +395,8 @@ ORGS_CONFIG = {
     # ── IITs (career/recruitment pages) ──────────────────────────────────────
     "iith": {
         "name": "IIT Hyderabad",
-        "url": "https://careers.iith.ac.in/",
-        "special": "playwright"
+        "url": "https://careers.iith.ac.in/jobs",
+        "note": "Direct JSON API — no Playwright needed"
     },
     "iitm": {
         "name": "IIT Madras",

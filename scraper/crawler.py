@@ -532,6 +532,9 @@ class GovJobCrawler:
                 postings = parsers.parse_nielit(session=self.session)
             elif key == "ncs":
                 postings = parsers.parse_ncs(session=self.session)
+            elif key == "iith":
+                from scraper.spa_scraper import parse_iith_spa
+                postings = parse_iith_spa()
             elif cfg.get("special") == "hal_api":
                 postings = self._fetch_hal(url)
             elif cfg.get("special") == "playwright":
@@ -802,7 +805,7 @@ class GovJobCrawler:
         Falls back to the static parser (parse_rrb) for RRB if SPA returns
         no useful content.
         """
-        from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_drdo_spa, parse_generic_spa
+        from scraper.spa_scraper import fetch_spa_page, parse_rrb_spa, parse_drdo_spa, parse_generic_spa, parse_iitb_spa, parse_iitm_spa
 
         self._log(f"[SPA] Launching Chromium for {key}...", end=" ")
 
@@ -821,6 +824,10 @@ class GovJobCrawler:
             postings = parse_rrb_spa(html)
         elif key == "drdo_spa":
             postings = parse_drdo_spa(html)
+        elif key == "iitb":
+            postings = parse_iitb_spa(html, base_url=url)
+        elif key == "iitm":
+            postings = parse_iitm_spa(html, base_url=url)
         else:
             postings = parse_generic_spa(html, base_url=url)
 

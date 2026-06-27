@@ -469,6 +469,240 @@ def parse_drdo_spa(html_content):
     return postings
 
 
+# ─── IIT Hyderabad (IITH) Parser ──────────────────────────────────────────────
+
+
+def parse_iith_spa(_html_content="", _base_url=""):
+    """
+    Parse IIT Hyderabad career page via their JSON API.
+
+    IITH uses a React SPA (careers.iith.ac.in) that fetches job data from:
+      https://careers.iith.ac.in/api/v1/jobs/search/?sort=created
+
+    This parser hits the API directly (no Playwright needed) and returns
+    structured job listings.
+    """
+    import requests as _req
+
+    postings = []
+    api_url = "https://careers.iith.ac.in/api/v1/jobs/search/?sort=created"
+
+    try:
+        r = _req.get(api_url, timeout=15, verify=False)
+        r.raise_for_status()
+        data = r.json()
+    except Exception:
+        return postings
+
+    results = data.get("results", [])
+    for job in results:
+        title = job.get("title", "")
+        job_id = job.get("id", "")
+        job_type = job.get("job_type", "")
+        start_date = job.get("start_date", "")
+        end_date = job.get("end_date", "")
+        departments = job.get("departments", [])
+        # departments is a list of dicts: [{"id": 21, "name": "Physics", "code": "PHY_D"}]
+        if isinstance(departments, list) and departments:
+            dept = departments[0]
+            dept_name = dept.get("name", "") if isinstance(dept, dict) else str(dept)
+        else:
+            dept_name = ""
+        slug = job.get("slug", "")
+
+        if not title:
+            continue
+
+        # Build link to the job detail page
+        if slug:
+            link = f"https://careers.iith.ac.in/jobs/{slug}"
+        elif job_id:
+            link = f"https://careers.iith.ac.in/jobs/{job_id}"
+        else:
+            link = "https://careers.iith.ac.in/jobs"
+
+        # Format date
+        date_str = end_date or start_date or ""
+        if date_str:
+            date_str = date_str[:10]  # YYYY-MM-DD
+
+        # Build descriptive title
+        full_title = title
+        if dept_name and dept_name not in title:
+            full_title = f"{title} ({dept_name})"
+        if job_type:
+            full_title = f"{full_title} [{job_type}]"
+
+        postings.append({
+            "title": f"[IITH] {full_title}",
+            "link": link,
+            "date": date_str,
+        })
+
+    return postings
+
+
+# ─── IIT Bombay (IITB) Parser ───────────────────────────────────────────────
+
+
+def parse_iitb_spa(html_content, base_url=""):
+    """
+    Parse IIT Bombay R&D jobs page.
+
+    URL: https://rnd.iitb.ac.in/jobs
+    Structure: HTML table with rows containing job titles and PDF links.
+    Each row has a link to a PDF advertisement or results document.
+    """
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    seen = set()
+
+    BASE = "https://rnd.iitb.ac.in"
+
+    # Strategy 1: Parse the table rows
+    for table in soup.find_all('table'):
+        for row in table.find_all('tr'):
+            cells = row.find_all(['td', 'th'])
+            if not cells:
+                continue
+            # Find the first cell with a link
+            for cell in cells:
+                a_tag = cell.find('a')
+                if not a_tag or not a_tag.get('href'):
+                    continue
+                title = a_tag.get_text(strip=True)
+                href = a_tag['href']
+                if len(title) < 5:
+                    continue
+
+                link = urljoin(BASE + "/", href) if not href.startswith('http') else href
+                if link in seen:
+                    continue
+                seen.add(link)
+
+                postings.append({
+                    "title": f"[IITB] {title}",
+                    "link": link,
+                    "date": "",
+                })
+
+    # Strategy 2: Scan all links for job/recruitment patterns
+    if not postings:
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            if not href or href.startswith('javascript:') or href == '#':
+                continue
+            title = a.get_text(strip=True)
+            if len(title) < 5:
+                continue
+            link = urljoin(BASE + "/", href) if not href.startswith('http') else href
+            if link in seen:
+                continue
+            seen.add(link)
+            title_lower = title.lower()
+            link_lower = link.lower()
+            if any(kw in title_lower or kw in link_lower
+                   for kw in ['job', 'recruit', 'vacanc', 'advertisement', 'project', 'apply']):
+                postings.append({
+                    "title": f"[IITB] {title}",
+                    "link": link,
+                    "date": "",
+                })
+
+    return postings
+
+
+# ─── IIT Madras (IITM) Parser ───────────────────────────────────────────────
+
+
+def parse_iitm_spa(html_content, base_url=""):
+    """
+    Parse IIT Madras recruitment page.
+
+    URL: https://recruit.iitm.ac.in/
+    Structure: Pages with numbered recruitments (R525, R524, etc.) containing
+    links to detailed advertisements, syllabi, shortlists, and results.
+
+    Extracts recruitment notices with their R-number codes and associated
+    documents (advertisements, results, etc.).
+    """
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
+    postings = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    seen = set()
+    BASE = "https://recruit.iitm.ac.in"
+
+    # Strategy 1: Find recruitment entries by R-number pattern
+    # IITM uses codes like R525, R524, etc. for each recruitment
+    r_numbers = {}
+
+    for a in soup.find_all('a'):
+        href = a.get('href', '').strip()
+        text = a.get_text(strip=True)
+        if not href or len(text) < 3:
+            continue
+
+        # Check if this link's text or href contains an R-number
+        r_match = re.search(r'(R\d{3,4})', text + ' ' + href, re.IGNORECASE)
+        if r_match:
+            r_code = r_match.group(1).upper()
+            if r_code not in r_numbers:
+                r_numbers[r_code] = []
+            r_numbers[r_code].append((text, href))
+
+    # Build postings from R-number groups
+    for r_code, links in sorted(r_numbers.items(), reverse=True):
+        # Find the main advertisement link
+        advt_link = ""
+        advt_title = ""
+        for text, href in links:
+            text_lower = text.lower()
+            if any(kw in text_lower for kw in ['advertisement', 'detailed advt', 'general instruction']):
+                advt_title = text
+                advt_link = href
+                break
+
+        if not advt_link and links:
+            advt_title = links[0][0]
+            advt_link = links[0][1]
+
+        if advt_link:
+            link = urljoin(BASE + "/", advt_link) if not advt_link.startswith('http') else advt_link
+            if link not in seen:
+                seen.add(link)
+                postings.append({
+                    "title": f"[IITM] {r_code}: {advt_title}",
+                    "link": link,
+                    "date": "",
+                })
+
+    # Strategy 2: If no R-numbers found, scan for recruitment-related links
+    if not postings:
+        for a in soup.find_all('a'):
+            href = a.get('href', '').strip()
+            text = a.get_text(strip=True)
+            if not href or len(text) < 5:
+                continue
+            link = urljoin(BASE + "/", href) if not href.startswith('http') else href
+            if link in seen:
+                continue
+            seen.add(link)
+            text_lower = text.lower()
+            if any(kw in text_lower for kw in ['recruit', 'advertisement', 'vacanc', 'apply', 'position']):
+                postings.append({
+                    "title": f"[IITM] {text}",
+                    "link": link,
+                    "date": "",
+                })
+
+    return postings
+
+
 # ─── Generic SPA Parser ──────────────────────────────────────────────────────
 
 

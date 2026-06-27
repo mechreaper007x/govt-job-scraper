@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-06-27T13:50:47.675168",
+  "summary": {
+    "total": 3,
+    "relevant": 0,
+    "uncertain": 3,
+    "excluded": 0,
+    "orgs_scraped": 1,
+    "orgs_failed": 0
+  },
+  "orgs": {
+    "rrb": {
+      "name": "Indian Railways (RRB)",
+      "url": "https://rrbapply.gov.in/#/auth/landing",
+      "status": "ok",
+      "jobs": [
+        {
+          "title": "[RRB-SPA] Railway Recruitment Board",
+          "link": "https://rrbapply.gov.in/",
+          "date": "",
+          "tier": "uncertain"
+        },
+        {
+          "title": "[RRB-SPA] Railway Recruitment Board",
+          "link": "https://rrbapply.gov.in/",
+          "date": "",
+          "tier": "uncertain"
+        },
+        {
+          "title": "[RRB-SPA] Heading",
+          "link": "https://rrbapply.gov.in/",
+          "date": "",
+          "tier": "uncertain"
+        }
+      ]
+    }
+  }
+}

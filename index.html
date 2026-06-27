@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Automated Govt & PSU Job Notification Tracker prioritizing Computer Science and Information Technology positions.">
+    <title>Govt CSE/IT Job Notification Tracker</title>
+    
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-card-hover: rgba(26, 36, 57, 0.85);
+            --border-glow: rgba(139, 92, 246, 0.15);
+            --border-standard: rgba(255, 255, 255, 0.06);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #a78bfa;
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            
+            --success-color: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --success-border: rgba(16, 185, 129, 0.25);
+            
+            --warning-color: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --warning-border: rgba(245, 158, 11, 0.25);
+            
+            --danger-color: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --danger-border: rgba(239, 68, 68, 0.25);
+            
+            --info-color: #3b82f6;
+            --info-bg: rgba(59, 130, 246, 0.1);
+            --info-border: rgba(59, 130, 246, 0.25);
+
+            --transition-speed: 0.3s;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 45%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header Style */
+        header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--accent-primary), var(--info-color));
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .logo-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 30%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 650px;
+            margin: 0.5rem auto 1.5rem auto;
+            font-weight: 400;
+        }
+
+        /* Glassmorphic Cards & Widgets */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-standard);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .glass-panel:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-primary);
+            border-radius: 2px;
+        }
+
+        .stat-card.relevant::before { background: var(--success-color); }
+        .stat-card.uncertain::before { background: var(--warning-color); }
+        .stat-card.orgs::before { background: var(--info-color); }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card.total .stat-icon { background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary); }
+        .stat-card.relevant .stat-icon { background: var(--success-bg); color: var(--success-color); }
+        .stat-card.uncertain .stat-icon { background: var(--warning-bg); color: var(--warning-color); }
+        .stat-card.orgs .stat-icon { background: var(--info-bg); color: var(--info-color); }
+
+        .stat-info {
+            flex-grow: 1;
+        }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .last-updated {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Filter Controls Panel */
+        .controls-panel {
+            margin-bottom: 2rem;
+            animation: slideDown 0.7s ease-out;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .search-box, .select-box {
+            position: relative;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-standard);
+            border-radius: 12px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all var(--transition-speed);
+        }
+
+        .search-input:focus, .select-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .select-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-standard);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 2.5rem;
+        }
+
+        .tabs-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .filter-tabs {
+            display: inline-flex;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-standard);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-primary);
+            border-color: var(--border-standard);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: var(--text-secondary);
+            transform: translateY(-1px);
+        }
+
+        /* Two Column Content Area */
+        .content-area {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            animation: fadeIn 0.9s ease-out;
+        }
+
+        @media (max-width: 1024px) {
+            .content-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Jobs Section */
+        .jobs-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Job Card Styling */
+        .job-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .org-badge {
+            background: var(--info-bg);
+            color: var(--info-color);
+            border: 1px solid var(--info-border);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            display: inline-block;
+        }
+
+        .tier-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-badge.relevant {
+            background: var(--success-bg);
+            color: var(--success-color);
+            border: 1px solid var(--success-border);
+        }
+
+        .tier-badge.uncertain {
+            background: var(--warning-bg);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-border);
+        }
+
+        .tier-badge.excluded {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--border-standard);
+        }
+
+        .job-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.35;
+            transition: color 0.2s;
+        }
+
+        .job-title:hover {
+            color: var(--accent-secondary);
+        }
+
+        .job-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .meta-item svg {
+            width: 14px;
+            height: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Sidebar Portal Health Monitor */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .health-panel {
+            padding: 1.25rem;
+        }
+
+        .health-panel-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-primary);
+        }
+
+        .health-search {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-standard);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            outline: none;
+        }
+
+        .health-search:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .health-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .health-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .health-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .health-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            font-size: 0.8rem;
+        }
+
+        .health-name {
+            font-weight: 500;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .health-status {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .health-status.ok {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .health-status.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Empty/Loading States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255,255,255,0.05);
+            border-top: 3px solid var(--accent-primary);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        /* Footer styling */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-standard);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo & Header -->
+        <header>
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                    </svg>
+                </div>
+                <span style="font-family: var(--font-heading); font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em;">MECHREAPER</span>
+            </div>
+            <h1>Govt CSE/IT Job Tracker</h1>
+            <p class="subtitle">Highly resilient, concurrent, and adaptive crawler tracking recruitment notifications across 115 core public sector, banking, and government channels.</p>
+        </header>
+
+        <!-- Last Checked Indicator -->
+        <div class="last-updated" id="last-updated-indicator">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="generated-time-text">Loading data...</span>
+        </div>
+
+        <!-- Metrics Dashboard -->
+        <section class="stats-grid" id="stats-section">
+            <div class="glass-panel stat-card total">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-total-jobs">-</div>
+                    <div class="stat-label">Total Jobs</div>
+                </div>
+            </div>
+            <div class="glass-panel stat-card relevant">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-relevant-jobs">-</div>
+                    <div class="stat-label">CS / IT Relevant</div>
+                </div>
+            </div>
+            <div class="glass-panel stat-card uncertain">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-uncertain-jobs">-</div>
+                    <div class="stat-label">Uncertain / Other</div>
+                </div>
+            </div>
+            <div class="glass-panel stat-card orgs">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-monitored-orgs">-</div>
+                    <div class="stat-label">Online Channels</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls / Search -->
+        <section class="glass-panel controls-panel">
+            <div class="search-row">
+                <div class="search-box">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" class="search-input" id="job-search-input" placeholder="Search by job title, description keywords...">
+                </div>
+                <div class="select-box">
+                    <select class="select-input" id="org-filter-select">
+                        <option value="all">All Organizations</option>
+                    </select>
+                </div>
+            </div>
+            <div class="tabs-row">
+                <div class="filter-tabs" id="relevancy-tabs">
+                    <button class="tab-btn active" id="tab-relevant" data-tier="relevant">CS / IT Relevant</button>
+                    <button class="tab-btn" id="tab-uncertain" data-tier="uncertain">Uncertain / Other</button>
+                    <button class="tab-btn" id="tab-excluded" data-tier="excluded">Noise / Excluded</button>
+                    <button class="tab-btn" id="tab-all" data-tier="all">All Listings</button>
+                </div>
+                <div class="download-actions">
+                    <a href="scraped_jobs.json" target="_blank" class="btn btn-secondary" id="raw-json-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Raw JSON
+                    </a>
+                    <a href="jobs_report.pdf" target="_blank" class="btn btn-primary" id="download-pdf-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Download PDF Report
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <!-- Jobs Column -->
+            <section class="jobs-section">
+                <div class="results-count">
+                    <span>Showing <strong id="displayed-count">0</strong> of <strong id="total-count">0</strong> postings</span>
+                </div>
+                
+                <div id="loading-indicator">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <div class="jobs-list" id="jobs-list-container" style="display: none;">
+                    <!-- Job cards injected here -->
+                </div>
+            </section>
+
+            <!-- Sidebar Portal Health Monitor -->
+            <aside class="sidebar">
+                <div class="glass-panel health-panel">
+                    <div class="health-panel-title">
+                        <span>Portal Crawler Monitor</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    </div>
+                    <input type="text" class="health-search" id="health-search-input" placeholder="Search portals...">
+                    <div class="health-list" id="health-list-container">
+                        <!-- Portal items injected here -->
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Govt CSE/IT Job Tracker. Daily automated checks configured in GitHub Actions.</p>
+            <p style="margin-top: 4px; font-size: 0.75rem; color: var(--text-muted);">Maintained in collaboration with Antigravity AI.</p>
+        </footer>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let allJobs = [];
+            let allOrgs = {};
+            let selectedTier = 'relevant';
+            let searchQuery = '';
+            let selectedOrg = 'all';
+            let healthSearchQuery = '';
+
+            const jobsContainer = document.getElementById('jobs-list-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const displayedCountEl = document.getElementById('displayed-count');
+            const totalCountEl = document.getElementById('total-count');
+            const orgSelectEl = document.getElementById('org-filter-select');
+            const searchInput = document.getElementById('job-search-input');
+            const tabButtons = document.querySelectorAll('#relevancy-tabs .tab-btn');
+            
+            // Stats elements
+            const statTotalEl = document.getElementById('stat-total-jobs');
+            const statRelevantEl = document.getElementById('stat-relevant-jobs');
+            const statUncertainEl = document.getElementById('stat-uncertain-jobs');
+            const statOrgsEl = document.getElementById('stat-monitored-orgs');
+            const genTimeEl = document.getElementById('generated-time-text');
+            
+            // Health panel elements
+            const healthContainer = document.getElementById('health-list-container');
+            const healthSearchInput = document.getElementById('health-search-input');
+
+            // Initialize fetch from scraped_jobs.json
+            async function init() {
+                try {
+                    const response = await fetch('scraped_jobs.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    processData(data);
+                } catch (error) {
+                    console.error("Failed to load job listings:", error);
+                    showErrorState(error.message);
+                }
+            }
+
+            // Parse raw JSON into list structures
+            function processData(data) {
+                // Time formatting
+                if (data.generated_at) {
+                    const date = new Date(data.generated_at);
+                    const formattedDate = date.toLocaleDateString(undefined, { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                    });
+                    const formattedTime = date.toLocaleTimeString(undefined, { 
+                        hour: '2-digit', minute: '2-digit' 
+                    });
+                    genTimeEl.textContent = `Last Checked: ${formattedDate} at ${formattedTime}`;
+                }
+
+                // Summary metrics
+                if (data.summary) {
+                    statTotalEl.textContent = data.summary.total ?? 0;
+                    statRelevantEl.textContent = data.summary.relevant ?? 0;
+                    statUncertainEl.textContent = data.summary.uncertain ?? 0;
+                    statOrgsEl.textContent = `${data.summary.orgs_scraped ?? 0}/${(data.summary.orgs_scraped ?? 0) + (data.summary.orgs_failed ?? 0)}`;
+                }
+
+                // Org parsing and flat jobs list
+                if (data.orgs) {
+                    allOrgs = data.orgs;
+                    for (const [orgKey, orgInfo] of Object.entries(data.orgs)) {
+                        const orgName = orgInfo.name || orgKey.toUpperCase();
+                        
+                        // Extract jobs
+                        if (orgInfo.jobs && Array.isArray(orgInfo.jobs)) {
+                            orgInfo.jobs.forEach(job => {
+                                allJobs.push({
+                                    ...job,
+                                    orgKey: orgKey,
+                                    orgName: orgName
+                                });
+                            });
+                        }
+                    }
+
+                    // Sort jobs: newest dates first
+                    allJobs.sort((a, b) => {
+                        const dateA = a.date ? new Date(a.date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3')) : new Date(0);
+                        const dateB = b.date ? new Date(b.date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1/$2/$3')) : new Date(0);
+                        return dateB - dateA;
+                    });
+                }
+
+                // Populate org select dropdown
+                populateOrgSelect();
+                
+                // Hide spinner, show content
+                loadingIndicator.style.display = 'none';
+                jobsContainer.style.display = 'flex';
+
+                // Initial render
+                renderJobs();
+                renderHealthList();
+            }
+
+            // Populate filter dropdown with organizations that have active listings
+            function populateOrgSelect() {
+                const orgsWithJobs = new Set();
+                allJobs.forEach(job => orgsWithJobs.add(JSON.stringify({ key: job.orgKey, name: job.orgName })));
+                
+                const sortedOrgs = Array.from(orgsWithJobs)
+                    .map(o => JSON.parse(o))
+                    .sort((a, b) => a.name.localeCompare(b.name));
+
+                sortedOrgs.forEach(org => {
+                    const option = document.createElement('option');
+                    option.value = org.key;
+                    option.textContent = org.name;
+                    orgSelectEl.appendChild(option);
+                });
+            }
+
+            // Filter jobs based on selected search query, org select and tab tier
+            function getFilteredJobs() {
+                return allJobs.filter(job => {
+                    // Relevancy Tier filter
+                    if (selectedTier !== 'all' && job.tier !== selectedTier) {
+                        return false;
+                    }
+                    // Organization filter
+                    if (selectedOrg !== 'all' && job.orgKey !== selectedOrg) {
+                        return false;
+                    }
+                    // Search text query
+                    if (searchQuery) {
+                        const titleMatch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
+                        const orgMatch = job.orgName.toLowerCase().includes(searchQuery.toLowerCase());
+                        return titleMatch || orgMatch;
+                    }
+                    return true;
+                });
+            }
+
+            // Render matching jobs list
+            function renderJobs() {
+                const filtered = getFilteredJobs();
+                displayedCountEl.textContent = filtered.length;
+                totalCountEl.textContent = allJobs.length;
+
+                // Clear previous cards
+                jobsContainer.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    jobsContainer.innerHTML = `
+                        <div class="glass-panel empty-state">
+                            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path>
+                            </svg>
+                            <h3>No job postings match your filters</h3>
+                            <p style="font-size: 0.9rem; margin-top: 4px; color: var(--text-muted);">Try adjusting your search criteria or switching filter tabs.</p>
+                        </div>`;
+                    return;
+                }
+
+                filtered.forEach(job => {
+                    const card = document.createElement('article');
+                    card.className = 'glass-panel job-card';
+
+                    // Relevancy badge label
+                    let badgeLabel = job.tier;
+                    if (job.tier === 'relevant') badgeLabel = 'Relevant CS/IT';
+
+                    // Format date
+                    let dateDisplay = job.date || 'Active';
+                    if (job.date && job.date !== '-') {
+                        try {
+                            const dateObj = new Date(job.date);
+                            if (!isNaN(dateObj.getTime())) {
+                                dateDisplay = dateObj.toLocaleDateString(undefined, { 
+                                    year: 'numeric', month: 'short', day: 'numeric' 
+                                });
+                            }
+                        } catch (e) {}
+                    }
+
+                    card.innerHTML = `
+                        <div class="job-card-header">
+                            <div>
+                                <span class="org-badge">${escapeHtml(job.orgName)}</span>
+                                <h3 style="margin-top: 8px;">
+                                    <a href="${escapeHtml(job.link || '#')}" target="_blank" class="job-title" rel="noopener noreferrer">${escapeHtml(job.title)}</a>
+                                </h3>
+                            </div>
+                            <span class="tier-badge ${job.tier}">${escapeHtml(badgeLabel)}</span>
+                        </div>
+                        <div class="job-meta">
+                            <div class="meta-item">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>${escapeHtml(dateDisplay)}</span>
+                            </div>
+                            <div class="meta-item" style="margin-left: auto;">
+                                <a href="${escapeHtml(job.link || '#')}" target="_blank" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem; border-radius: 6px;" rel="noopener noreferrer">
+                                    Apply
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    jobsContainer.appendChild(card);
+                });
+            }
+
+            // Render health panel monitor in the sidebar
+            function renderHealthList() {
+                healthContainer.innerHTML = '';
+                
+                const orgsArray = Object.entries(allOrgs).map(([key, info]) => ({
+                    key: key,
+                    name: info.name || key.toUpperCase(),
+                    status: info.status || 'ok'
+                })).sort((a, b) => a.name.localeCompare(b.name));
+
+                const filteredOrgs = orgsArray.filter(org => {
+                    if (healthSearchQuery) {
+                        return org.name.toLowerCase().includes(healthSearchQuery.toLowerCase());
+                    }
+                    return true;
+                });
+
+                if (filteredOrgs.length === 0) {
+                    healthContainer.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; padding: 1rem;">No matching portals</div>';
+                    return;
+                }
+
+                filteredOrgs.forEach(org => {
+                    const item = document.createElement('div');
+                    item.className = 'health-item';
+                    item.innerHTML = `
+                        <span class="health-name" title="${escapeHtml(org.name)}">${escapeHtml(org.name)}</span>
+                        <span class="health-status ${org.status === 'ok' ? 'ok' : 'failed'}">${escapeHtml(org.status)}</span>
+                    `;
+                    healthContainer.appendChild(item);
+                });
+            }
+
+            // Show error message on index.html if fetch fails
+            function showErrorState(message) {
+                loadingIndicator.style.display = 'none';
+                jobsContainer.style.display = 'block';
+                jobsContainer.innerHTML = `
+                    <div class="glass-panel empty-state" style="border-color: var(--danger-border); background: var(--danger-bg);">
+                        <svg fill="none" stroke="var(--danger-color)" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376C1.83 15.002 2.006 13.622 3 12.5L10.5 5c1-1 2.5-1 3.5 0L21 12.5c1 1.122 1.17 2.502.103 3.626l-1.5 1.5C18.67 18.5 17.5 19 16 19H8c-1.5 0-2.67-.5-3.603-1.374l-1.397-1.25z"></path>
+                        </svg>
+                        <h3 style="color: var(--danger-color);">Failed to load job scraper data</h3>
+                        <p style="font-size: 0.9rem; margin-top: 4px; color: var(--text-secondary);">Reason: ${escapeHtml(message)}</p>
+                        <p style="font-size: 0.85rem; margin-top: 12px; color: var(--text-muted);">Make sure the daily GitHub Actions check run has executed successfully and 'scraped_jobs.json' is present at the repository root.</p>
+                    </div>`;
+            }
+
+            // Simple HTML escape helper
+            function escapeHtml(unsafe) {
+                return String(unsafe)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            // Listeners
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderJobs();
+            });
+
+            orgSelectEl.addEventListener('change', (e) => {
+                selectedOrg = e.target.value;
+                renderJobs();
+            });
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedTier = btn.getAttribute('data-tier');
+                    renderJobs();
+                });
+            });
+
+            healthSearchInput.addEventListener('input', (e) => {
+                healthSearchQuery = e.target.value;
+                renderHealthList();
+            });
+
+            // Start application
+            init();
+        });
+    </script>
+</body>
+</html>
