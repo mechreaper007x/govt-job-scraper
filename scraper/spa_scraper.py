@@ -27,6 +27,7 @@ from datetime import datetime
 _thread_local = threading.local()
 _all_instances = []
 _instances_lock = threading.Lock()
+_playwright_semaphore = threading.Semaphore(2)
 _atexit_registered = False
 
 # Compiled regex for blocking unnecessary resources (images, fonts)
@@ -121,68 +122,69 @@ def fetch_spa_page(url, wait_selector=None, timeout_ms=30000, scroll=True):
     Returns:
         str: Rendered HTML content, or empty string on failure.
     """
-    browser = _ensure_playwright()
+    with _playwright_semaphore:
+        browser = _ensure_playwright()
 
-    try:
-        context = browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1920, "height": 1080},
-            java_script_enabled=True,
-            ignore_https_errors=True,
-        )
-
-        page = context.new_page()
-
-        # Apply stealth patches to hide automation fingerprints
         try:
-            from playwright_stealth import Stealth
-            stealth = Stealth()
-            stealth.apply_stealth_sync(page)
-        except Exception:
-            pass  # stealth is optional — degrade gracefully if not installed
+            context = browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
+                ),
+                viewport={"width": 1920, "height": 1080},
+                java_script_enabled=True,
+                ignore_https_errors=True,
+            )
 
-        # Block unnecessary resources to speed up loading
-        page.route(_BLOCKED_RESOURCES, lambda route: route.abort())
+            page = context.new_page()
 
-        # Navigate to the page
-        page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
-
-        # Wait for dynamic content
-        if wait_selector:
+            # Apply stealth patches to hide automation fingerprints
             try:
-                page.wait_for_selector(wait_selector, timeout=timeout_ms)
+                from playwright_stealth import Stealth
+                stealth = Stealth()
+                stealth.apply_stealth_sync(page)
             except Exception:
-                # Selector not found — try networkidle as fallback
+                pass  # stealth is optional — degrade gracefully if not installed
+
+            # Block unnecessary resources to speed up loading
+            page.route(_BLOCKED_RESOURCES, lambda route: route.abort())
+
+            # Navigate to the page
+            page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
+
+            # Wait for dynamic content
+            if wait_selector:
+                try:
+                    page.wait_for_selector(wait_selector, timeout=timeout_ms)
+                except Exception:
+                    # Selector not found — try networkidle as fallback
+                    try:
+                        page.wait_for_load_state("networkidle", timeout=timeout_ms)
+                    except Exception:
+                        pass  # Continue with whatever loaded
+            else:
                 try:
                     page.wait_for_load_state("networkidle", timeout=timeout_ms)
                 except Exception:
                     pass  # Continue with whatever loaded
-        else:
-            try:
-                page.wait_for_load_state("networkidle", timeout=timeout_ms)
-            except Exception:
-                pass  # Continue with whatever loaded
 
-        # Scroll to trigger lazy-loaded content
-        if scroll:
-            _scroll_page(page)
+            # Scroll to trigger lazy-loaded content
+            if scroll:
+                _scroll_page(page)
 
-        # Extract rendered HTML
-        html = page.content()
-        context.close()
-        return html
-
-    except Exception as exc:
-        print(f"  [SPA] Error fetching {url}: {exc}", file=sys.stderr)
-        try:
+            # Extract rendered HTML
+            html = page.content()
             context.close()
-        except Exception:
-            pass
-        return ""
+            return html
+
+        except Exception as exc:
+            print(f"  [SPA] Error fetching {url}: {exc}", file=sys.stderr)
+            try:
+                context.close()
+            except Exception:
+                pass
+            return ""
 
 
 def _scroll_page(page):
