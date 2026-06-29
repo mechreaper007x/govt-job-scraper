@@ -100,7 +100,10 @@ def main():
             if k not in ORGS_CONFIG:
                 v["resolve_career"] = True
                 ORGS_CONFIG[k] = v
-        all_keys = sorted([k for k, v in seeded_domains.items() if "duplicate_of" not in v])
+        all_keys = sorted([
+            k for k in ORGS_CONFIG.keys()
+            if k != "drdo_spa" and "duplicate_of" not in ORGS_CONFIG.get(k, {})
+        ])
         start = args.offset
         end = (start + args.limit) if args.limit is not None else len(all_keys)
         target_keys = all_keys[start:end]
