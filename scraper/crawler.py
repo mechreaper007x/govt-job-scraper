@@ -635,10 +635,51 @@ class GovJobCrawler:
                             postings = subpage_postings
                             self._log(f"[sub-page exploration found {len(postings)} listings]")
 
-            # ── Filter by relevance (with per-org context + URL awareness) ──
-
             annotate(postings, org_key=key, session=self.session)
-            filtered = [p for p in postings if p.get("relevance") != "excluded"]
+
+            # Deduplicate and group by title to separate apply_link vs pdf_link
+            import re
+            grouped = {}
+            for p in postings:
+                title = p.get("title", "").strip()
+                if not title:
+                    continue
+                norm_title = re.sub(r"\s+", " ", title.lower()).strip()
+                link = p.get("link", "").strip()
+                is_pdf = link.lower().endswith(".pdf") or ".pdf?" in link.lower()
+
+                if norm_title not in grouped:
+                    grouped[norm_title] = {
+                        "title": title,
+                        "date": p.get("date", ""),
+                        "relevance": p.get("relevance", "uncertain"),
+                        "apply_link": "" if is_pdf else link,
+                        "pdf_link": link if is_pdf else "",
+                    }
+                else:
+                    # Update date if empty
+                    if not grouped[norm_title]["date"] and p.get("date", ""):
+                        grouped[norm_title]["date"] = p.get("date", "")
+                    # Keep more relevant category
+                    rel_rank = {"relevant": 2, "uncertain": 1, "excluded": 0}
+                    p_rel = p.get("relevance", "uncertain")
+                    g_rel = grouped[norm_title]["relevance"]
+                    if rel_rank.get(p_rel, 0) > rel_rank.get(g_rel, 0):
+                        grouped[norm_title]["relevance"] = p_rel
+                    # Merge links
+                    if is_pdf:
+                        if not grouped[norm_title]["pdf_link"]:
+                            grouped[norm_title]["pdf_link"] = link
+                    else:
+                        if not grouped[norm_title]["apply_link"]:
+                            grouped[norm_title]["apply_link"] = link
+
+            final_postings = []
+            for g in grouped.values():
+                g["link"] = g["apply_link"] or g["pdf_link"]
+                final_postings.append(g)
+
+            filtered = [p for p in final_postings if p.get("relevance") != "excluded"]
             self._log(f"{len(filtered)} listings (from {len(postings)})")
             return filtered
 
