@@ -903,3 +903,5 @@ DISCOVERY_CONFIG = {
         "patterns": [r"recruit", r"advertisement", r"notification", r"vacancy"],
     },
 }
+
+CURATED_ORG_KEYS = set(ORGS_CONFIG.keys())

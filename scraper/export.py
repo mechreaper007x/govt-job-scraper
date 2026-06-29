@@ -41,7 +41,7 @@ import json
 import os
 from datetime import datetime
 
-from scraper.config import ORGS_CONFIG
+from scraper.config import ORGS_CONFIG, CURATED_ORG_KEYS
 
 
 def build_jobs_payload(scraped_data):
@@ -62,14 +62,16 @@ def build_jobs_payload(scraped_data):
         cfg = ORGS_CONFIG.get(org_key, {})
         name = cfg.get("name", org_key.upper())
         url  = cfg.get("url", "")
+        category = "main" if org_key in CURATED_ORG_KEYS else "other"
 
         if postings is None or not isinstance(postings, list):
             # Org scrape failed — include so the consumer knows it was attempted
             orgs_out[org_key] = {
-                "name":   name,
-                "url":    url,
-                "status": "failed",
-                "jobs":   [],
+                "name":     name,
+                "url":      url,
+                "status":   "failed",
+                "category": category,
+                "jobs":     [],
             }
             orgs_failed += 1
             continue
@@ -79,10 +81,12 @@ def build_jobs_payload(scraped_data):
         for post in postings:
             tier = post.get("relevance", "uncertain")
             jobs_out.append({
-                "title": post.get("title", ""),
-                "link":  post.get("link", ""),
-                "date":  post.get("date", ""),
-                "tier":  tier,
+                "title":      post.get("title", ""),
+                "link":       post.get("link", ""),
+                "apply_link": post.get("apply_link", ""),
+                "pdf_link":   post.get("pdf_link", ""),
+                "date":       post.get("date", ""),
+                "tier":       tier,
             })
             total += 1
             if tier == "relevant":
@@ -93,10 +97,11 @@ def build_jobs_payload(scraped_data):
                 excluded += 1
 
         orgs_out[org_key] = {
-            "name":   name,
-            "url":    url,
-            "status": "ok",
-            "jobs":   jobs_out,
+            "name":     name,
+            "url":      url,
+            "status":   "ok",
+            "category": category,
+            "jobs":     jobs_out,
         }
 
     return {

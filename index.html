@@ -228,7 +228,7 @@
 
         .search-row {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr;
             gap: 1rem;
             margin-bottom: 1.25rem;
         }
@@ -725,6 +725,13 @@
                         <option value="all">All Organizations</option>
                     </select>
                 </div>
+                <div class="select-box">
+                    <select class="select-input" id="category-filter-select">
+                        <option value="all">All Channels</option>
+                        <option value="main">Main Govt & PSUs</option>
+                        <option value="other">Other Portals</option>
+                    </select>
+                </div>
             </div>
             <div class="tabs-row">
                 <div class="filter-tabs" id="relevancy-tabs">
@@ -792,6 +799,7 @@
             let selectedTier = 'relevant';
             let searchQuery = '';
             let selectedOrg = 'all';
+            let selectedCategory = 'all';
             let healthSearchQuery = '';
 
             const jobsContainer = document.getElementById('jobs-list-container');
@@ -799,6 +807,7 @@
             const displayedCountEl = document.getElementById('displayed-count');
             const totalCountEl = document.getElementById('total-count');
             const orgSelectEl = document.getElementById('org-filter-select');
+            const categorySelectEl = document.getElementById('category-filter-select');
             const searchInput = document.getElementById('job-search-input');
             const tabButtons = document.querySelectorAll('#relevancy-tabs .tab-btn');
             
@@ -855,6 +864,7 @@
                     allOrgs = data.orgs;
                     for (const [orgKey, orgInfo] of Object.entries(data.orgs)) {
                         const orgName = orgInfo.name || orgKey.toUpperCase();
+                        const orgCategory = orgInfo.category || 'main';
                         
                         // Extract jobs
                         if (orgInfo.jobs && Array.isArray(orgInfo.jobs)) {
@@ -862,7 +872,8 @@
                                 allJobs.push({
                                     ...job,
                                     orgKey: orgKey,
-                                    orgName: orgName
+                                    orgName: orgName,
+                                    category: orgCategory
                                 });
                             });
                         }
@@ -905,11 +916,15 @@
                 });
             }
 
-            // Filter jobs based on selected search query, org select and tab tier
+            // Filter jobs based on selected search query, category, org select and tab tier
             function getFilteredJobs() {
                 return allJobs.filter(job => {
                     // Relevancy Tier filter
                     if (selectedTier !== 'all' && job.tier !== selectedTier) {
+                        return false;
+                    }
+                    // Category filter (Main vs Other)
+                    if (selectedCategory !== 'all' && job.category !== selectedCategory) {
                         return false;
                     }
                     // Organization filter
@@ -1084,6 +1099,11 @@
 
             orgSelectEl.addEventListener('change', (e) => {
                 selectedOrg = e.target.value;
+                renderJobs();
+            });
+
+            categorySelectEl.addEventListener('change', (e) => {
+                selectedCategory = e.target.value;
                 renderJobs();
             });
 
