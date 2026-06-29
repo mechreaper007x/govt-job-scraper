@@ -34,9 +34,9 @@ def diff_and_update_state(scraped_data, state_file_path="state.json"):
     state_changed = False
 
     for org_key, postings in scraped_data.items():
-        # If postings is None, it means the scraper failed for this org.
+        # If postings is None or not a list (e.g. SERVER_DOWN), the scraper failed or was skipped.
         # We skip updates to its state so we check it again next time.
-        if postings is None:
+        if postings is None or not isinstance(postings, list):
             continue
 
         known_hashes = set(state.get(org_key, []))
