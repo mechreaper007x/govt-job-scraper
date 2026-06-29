@@ -49,6 +49,7 @@ jobs:
           SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
           NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
           SCRAPER_PDF_SCAN: '1'
+          SCALE_CRAWL: '1'
         run: python -m scraper.main --scale-all
 
       - name: Generate PDF Report

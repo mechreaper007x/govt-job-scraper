@@ -91,6 +91,8 @@ def main():
     elif args.all:
         target_keys = sorted([k for k in ORGS_CONFIG.keys() if k != "drdo_spa"])
     elif args.scale_all:
+        import os
+        os.environ["SCALE_CRAWL"] = "1"
         from scraper.domain_seeder import generate_domains
         seeded_domains = generate_domains()
         # Merge seeded_domains into ORGS_CONFIG and mark them for career URL resolution
@@ -139,7 +141,7 @@ def main():
         return  # watch runs indefinitely until Ctrl+C
 
     # ── Scrape pipeline (single run) ──────────────────────────────────────
-    max_workers = 15 if len(target_keys) > 10 else 4
+    max_workers = 20 if len(target_keys) > 10 else 4
     scraped_data = crawler.run_scrape(orgs=target_keys, max_workers=max_workers)
 
     # ── Generate all_relevant_jobs.md ─────────────────────────────────────
