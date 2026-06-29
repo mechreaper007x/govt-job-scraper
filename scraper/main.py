@@ -142,6 +142,32 @@ def main():
     max_workers = 15 if len(target_keys) > 10 else 4
     scraped_data = crawler.run_scrape(orgs=target_keys, max_workers=max_workers)
 
+    # ── Generate all_relevant_jobs.md ─────────────────────────────────────
+    try:
+        relevant_jobs = []
+        for org_key, postings in scraped_data.items():
+            if postings and isinstance(postings, list):
+                org_name = ORGS_CONFIG.get(org_key, {}).get("name", org_key.upper())
+                for post in postings:
+                    if post.get("relevance") == "relevant":
+                        relevant_jobs.append({
+                            "org": org_name,
+                            "title": post.get("title", ""),
+                            "date": post.get("date", "") or "-",
+                            "url": post.get("link", "")
+                        })
+        relevant_jobs.sort(key=lambda x: (x["org"].lower(), x["title"].lower()))
+        with open("all_relevant_jobs.md", "w", encoding="utf-8") as f:
+            f.write("# All Relevant CS/IT Government Job Postings\n\n")
+            f.write(f"**Total Relevant Postings:** {len(relevant_jobs)}\n\n")
+            f.write("| # | Organization | Title | Date | Link |\n")
+            f.write("| --- | --- | --- | --- | --- |\n")
+            for idx, j in enumerate(relevant_jobs, 1):
+                f.write(f"| {idx} | {j['org']} | {j['title']} | {j['date']} | [Link]({j['url']}) |\n")
+        print(f"Generated all_relevant_jobs.md with {len(relevant_jobs)} relevant CS/IT jobs.")
+    except Exception as e:
+        print(f"Warning: Failed to generate all_relevant_jobs.md ({e})")
+
     # ── Diff + Notify ─────────────────────────────────────────────────────
     from scraper.diff import diff_and_update_state
     from scraper.notify_discord import send_discord_notifications
