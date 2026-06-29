@@ -47,3 +47,23 @@ The final full-scale crawl processed all **1,237** dynamic and static organizati
 ### Verification of Outputs
 * [all_relevant_jobs.md](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/all_relevant_jobs.md) contains exactly **79** highly accurate, verified CS/IT postings.
 * The system is clean of false positives and handles domain-specific context correctly.
+
+---
+
+## 4. Job Posting Consolidation & UI Enhancements
+
+To clean up the dashboard experience and fix the runner synchronization issues, we implemented several features:
+
+### Title-Based Deduplication & Link Classification
+* **Consolidation**: Grouped postings under each organization by normalized title.
+* **Separation**: Split links into `apply_link` (for portals/forms) and `pdf_link` (for PDF notifications).
+* **Dual Action Buttons**: In the UI ([index.html](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/index.html)), cards now display separate **"Apply Online"** and **"Notification (PDF)"** buttons side-by-side if both are present.
+
+### "Main Govt" vs "Other Portals" Filtering
+* **Static Locking**: Locked down the original list of 83 curated organizations as `CURATED_ORG_KEYS` in [config.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/scraper/config.py) to prevent mutation override.
+* **Category Tagging**: Exported organizations with `"category": "main"` (curated) or `"category": "other"` (dynamically seeded) tags in the final `scraped_jobs.json`.
+* **Sub-Filter Selection**: Added a dropdown filter in the UI next to the organization filter to toggle between **All Channels**, **Main Govt & PSUs**, and **Other Portals**.
+
+### Complete Target Union & CI Push Fix
+* **Unified Crawling**: Expanded the target list for `--scale-all` in [main.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/scraper/main.py) and [run_all_orgs.py](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/run_all_orgs.py) to merge the curated `ORGS_CONFIG` keys with the `seeded_domains` keys. This guarantees curated targets like CRIS and RRB are actively included in the scale crawls.
+* **CI Rebase Push**: Configured the GitHub Actions workflow in [daily-check.yml](file:///c:/Users/Savyasachi%20Mishra/Desktop/Job%20scraper/.github/workflows/daily-check.yml) to use `git pull --rebase` prior to committing and pushing. This cleanly merges the automated reports even when code edits are pushed to `main` while a crawler run is active.
