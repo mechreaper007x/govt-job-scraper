@@ -637,47 +637,96 @@ class GovJobCrawler:
 
             annotate(postings, org_key=key, session=self.session)
 
-            # Deduplicate and group by title to separate apply_link vs pdf_link
+            # Deduplicate and group by title and URL to separate apply_link vs pdf_link
             import re
-            grouped = {}
+            
+            def normalize_url(url):
+                if not url or url.strip() in {"", "#", "javascript:void(0);"}:
+                    return ""
+                url = url.split("?")[0].split("#")[0]
+                if url.endswith("/"):
+                    url = url[:-1]
+                return url.strip().lower()
+
+            def clean_title(t):
+                t = re.sub(r"[^a-zA-Z0-9\s]", " ", t.lower())
+                return re.sub(r"\s+", " ", t).strip()
+
+            GENERIC_TITLES = {"notification", "recruitment", "careers", "jobs", "vacancy", "advertisement", "click here", "view", "details", "heading"}
+
+            merged_groups = []
+
             for p in postings:
                 title = p.get("title", "").strip()
                 if not title:
                     continue
-                norm_title = re.sub(r"\s+", " ", title.lower()).strip()
+                
                 link = p.get("link", "").strip()
+                norm_title = clean_title(title)
+                norm_url = normalize_url(link)
                 is_pdf = link.lower().endswith(".pdf") or ".pdf?" in link.lower()
 
-                if norm_title not in grouped:
-                    grouped[norm_title] = {
+                # Try to find a matching group to merge with
+                matched_group = None
+                for g in merged_groups:
+                    # Match by URL
+                    if norm_url:
+                        g_apply_norm = normalize_url(g["apply_link"])
+                        g_pdf_norm = normalize_url(g["pdf_link"])
+                        if norm_url in (g_apply_norm, g_pdf_norm):
+                            matched_group = g
+                            break
+                    
+                    # Match by Title
+                    if norm_title and norm_title not in GENERIC_TITLES and len(norm_title) > 8:
+                        if norm_title == clean_title(g["title"]):
+                            # One must be PDF and the other must be webpage
+                            g_has_pdf = bool(g["pdf_link"])
+                            g_has_web = bool(g["apply_link"])
+                            if (is_pdf and not g_has_pdf) or (not is_pdf and not g_has_web):
+                                matched_group = g
+                                break
+
+                if matched_group:
+                    # Merge date if empty
+                    if not matched_group["date"] and p.get("date", ""):
+                        matched_group["date"] = p.get("date", "")
+                    
+                    # Keep more relevant category
+                    rel_rank = {"relevant": 2, "uncertain": 1, "excluded": 0}
+                    p_rel = p.get("relevance", "uncertain")
+                    g_rel = matched_group["relevance"]
+                    if rel_rank.get(p_rel, 0) > rel_rank.get(g_rel, 0):
+                        matched_group["relevance"] = p_rel
+                    
+                    # Merge links
+                    if is_pdf:
+                        if not matched_group["pdf_link"]:
+                            matched_group["pdf_link"] = link
+                    else:
+                        if not matched_group["apply_link"]:
+                            matched_group["apply_link"] = link
+                else:
+                    # Create new group
+                    merged_groups.append({
                         "title": title,
                         "date": p.get("date", ""),
                         "relevance": p.get("relevance", "uncertain"),
                         "apply_link": "" if is_pdf else link,
                         "pdf_link": link if is_pdf else "",
-                    }
-                else:
-                    # Update date if empty
-                    if not grouped[norm_title]["date"] and p.get("date", ""):
-                        grouped[norm_title]["date"] = p.get("date", "")
-                    # Keep more relevant category
-                    rel_rank = {"relevant": 2, "uncertain": 1, "excluded": 0}
-                    p_rel = p.get("relevance", "uncertain")
-                    g_rel = grouped[norm_title]["relevance"]
-                    if rel_rank.get(p_rel, 0) > rel_rank.get(g_rel, 0):
-                        grouped[norm_title]["relevance"] = p_rel
-                    # Merge links
-                    if is_pdf:
-                        if not grouped[norm_title]["pdf_link"]:
-                            grouped[norm_title]["pdf_link"] = link
-                    else:
-                        if not grouped[norm_title]["apply_link"]:
-                            grouped[norm_title]["apply_link"] = link
+                    })
 
             final_postings = []
-            for g in grouped.values():
-                g["link"] = g["apply_link"] or g["pdf_link"]
-                final_postings.append(g)
+            for g in merged_groups:
+                p_out = {
+                    "title": g["title"],
+                    "link": g["apply_link"] or g["pdf_link"],
+                    "apply_link": g["apply_link"],
+                    "pdf_link": g["pdf_link"],
+                    "date": g["date"],
+                    "relevance": g["relevance"]
+                }
+                final_postings.append(p_out)
 
             filtered = [p for p in final_postings if p.get("relevance") != "excluded"]
             self._log(f"{len(filtered)} listings (from {len(postings)})")
