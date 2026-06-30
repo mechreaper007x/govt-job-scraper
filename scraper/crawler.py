@@ -637,6 +637,68 @@ class GovJobCrawler:
 
             annotate(postings, org_key=key, session=self.session)
 
+            # Filter out cross-domain links (links pointing to other organizations' domains)
+            from urllib.parse import urlparse
+            cfg = ORGS_CONFIG.get(key, {})
+            allowed_domains = set()
+            for url_field in [cfg.get("url", "")] + cfg.get("homepages", []):
+                if url_field:
+                    parsed = urlparse(url_field)
+                    if parsed.netloc:
+                        dom = parsed.netloc.lower()
+                        if dom.startswith("www."):
+                            dom = dom[4:]
+                        allowed_domains.add(dom)
+
+            # Extend allowed domains to parent state or university domains
+            extended_allowed = set(allowed_domains)
+            for dom in allowed_domains:
+                parts = dom.split(".")
+                if len(parts) >= 3:
+                    suffix_3 = ".".join(parts[-3:])
+                    if any(suffix_3.endswith(s) for s in (".gov.in", ".nic.in", ".edu.in", ".ac.in", ".co.in", ".org.in", ".res.in")):
+                        extended_allowed.add(suffix_3)
+                if len(parts) >= 2:
+                    suffix_2 = ".".join(parts[-2:])
+                    if any(suffix_2.endswith(s) for s in (".edu", ".org", ".com", ".net", ".in")):
+                        extended_allowed.add(suffix_2)
+            allowed_domains = extended_allowed
+
+            # Standard globally allowed domains for document sharing, application forms, etc.
+            GLOBAL_ALLOWED_DOMAINS = {
+                "google.com", "docs.google.com", "drive.google.com", "forms.gle",
+                "github.com", "dropbox.com", "samarth.edu.in", "samarth.ac.in",
+                "mponline.gov.in", "nta.nic.in", "digialm.com", "careers.irrtc.co.in",
+                "ecareer.in", "digilocker.gov.in", "s3.amazonaws.com"
+            }
+
+            filtered_postings = []
+            for p in postings:
+                p_url = p.get("link", "").strip()
+                if not p_url:
+                    continue
+                parsed_p = urlparse(p_url)
+                if not parsed_p.netloc:
+                    filtered_postings.append(p)
+                    continue
+                p_dom = parsed_p.netloc.lower()
+                if p_dom.startswith("www."):
+                    p_dom = p_dom[4:]
+                
+                is_allowed = False
+                for allowed in allowed_domains:
+                    if p_dom == allowed or p_dom.endswith("." + allowed):
+                        is_allowed = True
+                        break
+                if not is_allowed:
+                    for global_dom in GLOBAL_ALLOWED_DOMAINS:
+                        if p_dom == global_dom or p_dom.endswith("." + global_dom):
+                            is_allowed = True
+                            break
+                if is_allowed:
+                    filtered_postings.append(p)
+            postings = filtered_postings
+
             # Deduplicate and group by title and URL to separate apply_link vs pdf_link
             import re
             
