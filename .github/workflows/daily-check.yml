@@ -68,5 +68,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git reset origin/main
           git add state.json scraped_jobs.json jobs_report.pdf all_relevant_jobs.md || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update state and reports [skip ci]" && git pull --rebase origin main && git push origin main)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update state and reports [skip ci]" && git push origin main)
