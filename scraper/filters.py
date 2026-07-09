@@ -953,14 +953,20 @@ def annotate(listings, org_key="", session=None):
         org_key: org key string (optional, for per-org context rules)
         session: requests.Session (optional, for PDF content extraction)
     """
+    from scraper.date_utils import normalize_date, year_of
+
     for item in listings:
-        # Filter out postings that explicitly have old dates (e.g. year <= 2025)
-        date_str = item.get("date", "")
-        is_old = False
-        if date_str:
-            years = [int(y) for y in re.findall(r"\b(20\d{2})\b", date_str)]
-            if years and max(years) <= 2025:
-                is_old = True
+        # Ensure every posting carries a normalized ISO date for reliable
+        # downstream sorting/filtering, even if it came from a legacy parser
+        # that only set the raw "date" field.
+        if not item.get("date_iso"):
+            item["date_iso"] = normalize_date(item.get("date", ""))
+
+        # Filter out postings that explicitly have old dates (year <= 2025).
+        # Prefer the normalized year; fall back to any 4-digit year in the raw
+        # string so a partially-parsed date still triggers the cutoff.
+        yr = year_of(item.get("date_iso") or item.get("date", ""))
+        is_old = yr is not None and yr <= 2025
 
         if is_old:
             item["relevance"] = "excluded"

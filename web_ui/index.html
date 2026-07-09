@@ -3,76 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Govt Job Scraper</title>
+    <meta name="description" content="Automated Govt & PSU Job Notification Tracker prioritizing Computer Science and Information Technology positions.">
+    <title>Govt CSE/IT Job Tracker</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="app-container">
-        <header>
-            <h1>Job Scraper Control Panel</h1>
-            <p>Automated Government Job Data Collection</p>
+    <div class="container">
+        <!-- Hero header -->
+        <header class="hero">
+            <div class="hero-topline">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                        </svg>
+                    </div>
+                    <span class="brand-name">MECHREAPER</span>
+                </div>
+                <div class="last-updated" id="last-updated-indicator">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span id="generated-time-text">Loading data…</span>
+                </div>
+            </div>
+            <h1>Govt CSE/IT Job Tracker</h1>
+            <p class="subtitle">A resilient, concurrent, adaptive crawler tracking recruitment notifications across public sector, banking, and government channels — prioritizing Computer Science &amp; IT roles.</p>
         </header>
-        
-        <main>
-            <section class="card">
-                <h2>Core Scraper (83 Orgs)</h2>
-                <div class="form-group">
-                    <label for="org-target">Target Organization (Optional)</label>
-                    <input type="text" id="org-target" placeholder="e.g., cdac">
-                </div>
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="watch-mode">
-                    <label for="watch-mode">Enable Watch Mode</label>
-                </div>
-                <div class="form-group" id="interval-group" style="display:none;">
-                    <label for="watch-interval">Polling Interval (seconds)</label>
-                    <input type="number" id="watch-interval" value="30">
-                </div>
-                <button class="btn primary-btn" id="run-core-btn">Run Core Scraper</button>
-            </section>
 
-            <section class="card">
-                <h2>Scale Scraper (2,300+ Orgs)</h2>
-                <div class="form-group-row">
-                    <div class="form-group">
-                        <label for="scale-limit">Limit</label>
-                        <input type="number" id="scale-limit" value="20" min="1">
-                    </div>
-                    <div class="form-group">
-                        <label for="scale-offset">Offset</label>
-                        <input type="number" id="scale-offset" value="0" min="0">
-                    </div>
+        <!-- Metrics dashboard -->
+        <section class="stats-grid" id="stats-section">
+            <div class="glass-panel stat-card total">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 </div>
-                <button class="btn secondary-btn" id="run-scale-btn">Run Scale Scraper</button>
-            </section>
-
-            <section class="card" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <h2>Export Data</h2>
-                <p style="margin-bottom: 1rem; color: var(--color-text-dark);">Download the scraped job listings as a formatted PDF with clickable links.</p>
-                <button class="btn primary-btn" id="download-pdf-btn" style="max-width: 300px; background-color: var(--color-accent); color: var(--color-primary);">Download PDF Report</button>
-            </section>
-        </main>
-        
-        <div class="terminal-container">
-            <div class="terminal-header">
-                <span>Console Output</span>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <button class="icon-btn" id="copy-console" title="Copy Console">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
-                    <button class="icon-btn" id="clear-console" title="Clear Console">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                    </button>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-total-jobs">-</div>
+                    <div class="stat-label">Total Jobs</div>
                 </div>
             </div>
-            <div class="terminal" id="terminal-output">
-                <div class="log-entry system">System initialized. Ready to execute commands.</div>
+            <div class="glass-panel stat-card relevant">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-relevant-jobs">-</div>
+                    <div class="stat-label">CS / IT Relevant</div>
+                </div>
             </div>
+            <div class="glass-panel stat-card uncertain">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-uncertain-jobs">-</div>
+                    <div class="stat-label">Uncertain / Other</div>
+                </div>
+            </div>
+            <div class="glass-panel stat-card orgs">
+                <div class="stat-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-monitored-orgs">-</div>
+                    <div class="stat-label">Online Channels</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls / search toolbar -->
+        <section class="glass-panel controls-panel">
+            <div class="search-row">
+                <div class="search-box">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" class="search-input" id="job-search-input" placeholder="Search by job title or organization…">
+                </div>
+                <div class="select-box">
+                    <select class="select-input" id="org-filter-select">
+                        <option value="all">All Organizations</option>
+                    </select>
+                </div>
+                <div class="select-box">
+                    <select class="select-input" id="category-filter-select">
+                        <option value="all">All Channels</option>
+                        <option value="main">Main Govt &amp; PSUs</option>
+                        <option value="other">Other Portals</option>
+                    </select>
+                </div>
+                <div class="select-box">
+                    <select class="select-input" id="sort-select" title="Sort postings">
+                        <option value="newest">Sort: Newest first</option>
+                        <option value="oldest">Sort: Oldest first</option>
+                        <option value="org">Sort: Organization (A–Z)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="tabs-row">
+                <div class="filter-tabs" id="relevancy-tabs">
+                    <button class="tab-btn active" id="tab-relevant" data-tier="relevant">CS / IT Relevant</button>
+                    <button class="tab-btn" id="tab-uncertain" data-tier="uncertain">Uncertain / Other</button>
+                    <button class="tab-btn" id="tab-excluded" data-tier="excluded">Noise / Excluded</button>
+                    <button class="tab-btn" id="tab-all" data-tier="all">All Listings</button>
+                </div>
+                <div class="download-actions">
+                    <a href="scraped_jobs.json" target="_blank" class="btn btn-secondary" id="raw-json-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Raw JSON
+                    </a>
+                    <a href="jobs_report.pdf" target="_blank" class="btn btn-primary" id="download-pdf-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Download PDF Report
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content -->
+        <div class="content-area">
+            <section class="jobs-section">
+                <div class="results-count">
+                    <span>Showing <strong id="displayed-count">0</strong> of <strong id="total-count">0</strong> postings</span>
+                </div>
+
+                <div id="loading-indicator">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <div class="jobs-list" id="jobs-list-container" style="display: none;">
+                    <!-- Job cards injected here -->
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="glass-panel health-panel">
+                    <div class="health-panel-title">
+                        <span>Portal Crawler Monitor</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    </div>
+                    <input type="text" class="health-search" id="health-search-input" placeholder="Search portals…">
+                    <div class="health-list" id="health-list-container">
+                        <!-- Portal items injected here -->
+                    </div>
+                </div>
+            </aside>
         </div>
+
+        <footer>
+            <p>&copy; 2026 Govt CSE/IT Job Tracker · Daily automated checks via GitHub Actions.</p>
+            <p class="credits">Created by <strong>Savyasachi Mishra</strong> &amp; <strong>Bipasha Mehra</strong></p>
+        </footer>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

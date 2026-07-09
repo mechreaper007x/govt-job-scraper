@@ -761,3 +761,64 @@ def parse_generic_spa(html_content, base_url="", keywords=None):
             })
 
     return postings
+
+
+# Markers that a page is a client-rendered JS app whose real content only
+# appears after the browser executes JavaScript. When the static HTML parse
+# finds nothing but these markers are present, a headless render is worth the
+# (expensive) attempt.
+_JS_APP_MARKERS = (
+    'id="root"', "id='root'", 'id="app"', "id='app'",
+    'ng-app', 'ng-version', 'data-reactroot', '__next_data__',
+    'window.__nuxt__', 'vue.js', 'react-dom', 'ng-controller',
+)
+
+
+def looks_like_js_app(html):
+    """
+    Heuristic: does this static HTML look like an empty shell for a JS app?
+
+    True when the page is small on visible text yet carries framework markers
+    (React/Angular/Vue/Next) or a large script-to-content ratio. Used to decide
+    whether a zero-result org is worth re-fetching through Playwright.
+    """
+    if not html:
+        return False
+    low = html.lower()
+
+    if any(m in low for m in _JS_APP_MARKERS):
+        return True
+
+    # Script-heavy, text-light pages are almost always client-rendered.
+    script_bytes = sum(len(s) for s in re.findall(r"<script[\s\S]*?</script>", low))
+    text_only = re.sub(r"<[^>]+>", " ", low)
+    text_only = re.sub(r"\s+", " ", text_only).strip()
+    if len(text_only) < 600 and script_bytes > 2000:
+        return True
+
+    return False
+
+
+def render_and_parse_adaptive(url, timeout_ms=25000):
+    """
+    Render *url* with headless Chromium, then run the standard adaptive parser
+    over the resulting DOM. Returns a list of postings (possibly empty).
+
+    This is the generic Playwright fallback used by the crawler for any org
+    whose static HTML yielded nothing but looks like a JS app. It reuses the
+    same scoring/date logic as the static path, so results are consistent.
+    """
+    from scraper.adaptive_parser import parse_adaptive
+
+    try:
+        html = fetch_spa_page(url, timeout_ms=timeout_ms)
+    except Exception:
+        return []
+
+    if not html or len(html) < 500:
+        return []
+
+    try:
+        return parse_adaptive(html, base_url=url)
+    except Exception:
+        return []

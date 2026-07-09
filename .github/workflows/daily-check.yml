@@ -5,8 +5,17 @@ on:
     - cron: '0 6 * * *'  # 06:00 UTC (11:30 AM IST) daily
   workflow_dispatch:      # Allows manual trigger for testing
 
+# contents: write  -> commit state.json/report back to the repo
+# pages: write + id-token: write -> deploy the dashboard to GitHub Pages
 permissions:
-  contents: write         # Required to commit state.json back to the repo
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow only one concurrent Pages deployment; don't cancel an in-progress run.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   check-jobs:
@@ -50,12 +59,13 @@ jobs:
           NOTIFY_EMAIL_TO: ${{ secrets.NOTIFY_EMAIL_TO }}
           SCRAPER_PDF_SCAN: '1'
           SCALE_CRAWL: '1'
+          SPA_FALLBACK: '1'
         run: python -m scraper.main --scale-all
 
       - name: Generate PDF Report
         run: python generate_pdf.py
 
-      - name: Upload PDF Report
+      - name: Upload scraper output (shared with deploy job)
         uses: actions/upload-artifact@v4
         with:
           name: daily-jobs-report
@@ -72,3 +82,44 @@ jobs:
           git reset origin/main
           git add state.json scraped_jobs.json jobs_report.pdf all_relevant_jobs.md || true
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update state and reports [skip ci]" && git push origin main)
+
+  # ── Publish the web_ui dashboard to GitHub Pages ────────────────────────
+  # Assembles the static site (web_ui/ + fresh scraped_jobs.json + PDF) and
+  # deploys it. Runs in the same workflow as the scrape so it always ships
+  # the data just produced (the scrape's commit carries [skip ci], so a
+  # separate push-triggered workflow would not fire).
+  deploy-pages:
+    needs: check-jobs
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download scraper output
+        uses: actions/download-artifact@v4
+        with:
+          name: daily-jobs-report
+          path: artifact
+
+      - name: Assemble site directory
+        run: |
+          mkdir -p _site
+          cp -r web_ui/. _site/
+          cp artifact/scraped_jobs.json _site/scraped_jobs.json
+          cp artifact/jobs_report.pdf   _site/jobs_report.pdf
+          echo "Assembled site:" && ls -la _site
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

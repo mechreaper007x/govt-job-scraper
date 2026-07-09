@@ -12,6 +12,8 @@ import re
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
+from scraper.date_utils import find_date, normalize_date
+
 # Positive and negative keywords for scoring link relevance
 _RELEVANCE_KEYWORDS = [
     r"recruit", r"vacanc", r"career", r"job", r"opening", r"advertisement", r"advt",
@@ -221,8 +223,16 @@ class AdaptiveParser:
             postings.append({
                 "title": title,
                 "link": link,
-                "date": date_str
+                "date": date_str,
+                "date_iso": normalize_date(date_str),
             })
+
+        # 4. Fallback: if anchor scoring found nothing, try table/list rows.
+        #    Many gov pages list vacancies as <tr>/<li> blocks where the link
+        #    text alone is generic ("View"/"PDF") and never clears the score
+        #    threshold above.
+        if not postings:
+            postings = self._parse_row_blocks(soup)
 
         return postings
 
@@ -261,12 +271,15 @@ class AdaptiveParser:
         """
         Climb up the DOM tree and scan neighboring text nodes or sibling elements
         to find any date formats (e.g. publication or last date).
+
+        Uses the wide-format matcher in date_utils, so ordinal ('2nd June'),
+        month-first ('June 20, 2026') and dotted ('20.06.26') dates are caught
+        in addition to the classic DD/MM/YYYY shapes.
         """
         # Look first inside the anchor tag text itself
-        text = a_tag.get_text()
-        match = _DATE_RE.search(text)
-        if match:
-            return match.group(0)
+        found = find_date(a_tag.get_text())
+        if found:
+            return found
 
         # Climb up to 3 parent levels to search nearby siblings and text
         curr = a_tag
@@ -274,15 +287,84 @@ class AdaptiveParser:
             parent = curr.parent
             if not parent:
                 break
-            
-            parent_text = parent.get_text(separator=" ", strip=True)
-            match = _DATE_RE.search(parent_text)
-            if match:
-                return match.group(0)
-            
+
+            found = find_date(parent.get_text(separator=" ", strip=True))
+            if found:
+                return found
+
             curr = parent
 
         return ""
+
+    def _parse_row_blocks(self, soup):
+        """
+        Recover job listings from tabular / list layouts.
+
+        Triggered only when anchor-based scoring produced nothing. Many older
+        government portals render vacancies as table rows or list items whose
+        clickable link text is a bare "View"/"Download"/"PDF" — those never
+        clear the link score threshold, so the whole page looks empty.
+
+        Strategy: scan every <tr> and <li> that contains at least one link.
+        Use the row's *full text* (not just the anchor text) as the title, and
+        prefer a PDF/detail link as the target. Score the combined row text so
+        we still filter out navigation and boilerplate rows.
+        """
+        postings = []
+        seen_links = set()
+
+        candidates = soup.find_all("tr") + soup.find_all("li")
+        for block in candidates:
+            link_tag = None
+            # Prefer a PDF or job-ish link; otherwise take the first real link.
+            for a in block.find_all("a", href=True):
+                href = a["href"].strip()
+                if not href or href.startswith(("javascript:", "mailto:", "#")):
+                    continue
+                if link_tag is None:
+                    link_tag = a
+                if href.lower().endswith(".pdf") or ".pdf?" in href.lower():
+                    link_tag = a
+                    break
+            if link_tag is None:
+                continue
+
+            href = link_tag["href"].strip()
+            link = urljoin(self.base_url, href)
+            clean_link = link.split("#")[0].rstrip("/")
+            if clean_link in seen_links:
+                continue
+
+            # Row text becomes the title. Collapse whitespace and trim the
+            # generic call-to-action words the anchor usually carries.
+            row_text = block.get_text(separator=" ", strip=True)
+            row_text = re.sub(r"\s+", " ", row_text).strip()
+            title = re.sub(
+                r"\s*(view|download|click here|apply online|apply now|read more|pdf|details)\s*",
+                " ", row_text, flags=re.I,
+            ).strip(" |-,.")
+
+            if len(title) < 8 or len(title) > 300:
+                continue
+
+            # Score the row text so nav/boilerplate rows are dropped.
+            score = self._score_element(clean_link, title)
+            if href.lower().endswith(".pdf"):
+                score += 20
+            if score < 40:
+                continue
+
+            date_str = find_date(row_text)
+            seen_links.add(clean_link)
+            postings.append({
+                "title": title[:220],
+                "link": link,
+                "date": date_str,
+                "date_iso": normalize_date(date_str),
+            })
+
+        return postings
+
 
 def parse_adaptive(html_content, base_url=""):
     """Convenience wrapper for functional parser interface."""

@@ -635,6 +635,27 @@ class GovJobCrawler:
                             postings = subpage_postings
                             self._log(f"[sub-page exploration found {len(postings)} listings]")
 
+                    # ── Playwright fallback for JS-rendered pages ────────────
+                    # If static parsing (and sub-page exploration) found nothing
+                    # but the page is a client-rendered JS app shell, re-fetch
+                    # through headless Chromium and re-parse. Gated by env flag
+                    # because launching a browser per empty org is expensive.
+                    if not postings and self._spa_fallback_enabled():
+                        try:
+                            from scraper.spa_scraper import (
+                                looks_like_js_app, render_and_parse_adaptive,
+                            )
+                            if looks_like_js_app(r.text):
+                                self._log(f"[JS app detected — rendering {key} with Chromium]", end=" ")
+                                spa_posts = render_and_parse_adaptive(url)
+                                if spa_posts:
+                                    postings = spa_posts
+                                    self._log(f"[SPA fallback recovered {len(postings)} listings]")
+                                else:
+                                    self._log("[SPA fallback found nothing]")
+                        except Exception as e:
+                            self._log(f"[SPA fallback error: {e}]")
+
             annotate(postings, org_key=key, session=self.session)
 
             # Filter out cross-domain links (links pointing to other organizations' domains)
@@ -946,6 +967,21 @@ class GovJobCrawler:
         except Exception:
             self._log("→ static fallback also failed")
             return []
+
+    def _spa_fallback_enabled(self):
+        """
+        Whether to attempt the generic Playwright fallback for zero-result,
+        JS-app-looking pages.
+
+        Controlled by the SPA_FALLBACK env var so the (expensive) browser
+        renders can be turned off for quick local runs. Defaults to ON during
+        the daily scale crawl (SCALE_CRAWL=1) and OFF otherwise, unless the
+        flag is set explicitly to "0"/"1".
+        """
+        flag = os.environ.get("SPA_FALLBACK")
+        if flag is not None:
+            return flag == "1"
+        return os.environ.get("SCALE_CRAWL") == "1"
 
     def _fetch_spa(self, key, url):
         """

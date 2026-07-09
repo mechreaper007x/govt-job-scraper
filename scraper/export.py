@@ -42,6 +42,7 @@ import os
 from datetime import datetime
 
 from scraper.config import ORGS_CONFIG, CURATED_ORG_KEYS
+from scraper.date_utils import normalize_date
 
 
 def build_jobs_payload(scraped_data):
@@ -86,6 +87,7 @@ def build_jobs_payload(scraped_data):
                 "apply_link": post.get("apply_link", ""),
                 "pdf_link":   post.get("pdf_link", ""),
                 "date":       post.get("date", ""),
+                "date_iso":   post.get("date_iso", "") or normalize_date(post.get("date", "")),
                 "tier":       tier,
             })
             total += 1

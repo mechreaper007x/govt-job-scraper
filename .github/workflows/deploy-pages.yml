@@ -1,0 +1,56 @@
+name: Deploy Dashboard to Pages
+
+# Fast, scrape-free deploy of the web_ui dashboard using the data already
+# committed in the repo (scraped_jobs.json / jobs_report.pdf). Use this for
+# frontend-only changes and for the very first Pages setup. The full daily
+# scrape has its own deploy step in daily-check.yml.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web_ui/**'
+      - 'scraped_jobs.json'
+      - 'jobs_report.pdf'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Assemble site directory
+        run: |
+          mkdir -p _site
+          cp -r web_ui/. _site/
+          # Ship the committed data if present (dashboard degrades gracefully
+          # with an error state if these are missing).
+          [ -f scraped_jobs.json ] && cp scraped_jobs.json _site/scraped_jobs.json || echo "no scraped_jobs.json yet"
+          [ -f jobs_report.pdf ]   && cp jobs_report.pdf   _site/jobs_report.pdf   || echo "no jobs_report.pdf yet"
+          echo "Assembled site:" && ls -la _site
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
